@@ -1,0 +1,22 @@
+<levels>
+	<level id="0">
+		<title>FirstStage</title>
+		<scene>
+			<background>
+				<color>#6495ED</color>	
+			</background>
+		</scene>
+		<enemies>
+			<enemy id="0">
+				<desc>enemy_bug</desc>
+				<row>3</row>
+				<width>97</width>
+				<height>97</height>
+				<frames>0,1,2,3,4,5,6,7,8,9,10,11</frames>
+			</enemy>
+		</enemies>
+		<lvlHeight>2000</lvlHeight>
+		<lvlSpeed>1</lvlSpeed>
+		<maxWindStrenght>3</maxWindStrenght>
+	</level>
+</levels>

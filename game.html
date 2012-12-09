@@ -1,0 +1,140 @@
+<html>  
+  <head>  
+    <title>Simple game with HTML5 Canvas</title>  
+	
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, target-densitydpi=device-dpi" />
+	
+	<link rel="stylesheet" type="text/css" href="css/game.css">
+	
+	<!-- JQuery und JQuery Mobile einbinden-->
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+	<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+	<script type="text/javascript" src="jquery.spritely-0.6.1/jquery.spritely-0.6.1.js"></script>
+	
+	<script type="text/javascript" src="js/preroll.js"></script>
+	<script type="text/javascript" src="js/data.js"></script>
+	<script type="text/javascript" src="js/PathManager.js"></script>
+	<script type="text/javascript" src="js/FlyingObject.js"></script>
+	<script type="text/javascript" src="js/initialisation.js"></script>
+	<script type="text/javascript" src="js/playGame.js"></script>
+	<script type="text/javascript" src="js/SpriteSheet.js"></script>
+	<script type="text/javascript" src="js/level.js"></script>
+	<script type="text/javascript" src="js/levelManager.js"></script>
+	<script type="text/javascript" src="js/ImageManager.js"></script>
+	<script type="text/javascript" src="js/sound.js"></script>
+	
+	<script type="text/javascript">
+		
+	</script>
+	
+  </head>  
+  <!--body onload='new Preroll().init(["pics/spaceship.png", "pics/sun.png"], 2000, 1000, document.getElementById("menu"))'-->
+  <body onload='new Preroll().init([], 2000, 1000, document.getElementById("menu"))'>
+	
+	<!-- Hauptmenue -->
+	<div data-role="page" id="menu">
+ 
+	  <div data-role="header">
+		<h1>Hauptmenu</h1>
+	  </div>
+	 
+	  <div data-role="content" id="overviewMenu"> 
+		<p><a href="#levels" data-role="button" id="startBtn">Start</a></p>
+		<p><a href="#options" data-role="button">Optionen</a></p>    
+		<p><a href="#exit" data-role="button">Beenden</a></p>
+	  </div>
+	 
+	</div>
+	
+	<!-- Level -->
+	<div data-role="page" id="levels">
+		<div data-role="header">
+			<h1>Levelauswahl</h1>
+		</div>
+		
+		<div data-role="content" id="levelOverview">
+			<div class="ui-grid-b" id="levelIcons">
+				<div class="ui-block-a"><a id="level1" href="#main" data-role="button"  data-theme="c">Level 1</a></div> 
+				<div class="ui-block-b"><a id="level2" href ="#main" data-role="button" data-theme="c">Level 2</a></div>	   
+				<div class="ui-block-c"><a id="level3" href="#main" data-role="button" data-theme="c">Level 3</a></div>	   
+			</div>
+		
+		<a href="#menu" data-role="button" id="optionBtns">Zurück</a>
+		</div>
+		
+		<!-- #main -->
+		
+	</div>
+	
+	<!-- Optionen -->
+	<div data-role="page" id="options">
+	 
+	  <div data-role="header">
+		<h1>Optionen</h1>
+	  </div>
+	  
+		<div data-role="content" id="overviewOptions">	  
+		
+			
+			<!-- Variante 1 nebeneinander, Abstaende muessen noch korrigiert werden -->
+			
+			
+		<div id="radioBtns">
+			<span id="radio"><b>Musik</b></span>
+			<span id="radio"><input type='radio' name='answer_id' id="rad"> An</span>
+			<span id="radio"><input type='radio' name='answer_id'id="rad"> Aus</span>	
+		</div>
+		<a href="" data-role="button" id="optionBtns">Weiterspielen</a>
+		
+		<a href="#menu" data-role="button" id="optionBtns">Zurück</a>
+		
+		</div>
+		
+	</div>
+	
+	<!-- Beenden -->
+	<div data-role="page" id="exit">
+	
+		<div data-role="header">
+			<h1>Beenden</h1>
+		</div>
+		
+		<div data-role="content" id="overviewExit"> 
+			<a href="" data-role="button">Ja</a>
+			<a href="#menu" data-role="button">Nein</a>
+		</div>
+	</div>
+	
+	<!-- Spiel -->
+	<div data-role="page" id="main">
+	 
+	  <div data-role="content" id="contentArea"> 
+		<div><canvas id="statusbar" width="600" height="40"></canvas></div>
+		<div><canvas id="gameCanvas" width="600" height="600"></canvas></div>
+	  </div>
+	  
+	  <div data-role="footer" id="foot">
+		<div id="music">
+			<a href="" data-role="button" id="musicBtn">&nbsp;</a>
+		</div>
+		<div id="gameBtns">
+			<a href="#levels" data-role="button" id="backBtn" >&nbsp;</a>
+			<a href="" data-role="button" id="playBtn">&nbsp;</a>
+			<a href="" data-role="button" id="pauseBtn">&nbsp;</a>		
+		</div>
+	  </div>
+	 
+	</div>
+	
+	
+	<div id="pwidget">  
+		<div id="progressbar">
+			<div id="indicator"></div>
+		</div>
+		<div id="progressnum">0</div>
+	</div>
+        
+  </body>  
+</html>
