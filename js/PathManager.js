@@ -15,12 +15,6 @@ function PathManager(paths) {
 	this.vx;
 	this.vy;
 	this.degree;
-	
-	/*this.paths = [// x    y  sp first
-				   [width, 100, 5, 180, 180, 210, 240, 270, 270, 270],
-				   [-100, 100, 5, 0, 0, 330, 300, 270, 270, 240, 300, 240],
-				   [500, -100, 5, 270, 300, 240, 300, 240, 300, 240, 300, 240]
-				 ];*/
 				 
 	this.init();
 }
