@@ -11,7 +11,8 @@ function LevelManager()
 	
 	this.spriteRowHeights = [0,			// Spaceship 
 							 101, 		// Bullet
-							 132 		// Enemy Bug
+							 132, 		// Enemy Bug
+							 233		// Asteroid
 							 ];
 }
 

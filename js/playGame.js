@@ -74,6 +74,10 @@ function createEnemy() {
 					var newEnemy = new Bug(enemySprite, [path['path']]);
 					objects.push(newEnemy);
 					break;
+				case 'asteroid':
+					var newEnemy = new Asteroid(enemySprite, [path['path']]);
+					objects.push(newEnemy);
+					break;
 			}
 			enemyCounter++;
 		}

@@ -228,6 +228,7 @@ Bug.prototype = {
 		// Ermittle Frame
 		frame = (((degree % 360) + 360) % 360) / 30;
 		//console.log("degree: "+ d + " frame: " +frame);
+		
 		this.setFrame(frame);
 	},
 	
@@ -260,56 +261,84 @@ Bug.prototype = {
 
 
 /****
-*  Vogel
+*  Asteroid
 *
 ****/
-Bird = function(sp) {
+Asteroid = function(sp, paths) {
 	this.base = Enemy;
 	
-	var speed = getRandom(3, 7);
-	
-	
+	var speed = 0;
+
 	this.base(speed, sp);
 	this.init();
 	
-	this.type = "Bird";
-	this.flyAwayFlag = false;
+	
+	this.degree = 0;
+	
+	this.type = "Asteroid";
+	this.picNr = getRandom(0, 11);
+	this.pathFinder = new PathManager(paths);
+	this.newPath();	
+	this.count = 0;
+	this.timer = getRandom(0,3);
 }
 
-Bird.prototype = new Enemy();
-Bird.prototype.constructor = Bird;
+Asteroid.prototype = new Enemy();
+Asteroid.prototype.constructor = Asteroid;
 
-Bird.prototype = {
+Asteroid.prototype = {
 	getDir: function() { return this.dir; },
 	setDir: function(d) { this.dir = d; },
 	
 	setFlyAwayFlag: function() { this.flyAwayFlag = true; },
 	getFlyAwayFlag: function() { return this.flyAwayFlag; },
 	
-	fly: function() {
-		this.incX(this.getSpeed());
-		this.incY(lvlSpeed);
+	getDegree: function() { return this.degree; },
+	setDegree: function(d) { this.degree = ((d % 360) + 360) % 360; },
+	
+	incDegree: function(val) {
+		this.degree = (((this.degree + val) % 360) + 360) % 360;
+	},
+	
+	decDegree: function(val) {
+		this.degree = (((this.degree - val) % 360) + 360) % 360;
+	},
+	
+	newPath: function() {
+		this.setX(this.pathFinder.getX());
+		this.setY(this.pathFinder.getY());
+	},
+	
+	fly: function() {	
 		
-		var xPos = Math.round(this.getX());
-		var dir = this.getDir();
+		this.pathFinder.calculate();
 		
-		if((xPos % 50) >= 0 && (xPos % 50) <= 10) {
-			if(dir == 1)
-				this.setFrame(0);
-			else
-				this.setFrame(2);
-				
-			this.incY(4);
+		var vx = this.pathFinder.getVX();
+		var vy = this.pathFinder.getVY();
+		
+		this.incX(vx);
+		this.decY(vy);
+		
+		this.turn(this.pathFinder.getDegree());
+	},
+	
+	turn: function(d) {
+		
+		this.setDegree(d);
+		
+		if(this.count == this.timer) {
+			if(this.picNr < 12) {
+				this.setFrame(this.picNr);
+				this.picNr++;
+			}
+			else {
+				this.picNr = 0;
+			}	
+			this.count = 0;
 		}
-		else {
-			if(dir == 1)
-				this.setFrame(1);
-			else
-				this.setFrame(3);
-				
-			this.decY(3);
-		}
-		//console.log("X: " + this.x + " xPos: " + xPos + " Y: " + this.y + " Frame: " + this.getFrame() + " Speed: " + this.getSpeed());
+			
+			
+		this.count++;
 	},
 	
 	changeDirection: function() {
@@ -500,7 +529,7 @@ Spaceship.prototype = {
 		var objectHeigth = object.getHeight();
 		
 		if(spaceshipX + this.width >= objectX && spaceshipX <= objectX + objectWidth  && spaceshipY + this.height >= objectY && spaceshipY <= objectY + objectHeigth) {
-			if(object instanceof Bird) {
+			if(object instanceof Asteroid) {
 				if(!object.getFlyAwayFlag()) {
 					object.flyAway();
 					object.setFlyAwayFlag();

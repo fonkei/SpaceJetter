@@ -8,10 +8,10 @@
 		</scene>
 		<enemies>
 			<enemy id="0">
-				<desc>enemy_bug</desc>
-				<row>3</row>
-				<width>97</width>
-				<height>97</height>
+				<desc>asteroid</desc>
+				<row>4</row>
+				<width>109</width>
+				<height>100</height>
 				<frames>0,1,2,3,4,5,6,7,8,9,10,11</frames>
 			</enemy>
 		</enemies>
@@ -20,24 +20,19 @@
 		<maxWindStrenght>3</maxWindStrenght>
 		<paths>
 			<enemyPath id="0">
-				<enemyId>enemy_bug</enemyId>
-				<number>2</number>
-				<path>3, -100, 5, 270</path>
+				<enemyId>asteroid</enemyId>
+				<number>1</number>
+				<path>-100, -100, 5, 300</path>
 			</enemyPath>
 			<enemyPath id="1">
-				<enemyId>enemy_bug</enemyId>
-				<number>2</number>
-				<path>500, -100, 5, 270</path>
+				<enemyId>asteroid</enemyId>
+				<number>1</number>
+				<path>500, 100, 5, 210</path>
 			</enemyPath>
 			<enemyPath id="2">
-				<enemyId>enemy_bug</enemyId>
-				<number>4</number>
-				<path>-100, 100, 5, 0</path>
-			</enemyPath>
-			<enemyPath id="3">
-				<enemyId>enemy_bug</enemyId>
-				<number>4</number>
-				<path>600, 100, 5, 180</path>
+				<enemyId>asteroid</enemyId>
+				<number>1</number>
+				<path>-100, -100, 5, 330</path>
 			</enemyPath>
 		</paths>
 	</level>
