@@ -99,3 +99,6 @@ var isStarted = false;
 var keys = {};
 var path = 0;
 var pathkey = 3;
+
+var enemyCounter = 0;
+var pathCounter = 0;

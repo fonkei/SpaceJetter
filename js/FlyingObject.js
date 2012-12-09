@@ -209,41 +209,13 @@ Bug.prototype = {
 		
 		this.pathFinder.calculate();
 		
-		//var angle = this.getDegree() * Math.PI / 180;
-		
-		
-		var vx = this.pathFinder.getVX();//this.getSpeed() * Math.cos(angle);
-		var vy = this.pathFinder.getVY()//this.getSpeed() * Math.sin(angle);
-		
-		//console.log("vx: "+ vx + " vy: " +vy);
-		
+		var vx = this.pathFinder.getVX();
+		var vy = this.pathFinder.getVY();
+
 		this.incX(vx);
 		this.decY(vy);
 		
 		this.turn(this.pathFinder.getDegree());
-		// Pathfinder
-		/*if(this.timer == 20) {
-			console.log(this.paths[this.path][this.pathkey] + " " + this.pathkey + " " +this.paths[this.path].length + " " + this.getDegree());
-			
-			var deg = this.paths[this.path][this.pathkey];
-			//this.decDegree(deg);
-			
-			console.log(deg);
-			this.turn(deg);
-			
-			if(this.pathkey < this.paths[this.path].length - 1)
-				this.pathkey++;
-			else {
-				this.path++;
-				this.newPath();
-				this.pathkey = 4;
-			}
-			//console.log(this.paths[path][0] + " " + this.paths[path][1] + " " + this.paths[path][2] + " " + this.paths[path][pathkey] + " " + pathkey + " " +this.paths[path].length);
-			this.timer = 0;
-		}
-		this.timer++;*/
-		
-		//console.log("X: " + this.x + " xPos: " + xPos + " Y: " + this.y + " Frame: " + this.getFrame() + " Speed: " + this.getSpeed());
 	},
 	
 	turn: function(d) {

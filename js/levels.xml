@@ -18,5 +18,27 @@
 		<lvlHeight>2000</lvlHeight>
 		<lvlSpeed>1</lvlSpeed>
 		<maxWindStrenght>3</maxWindStrenght>
+		<paths>
+			<enemyPath id="0">
+				<enemyId>enemy_bug</enemyId>
+				<number>2</number>
+				<path>3, -100, 5, 270</path>
+			</enemyPath>
+			<enemyPath id="1">
+				<enemyId>enemy_bug</enemyId>
+				<number>2</number>
+				<path>500, -100, 5, 270</path>
+			</enemyPath>
+			<enemyPath id="2">
+				<enemyId>enemy_bug</enemyId>
+				<number>4</number>
+				<path>-100, 100, 5, 0</path>
+			</enemyPath>
+			<enemyPath id="3">
+				<enemyId>enemy_bug</enemyId>
+				<number>4</number>
+				<path>600, 100, 5, 180</path>
+			</enemyPath>
+		</paths>
 	</level>
 </levels>

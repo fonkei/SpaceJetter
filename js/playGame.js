@@ -61,11 +61,32 @@ function onMouseClick(e) {
 
 //Erzeugt ein zufälliges Power Up
 function createEnemy() {
-	var newEnemy = new Bug(enemySprite, [[width, 100, 5, 180, 180, 210, 240, 270, 270, 270]]);
-	objects.push(newEnemy);
+	var paths = level.getPathData();
 	
-	var newEnemy = new Bug(enemySprite, [[-100, 100, 5, 0, 0, 330, 300, 270, 270, 270]]);
-	objects.push(newEnemy);
+	if(pathCounter in paths) {
+		var path = paths[pathCounter];
+		var number = parseInt(path['number']);
+		var enemy = path['enemyId'];
+			
+		if(enemyCounter < number) {
+			switch(enemy) {
+				case 'enemy_bug':
+					var newEnemy = new Bug(enemySprite, [path['path']]);
+					objects.push(newEnemy);
+					break;
+			}
+			enemyCounter++;
+		}
+		else {
+			enemyCounter = 0;
+			pathCounter++;
+		}	
+	}
+	else {
+		pathCounter = 0;
+		enemyCounter = 0;
+	}
+	
 }
 
 // verringere Geschwindigkeit (beim Fallen)

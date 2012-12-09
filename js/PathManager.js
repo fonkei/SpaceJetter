@@ -95,14 +95,10 @@ PathManager.prototype = {
 		this.setVY(this.getSpeed() * Math.sin(angle));
 		
 		if(this.getTimer() == 20) {
-			//console.log(this.paths[this.pathNr][this.pathKey] + " " + this.pathKey + " " +this.paths[this.pathNr].length + " " + this.getDegree());
 			
 			var deg = this.getNextPathDir();
 			this.setDegree(deg);
 			
-			
-
-			//console.log(this.paths[path][0] + " " + this.paths[path][1] + " " + this.paths[path][2] + " " + this.paths[path][pathkey] + " " + pathkey + " " +this.paths[path].length);
 			this.setTimer(0);
 		}
 		this.incTimer();

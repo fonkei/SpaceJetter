@@ -54,7 +54,9 @@ LevelManager.prototype.loadLevel = function(lvl) {
 	var enemies = {};
 	var objects = {};
 	var powerUps = {};
-	var attr = {}; 
+	var pathData = {};
+	var attr = {};
+	var data = {};	
 	
 	$(this.xml).find('level').each(function(){
 		var id = $(this).attr('id');
@@ -106,6 +108,19 @@ LevelManager.prototype.loadLevel = function(lvl) {
 								
 				powerUps[desc] = attr;
 			});
+			
+			// Path-Daten sammeln
+			$(this).find('enemyPath').each(function() {
+			
+				var pathId = $(this).attr('id');
+				data = {'number' : $(this).find('number').text(),
+						'enemyId': $(this).find('enemyId').text(),
+						'path' : $(this).find('path').text().split(',').map(function(e) {return +e})	// Splitte Alle Werte und wandle diese in Integer um
+					   };
+								
+				pathData[pathId] = data;
+			});
+			
 		}
 	});
 	
@@ -117,6 +132,8 @@ LevelManager.prototype.loadLevel = function(lvl) {
 	
 	var pFrames = this.calculateFrames(powerUps);
 	Level.prototype.setPowerUpFrames(pFrames);
+	
+	Level.prototype.setPathData(pathData);
 	
 	return this.level;
 }
