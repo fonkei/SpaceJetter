@@ -65,7 +65,7 @@ PathManager.prototype = {
 	},
 	
 	getNextPathDir: function() {
-		console.log("PathLength: " +this.paths[this.getPathNr()].length);
+		//console.log("PathLength: " +this.paths[this.getPathNr()].length);
 		if(this.getPathKey() < this.paths[this.getPathNr()].length - 1) {
 			this.incPathKey();
 		}
@@ -75,7 +75,7 @@ PathManager.prototype = {
 				this.incPathNr();
 				this.resetPathKey();
 				this.init();
-				console.log("hier ");
+				//console.log("hier ");
 			}
 			else {
 				this.resetPathNr();

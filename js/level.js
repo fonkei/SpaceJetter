@@ -16,6 +16,7 @@ function Level()
 	this.enemyFrames;
 	this.objectFrames;
 	this.powerUpFrames;
+	this.weaponFrames;
 	this.pathData;
 }
 
@@ -52,6 +53,9 @@ Level.prototype = {
 	
 	setPowerUpFrames: function(val) { this.powerUpFrames = val; },
 	getPowerUpFrames: function() { return this.powerUpFrames; },
+	
+	setWeaponFrames: function(val) { this.weaponFrames = val; },
+	getWeaponFrames: function() { return this.weaponFrames; },
 	
 	setPathData: function(val) { this.pathData = val; },
 	getPathData: function() { return this.pathData; },

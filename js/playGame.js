@@ -54,15 +54,29 @@ function onMouseClick(e) {
 }
 
 //Erzeugt ein zufälliges Power Up
-/*function createPowerUp() {
-	var newpowerUp = new Tank(powerupSprite);
-	objects.push(newpowerUp);
-}*/
+function createPowerUp() {
+	for(p in powerupSprite) {
+		switch(p) {
+			case 'shield':
+				var newpowerUp = new Shield(powerupSprite['shield']);
+				objects.push(newpowerUp);
+				break;
+			case 'rocket':
+				var newpowerUp = new Shield(powerupSprite['rocket']);
+				objects.push(newpowerUp);
+				break;
+			case 'laser':
+				var newpowerUp = new Shield(powerupSprite['laser']);
+				objects.push(newpowerUp);
+				break;
+		}
+	}
+}
 
 //Erzeugt ein zufälliges Power Up
 function createEnemy() {
 	var paths = level.getPathData();
-	
+	//console.log(enemySprite['bug']);
 	if(pathCounter in paths) {
 		var path = paths[pathCounter];
 		var number = parseInt(path['number']);
@@ -70,12 +84,12 @@ function createEnemy() {
 			
 		if(enemyCounter < number) {
 			switch(enemy) {
-				case 'enemy_bug':
-					var newEnemy = new Bug(enemySprite, [path['path']]);
+				case 'bug':
+					var newEnemy = new Bug(enemySprite['bug'], [path['path']]);
 					objects.push(newEnemy);
 					break;
 				case 'asteroid':
-					var newEnemy = new Asteroid(enemySprite, [path['path']]);
+					var newEnemy = new Asteroid(enemySprite['asteroid'], [path['path']]);
 					objects.push(newEnemy);
 					break;
 			}
@@ -188,11 +202,21 @@ function updateLevel(level) {
 	
 	// Gegnersprite anlegen
 	var enemyFrames = level.getEnemyFrames();
-	enemySprite = new SpriteSheet(spriteSheet, enemyFrames);
+	for(e in enemyFrames) {
+		enemySprite[e] = new SpriteSheet(spriteSheet, enemyFrames[e]);
+	}
 	
 	// PowerUp-Sprite anlegen
 	var powerUpFrames = level.getPowerUpFrames();
-	powerupSprite = new SpriteSheet(spriteSheet, powerUpFrames);
+	for(p in powerUpFrames) {
+		powerupSprite[p] = new SpriteSheet(spriteSheet, powerUpFrames[p]);
+	}
+	
+	// Weapon-Sprite anlegen
+	var weaponFrames = level.getWeaponFrames();
+	for(w in weaponFrames) {
+		weaponSprite[w] = new SpriteSheet(spriteSheet, weaponFrames[w]);
+	}
 }
 
 // Dreht ein Objekt entsprechend der Gradzahl (jQuery)
@@ -326,10 +350,12 @@ function drawObjects() {
 		var sprite = bullets[b].getSprite();
 		sprite.drawFrame(ctx, bullets[b].getFrame(), bullets[b].getX(), bullets[b].getY());
 		
-		if (bullets[b].defunct == true || bullets[b].getX() > (width + 100) || bullets[b].getX() < -100 || bullets[b].getY() < 0 || bullets[b].getY() > height ) {
+		if (bullets[b].defunct == true || bullets[b].getX() > width || bullets[b].getX() < 0 || bullets[b].getY() < 0 || bullets[b].getY() > height ) {
 			delete bullets[b];
 			bullets.splice(b, 1);
 			i--;
 		}
 	}
+	
+	//console.log(bullets.length + " " + objects.length);
 }

@@ -57,40 +57,6 @@ FlyingObject = function(x, y, s, f, sp, w, h) {
 
 
 /****
-*  Wolke
-*
-****/
-Cloud = function(sp) {	
-	this.base = FlyingObject;
-	
-	this.type = "Cloud";
-	
-	var xPos = getRandom(-100, width + 100);
-	var yPos = getRandom(-100, height);
-	var speed = windSpeed;
-	
-	// Ermittle die Position des naechsten Objekts
-	if(xPos >= 0)
-		yPos = -100;
-	else if(yPos >= 0)
-		xPos = -100;
-	
-	var frame = getRandom(0,2);
-	
-	this.base(xPos, yPos, speed, frame, sp);
-}
-
-Cloud.prototype = new FlyingObject();
-Cloud.prototype.constructor = Cloud;
-
-Cloud.prototype = {
-	fly: function() {
-		this.incSpeed(windSpeed / 100);
-		this.incX(this.getSpeed());
-	}
-}
-
-/****
 *  PowerUp
 *
 ****/
@@ -134,6 +100,52 @@ Tank.prototype = {
 	
 	fly: function() {
 		
+	}
+}
+
+/****
+*  PowerUp Shield
+*
+****/
+Shield = function(sp) {
+	this.base = PowerUp;
+	
+	this.x = getRandom(0, width-40);
+	this.y = getRandom(-100 , -50);
+		
+	this.frame = 0;
+	var speed = getRandom(3, 7);
+	
+	this.base(this.x, this.y, speed, this.frame, sp);
+	this.init();
+
+	var degree = getRandom(210, 330);
+	var angle = degree * Math.PI / 180;
+	this.vx = speed * Math.cos(angle);
+	this.vy = speed * Math.sin(angle);
+	this.counter = 0;
+	this.type = "Shield";
+}
+
+Shield.prototype = new PowerUp();
+Shield.prototype.constructor = Shield;
+
+Shield.prototype = {
+	getVX: function() { return this.vx; },
+	setVX: function(vx) { this.vx = vx; },
+	
+	getVY: function() { return this.vy; },
+	setVY: function(vy) { this.vy = vy; },
+	
+	fly: function() {
+		this.incY(lvlSpeed);
+		
+		if(this.counter < 24) {
+			this.setFrame(this.counter);
+			this.counter++;
+		}
+		else
+			this.counter = 0;
 	}
 }
 
@@ -419,6 +431,9 @@ Spaceship = function(x, y, horSpeed, vertSpeed, f) {
 	this.tankStatus = 420;
 	this.timer = 0;
 	this.heightBarFrame = 3;
+	this.rocketPowerUp = false;
+	this.laserPowerUp = false;
+	this.shieldPowerUp = false;
 }
 
 Spaceship.prototype = new FlyingObject();
@@ -451,9 +466,6 @@ Spaceship.prototype = {
 	
 	checkAttitude: function() {
 		var nextLevelFlag = false;
-		
-		this.incY(lvlSpeed);
-		
 		
 		// Falls die Flughoehe kleiner Null ist nicht mehr sinken
 		if(this.flightAttitude < 0) {
@@ -529,16 +541,25 @@ Spaceship.prototype = {
 		var objectHeigth = object.getHeight();
 		
 		if(spaceshipX + this.width >= objectX && spaceshipX <= objectX + objectWidth  && spaceshipY + this.height >= objectY && spaceshipY <= objectY + objectHeigth) {
-			if(object instanceof Asteroid) {
-				if(!object.getFlyAwayFlag()) {
-					object.flyAway();
-					object.setFlyAwayFlag();
-				}
-			}
-			else if(object instanceof Tank) {
-				this.incTankStatus(100);
+			if(object instanceof Shield) {
+				this.rocketPowerUp = true;
 				object.setDefunct();
 			}
+			if(object instanceof Asteroid) {
+				/*if(!object.getFlyAwayFlag()) {
+					object.flyAway();
+					object.setFlyAwayFlag();
+				}*/
+			}
+			
+			/*else if(object instanceof Laser) {
+				this.laserPowerUp = true;
+				object.setDefunct();
+			}*/
+			/*else if(object instanceof Shield) {
+				this.shieldPowerUp = true;
+				object.setDefunct();
+			}*/
 		}
 	},
 	
@@ -550,7 +571,7 @@ Spaceship.prototype = {
 		var objectHeight = object.getHeight();
 		
 		for (var i = 0; i < bullets.length; i++) {
-			if(bullets[i].getX() + bullets[i].getWidth() >= objectX && bullets[i].getX() <= objectX + objectWidth && bullets[i].getY() + bullets[i].getHeight() >= objectY && bullets[i].getY() <= objectY + objectHeight) {
+			if(bullets[i].getX() + bullets[i].getWidth() >= objectX && bullets[i].getX() <= objectX + objectWidth && bullets[i].getY() + bullets[i].getHeight() >= objectY && bullets[i].getY() <= objectY + objectHeight) {	
 				object.defunct = true;
 				bullets[i].defunct = true;
 				lvlScore += 5;
@@ -560,8 +581,11 @@ Spaceship.prototype = {
 	
 	// schießen
 	shoot: function() {
-		bullets.push(new Bullet(bulletSprite, this.getX(), this.getY(), 0));
-		bullets.push(new Bullet(bulletSprite, this.getX(), this.getY(), 1));
+		bullets.push(new Bullet(weaponSprite['bullet'], this.getX(), this.getY(), 0));
+		bullets.push(new Bullet(weaponSprite['bullet'], this.getX(), this.getY(), 1));
+		
+		//if(this.rocketPowerUp)
+			bullets.push(new Rocket(weaponSprite['rocket'], this.getX(), this.getY()));
 	}
 }
 
@@ -586,9 +610,9 @@ Bullet = function(sp, shooterX, shooterY, side) {
 	}
 		
 	var frame = 0;
-	var speed = 30;
+	var speed = 40;
 	
-	
+	this.canShoot = false;
 	this.base(xPos, yPos, speed, 0, sp);
 	this.init();
 	
@@ -600,11 +624,78 @@ Bullet.prototype.constructor = Bullet;
 
 Bullet.prototype = {
 	fly: function() {
-		this.incY(lvlSpeed);
 		this.decY(this.getSpeed());
 	}
 }
 
+/****
+*  Rocket
+*
+****/
+Rocket = function(sp, shooterX, shooterY) {
+	this.base = FlyingObject;
+	
+	var xPos = shooterX + 64;		
+	var yPos = shooterY + 40;
+		
+	var frame = 0;
+	var speed = 20;
+	
+	
+	this.base(xPos, yPos, speed, frame, sp);
+	this.init();
+	
+	this.canShoot = false;
+	this.searchNearest();
+	this.nearestX;
+	this.nearestY;
+	this.nearestObject;
+	this.vx;
+	this.vy;
+	this.type = "Rocket";
+}
+
+Rocket.prototype = new FlyingObject();
+Rocket.prototype.constructor = Rocket;
+
+Rocket.prototype = {
+	searchNearest: function() {
+		this.nearestX = width;
+		this.nearestY = height;
+		for(o in objects) {
+			if(objects[o].getX() <= this.nearestX && objects[o].getY() <= this.nearestY){
+				this.nearestX = objects[o].getX();
+				this.nearestY = objects[o].getY();
+				this.nearestObject = objects[o];
+			}
+		}	
+	},
+
+	fly: function() {
+		if(this.nearestObject != undefined && this.nearestObject.defunct == false) {
+			var x1 = this.getX() + (this.getWidth() / 2);
+			var x2 = this.nearestObject.getX() + (this.nearestObject.getWidth() / 2);
+			
+			var y1 = this.getY();
+			var y2 = this.nearestObject.getY() + (this.nearestObject.getHeight() / 2);
+			
+			var angle = Math.atan2(y2-y1, x2-x1);
+				
+			var degree = Math.abs((angle * 360) / (2 * Math.PI));
+			
+			var	frame = Math.floor(degree / 10);
+			
+			console.log(frame + " "+ degree);
+			this.setFrame(frame);
+			
+			this.vx = this.getSpeed() * Math.cos(angle);
+			this.vy = this.getSpeed() * Math.sin(angle);
+		}
+
+		this.incX(this.vx);
+		this.incY(this.vy);
+	}
+}
 
 function getRandom(a, b) {
 	var z = Math.random();

@@ -10,9 +10,13 @@ function LevelManager()
 	this.xml;
 	
 	this.spriteRowHeights = [0,			// Spaceship 
-							 101, 		// Bullet
-							 132, 		// Enemy Bug
-							 233		// Asteroid
+							 100, 		// Bullet
+							 140, 		// Enemy Bug
+							 240,		// Asteroid
+							 340,		// PowerUp Laser
+							 378,		// PowerUp Rocket
+							 416,		// PowerUp Shield
+							 453,		// Rocket
 							 ];
 }
 
@@ -55,6 +59,7 @@ LevelManager.prototype.loadLevel = function(lvl) {
 	var enemies = {};
 	var objects = {};
 	var powerUps = {};
+	var weapons = {};
 	var pathData = {};
 	var attr = {};
 	var data = {};	
@@ -110,6 +115,19 @@ LevelManager.prototype.loadLevel = function(lvl) {
 				powerUps[desc] = attr;
 			});
 			
+			// Weapon-Dauten sammeln
+			$(this).find('weapon').each(function() {
+			
+				var desc = $(this).find('desc').text();	
+				attr = {'width' : $(this).find('width').text(),
+						'height' : $(this).find('height').text(),
+						'frames' : $(this).find('frames').text().split(','),
+						'row' : $(this).find('row').text()
+					   };
+								
+				weapons[desc] = attr;
+			});
+			
 			// Path-Daten sammeln
 			$(this).find('enemyPath').each(function() {
 			
@@ -134,6 +152,9 @@ LevelManager.prototype.loadLevel = function(lvl) {
 	var pFrames = this.calculateFrames(powerUps);
 	Level.prototype.setPowerUpFrames(pFrames);
 	
+	var wFrames = this.calculateFrames(weapons);
+	Level.prototype.setWeaponFrames(wFrames);
+	
 	Level.prototype.setPathData(pathData);
 	
 	return this.level;
@@ -144,7 +165,6 @@ LevelManager.prototype.calculateFrames = function(data) {
 
 	var arr = [];
 	for(i in data) {
-		
 		var attribs = data[i];
 		
 		var frames = attribs['frames'];
@@ -164,7 +184,7 @@ LevelManager.prototype.calculateFrames = function(data) {
 		
 	}
 
-	return temp;
+	return arr;
 }
 
 // Naechstes Level

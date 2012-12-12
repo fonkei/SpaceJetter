@@ -70,11 +70,11 @@ function onDone() {
 	
 	spaceship.setFrame(0);
 	
-	var bulletFrames = [
-				[0, 101, 10, 30, 0, 0]
+	/*var bulletFrames = [
+				[0, 101, 10, 40, 0, 0]
 			];
 	
-	bulletSprite = new SpriteSheet(spriteSheet, bulletFrames);
+	bulletSprite = new SpriteSheet(spriteSheet, bulletFrames);*/
 	
 	/*var tankFrames = [
 				[0, 1841, 42, 39, 0, 0],
@@ -160,7 +160,7 @@ function startGame() {
 		isStarted = true;
 		
 		gameHandle = setInterval(draw, 50);
-		//powerUpHandle = setInterval(createPowerUp, 15000);
+		powerUpHandle = setInterval(createPowerUp, 15000);
 		enemyHandle = setInterval(createEnemy, 1000);
 	}
 }
@@ -170,11 +170,11 @@ function stopGame() {
 		isStarted = false;
 	
 		clearInterval(gameHandle);
-		//clearInterval(powerUpHandle);
+		clearInterval(powerUpHandle);
 		clearInterval(enemyHandle);
 	
 		gameHandle = 0;
-		//powerUpHandle = 0;
+		powerUpHandle = 0;
 		enemyHandle = 0;
 		
 		sound.levelsound.pause();
