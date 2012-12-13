@@ -680,12 +680,14 @@ Rocket.prototype = {
 			var y2 = this.nearestObject.getY() + (this.nearestObject.getHeight() / 2);
 			
 			var angle = Math.atan2(y2-y1, x2-x1);
-				
-			var degree = Math.abs((angle * 360) / (2 * Math.PI));
 			
+			var degree = (-angle * 360) / (2 * Math.PI);
+			
+			if(y1 < y2)
+				degree = degree + 360;
+				
 			var	frame = Math.floor(degree / 10);
 			
-			console.log(frame + " "+ degree);
 			this.setFrame(frame);
 			
 			this.vx = this.getSpeed() * Math.cos(angle);
