@@ -60,6 +60,20 @@
 				<height>30</height>
 				<frames>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35</frames>
 			</weapon>
+			<weapon id="2">
+				<desc>laser</desc>
+				<row>9</row>
+				<width>8</width>
+				<height>60</height>
+				<frames>0</frames>
+			</weapon>
+			<weapon id="3">
+				<desc>shield</desc>
+				<row>10</row>
+				<width>46</width>
+				<height>50</height>
+				<frames>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23</frames>
+			</weapon>
 		</weapons>
 		<lvlHeight>2000</lvlHeight>
 		<lvlSpeed>1</lvlSpeed>

@@ -60,77 +60,30 @@ FlyingObject = function(x, y, s, f, sp, w, h) {
 *  PowerUp
 *
 ****/
-PowerUp = function(xPos, yPos, speed, frame, sp) {
+PowerUp = function(sp) {
 	this.base = FlyingObject;
 
+	var x = getRandom(0, width-40);
+	var y = getRandom(-100 , -50);
 	
-	this.base(xPos, yPos, speed, frame, sp);
-
+	var frame = 0;
+	var speed = getRandom(3, 7);
+	
+	this.base(x, y, speed, frame, sp);
+	
+	var degree = getRandom(210, 330);
+	var angle = degree * Math.PI / 180;
+	this.vx = speed * Math.cos(angle);
+	this.vy = speed * Math.sin(angle);
+	this.counter = 0;
+	
 	this.type = "PowerUp";
 }
 
 PowerUp.prototype = new FlyingObject();
 PowerUp.prototype.constructor = PowerUp;
 
-
-/****
-*  Tank
-*
-****/
-Tank = function(sp) {
-	this.base = PowerUp;
-	
-	var xPos = getRandom(0, width-40);
-	var yPos = getRandom(-100 , -60);
-		
-	var frame = 0;
-	var speed = 0;
-	
-	this.base(xPos, yPos, speed, frame, sp);
-	this.init();
-	
-	this.type = "Tank";
-}
-
-Tank.prototype = new PowerUp();
-Tank.prototype.constructor = Tank;
-
-Tank.prototype = {
-	
-	
-	fly: function() {
-		
-	}
-}
-
-/****
-*  PowerUp Shield
-*
-****/
-Shield = function(sp) {
-	this.base = PowerUp;
-	
-	this.x = getRandom(0, width-40);
-	this.y = getRandom(-100 , -50);
-		
-	this.frame = 0;
-	var speed = getRandom(3, 7);
-	
-	this.base(this.x, this.y, speed, this.frame, sp);
-	this.init();
-
-	var degree = getRandom(210, 330);
-	var angle = degree * Math.PI / 180;
-	this.vx = speed * Math.cos(angle);
-	this.vy = speed * Math.sin(angle);
-	this.counter = 0;
-	this.type = "Shield";
-}
-
-Shield.prototype = new PowerUp();
-Shield.prototype.constructor = Shield;
-
-Shield.prototype = {
+PowerUp.prototype = {
 	getVX: function() { return this.vx; },
 	setVX: function(vx) { this.vx = vx; },
 	
@@ -150,6 +103,55 @@ Shield.prototype = {
 }
 
 /****
+*  PowerUp Shield
+*
+****/
+PUShield = function(sp) {
+	this.base = PowerUp;
+
+	this.base(sp);
+	this.init();
+	
+	this.type = "PUShield";
+}
+
+PUShield.prototype = new PowerUp();
+PUShield.prototype.constructor = PUShield;
+
+/****
+*  PowerUp Rocket
+*
+****/
+PURocket = function(sp) {
+	this.base = PowerUp;
+
+	this.base(sp);
+	this.init();
+	
+	this.type = "PURocket";
+}
+
+PURocket.prototype = new PowerUp();
+PURocket.prototype.constructor = PURocket;
+
+/****
+*  PowerUp PULaser
+*
+****/
+PULaser = function(sp) {
+	this.base = PowerUp;
+
+	this.base(sp);
+	this.init();
+	
+	this.type = "Shield";
+}
+
+PULaser.prototype = new PowerUp();
+PULaser.prototype.constructor = PULaser;
+
+
+/****
 *  Gegner
 *
 ****/
@@ -164,9 +166,6 @@ Enemy = function(s, sp) {
 	xPos = getRandom(100, 200);
 	
 	this.base(xPos, yPos, speed, 6, sp);
-	/*this.timer = 0;	
-	this.path = 0;
-	this.pathkey = 4;*/
 	this.dir = side;
 }
 
@@ -370,51 +369,6 @@ Asteroid.prototype = {
 }
 
 /****
-*  Flugzeug
-*
-****/
-Plane = function(sp) {
-	this.base = Enemy;
-	
-	var speed = getRandom(10, 15);
-	
-	this.base(speed, sp);
-	
-	this.type = "Plane";
-}
-
-Plane.prototype = new Enemy();
-Plane.prototype.constructor = Plane;
-
-Plane.prototype = {
-	getDir: function() { return this.dir; },
-	
-	fly: function() {
-		this.incX(this.getSpeed());
-		
-		var xPos = Math.round(this.getX());
-		var dir = this.getDir();
-		
-		if((xPos % 20) >= 0 && (xPos % 20) <= 5) {
-			if(dir == 1)
-				this.setFrame(7);
-			else
-				this.setFrame(4);
-				
-			this.incY(3);
-		}
-		else {
-			if(dir == 1)
-				this.setFrame(6);
-			else
-				this.setFrame(5);
-				
-			this.decY(3);
-		}
-	}
-}
-
-/****
 *  Spaceship
 *
 ****/
@@ -541,8 +495,17 @@ Spaceship.prototype = {
 		var objectHeigth = object.getHeight();
 		
 		if(spaceshipX + this.width >= objectX && spaceshipX <= objectX + objectWidth  && spaceshipY + this.height >= objectY && spaceshipY <= objectY + objectHeigth) {
-			if(object instanceof Shield) {
+			if(object instanceof PUShield) {
+				this.shieldPowerUp = true;
+				objects.push(new Shield(weaponSprite['shield'], this));
+				object.setDefunct();
+			}
+			if(object instanceof PURocket) {
 				this.rocketPowerUp = true;
+				object.setDefunct();
+			}
+			if(object instanceof PULaser) {
+				this.laserPowerUp = true;
 				object.setDefunct();
 			}
 			if(object instanceof Asteroid) {
@@ -572,7 +535,9 @@ Spaceship.prototype = {
 		
 		for (var i = 0; i < bullets.length; i++) {
 			if(bullets[i].getX() + bullets[i].getWidth() >= objectX && bullets[i].getX() <= objectX + objectWidth && bullets[i].getY() + bullets[i].getHeight() >= objectY && bullets[i].getY() <= objectY + objectHeight) {	
-				object.defunct = true;
+				if(!(object instanceof Shield) && !(object instanceof PUShield) && !(object instanceof PULaser) && !(object instanceof PURocket))
+					object.defunct = true;
+					
 				bullets[i].defunct = true;
 				lvlScore += 5;
 			}
@@ -584,8 +549,10 @@ Spaceship.prototype = {
 		bullets.push(new Bullet(weaponSprite['bullet'], this.getX(), this.getY(), 0));
 		bullets.push(new Bullet(weaponSprite['bullet'], this.getX(), this.getY(), 1));
 		
-		//if(this.rocketPowerUp)
+		if(this.rocketPowerUp)
 			bullets.push(new Rocket(weaponSprite['rocket'], this.getX(), this.getY()));
+		if(this.laserPowerUp)
+			bullets.push(new Laser(weaponSprite['laser'], this.getX(), this.getY()));
 	}
 }
 
@@ -663,10 +630,13 @@ Rocket.prototype = {
 		this.nearestX = width;
 		this.nearestY = height;
 		for(o in objects) {
-			if(objects[o].getX() <= this.nearestX && objects[o].getY() <= this.nearestY){
-				this.nearestX = objects[o].getX();
-				this.nearestY = objects[o].getY();
-				this.nearestObject = objects[o];
+			var object = objects[o];
+			if(!(object instanceof Shield) && !(object instanceof PUShield) && !(object instanceof PULaser) && !(object instanceof PURocket)) {
+				if(object.getX() <= this.nearestX && object.getY() <= this.nearestY){
+					this.nearestX = object.getX();
+					this.nearestY = object.getY();
+					this.nearestObject = object;
+				}
 			}
 		}	
 	},
@@ -696,6 +666,87 @@ Rocket.prototype = {
 
 		this.incX(this.vx);
 		this.incY(this.vy);
+	}
+}
+
+/****
+*  Laser
+*
+****/
+Laser = function(sp, shooterX, shooterY) {
+	this.base = FlyingObject;
+	
+	var xPos = shooterX + 64 - 5;		
+	var yPos = shooterY + 40;	
+	var frame = 0;
+	var speed = 60;
+	
+	this.base(xPos, yPos, speed, frame, sp);
+	this.init();
+
+	this.type = "Laser";
+}
+
+Laser.prototype = new FlyingObject();
+Laser.prototype.constructor = Laser;
+
+Laser.prototype = {
+	fly: function() {
+		this.decY(this.getSpeed());
+	}
+}
+
+/****
+*  Shield
+*
+****/
+Shield = function(sp, obj) {
+	this.base = FlyingObject;
+	
+	this.obj = obj;
+	var xPos = this.obj.getX(); //shooterX + 64;		
+	var yPos = this.obj.getY(); //shooterY + 40;
+		
+	var frame = 0;
+	var speed = 20;
+	
+	this.base(xPos, yPos, speed, frame, sp);
+	this.init();
+	
+	this.canShoot = false;
+	this.vx;
+	this.vy;
+	this.type = "Rocket";
+
+	//this.moveTo();
+}
+
+Shield.prototype = new FlyingObject();
+Shield.prototype.constructor = Shield;
+
+Shield.prototype = {
+
+	fly: function() {
+		var x1 = this.obj.getX() + (this.obj.getWidth() / 2);
+		var y1 = this.obj.getY() + (this.obj.getHeight() / 2);
+
+		var angle = this.degree * (Math.PI / 180);
+		
+		this.vx = (x1 + 100 * Math.cos(angle)) - (this.getWidth() / 2);
+		this.vy = (y1 + 100 * Math.sin(angle)) - (this.getHeight() / 2);
+		
+		var	frame = Math.floor(this.degree / 15);
+		
+		if(this.degree < 355)
+			this.degree += 5;
+		else
+			this.degree = 0;
+		
+		this.setFrame(frame);
+		
+		this.setX(this.vx);
+		this.setY(this.vy);
+		
 	}
 }
 

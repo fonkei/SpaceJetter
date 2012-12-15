@@ -16,7 +16,9 @@ function LevelManager()
 							 340,		// PowerUp Laser
 							 378,		// PowerUp Rocket
 							 416,		// PowerUp Shield
-							 453,		// Rocket
+							 454,		// Rocket
+							 485,		// Laser
+							 546		// Shield
 							 ];
 }
 

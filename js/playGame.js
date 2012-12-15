@@ -58,15 +58,15 @@ function createPowerUp() {
 	for(p in powerupSprite) {
 		switch(p) {
 			case 'shield':
-				var newpowerUp = new Shield(powerupSprite['shield']);
+				var newpowerUp = new PUShield(powerupSprite['shield']);
 				objects.push(newpowerUp);
 				break;
 			case 'rocket':
-				var newpowerUp = new Shield(powerupSprite['rocket']);
+				var newpowerUp = new PURocket(powerupSprite['rocket']);
 				objects.push(newpowerUp);
 				break;
 			case 'laser':
-				var newpowerUp = new Shield(powerupSprite['laser']);
+				var newpowerUp = new PULaser(powerupSprite['laser']);
 				objects.push(newpowerUp);
 				break;
 		}

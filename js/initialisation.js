@@ -147,6 +147,10 @@ function clearLevel() {
 	objects = [];
 	bullets = [];
 	
+	this.rocketPowerUp = false;
+	this.laserPowerUp = false;
+	this.shieldPowerUp = false;
+	
 	spaceship.setX(200);
 	spaceship.setX(250);
 	spaceship.setFrame(0);
