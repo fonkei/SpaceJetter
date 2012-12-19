@@ -1,15 +1,18 @@
 
 // Bewege den Ballon zur Mausposition (horizontal)
 function moveBalloon(e) {
-	spaceship.setX(e.clientX - myCanvas.offsetLeft - (spaceship.getWidth() / 2));
-	spaceship.setY(e.clientY - myCanvas.offsetTop - (spaceship.getHeight() / 2));
+	if(!spaceship.isShot) {
+		spaceship.setX(e.clientX - myCanvas.offsetLeft - (spaceship.getWidth() / 2));
+		spaceship.setY(e.clientY - myCanvas.offsetTop - (spaceship.getHeight() / 2));
+	}
 }
 
 // Tastenaktionen
 function keyDown(e) {
 	keys[e.which] = true;
-	
-	move();
+	if(!spaceship.isShot) {
+		move();
+	}
 }
 
 function keyUp(e) {
@@ -44,13 +47,15 @@ function move() {
 
 // Feuert eine Kugel ab
 function fireBullet() {
-	spaceship.shoot();
+	spaceship.shoot();	
 }
 
 function onMouseClick(e) {
 	e.stopPropagation();
 	e.preventDefault();  // verhindern des Normalverhaltens des Browsers
-	fireBullet();
+	if(!spaceship.isShot) {
+		fireBullet();
+	}
 }
 
 //Erzeugt ein zufälliges Power Up
@@ -88,6 +93,10 @@ function createEnemy() {
 					var newEnemy = new Bug(enemySprite['bug'], [path['path']]);
 					objects.push(newEnemy);
 					break;
+				case 'cubic':
+					var newEnemy = new Cubic(enemySprite['cubic'], [path['path']]);
+					objects.push(newEnemy);
+					break;
 				case 'asteroid':
 					var newEnemy = new Asteroid(enemySprite['asteroid'], [path['path']]);
 					objects.push(newEnemy);
@@ -110,15 +119,16 @@ function createEnemy() {
 // verringere Geschwindigkeit (beim Fallen)
 function updateSpaceship() {
 	// Flughoehe aktualisieren
-	spaceship.incFlightAttitude(-spaceship.getVertSpeed());
+	//spaceship.incFlightAttitude(-spaceship.getVertSpeed());
 	
 	// Geschwindigkeit drosseln
-	spaceship.derate();
-		
+	//spaceship.derate();
+	spaceship.checkIsHit();
+	
 	spaceship.checkBoundary();
 	
-	if(spaceship.checkAttitude())
-		nextLevel();
+	/*if(spaceship.checkAttitude())
+		nextLevel();*/
 }
 
 // aktualisiere den Windpfeil
@@ -240,10 +250,15 @@ function getRandom(a, b) {
 }
 
 function updateBackground() {
-	var yPos = 1300 - height;
-	yPos -= lvlHeight;
-	//backgroundSprite.drawFrame(ctx, bgFrame, 0, -yPos);
-	lvlHeight += lvlSpeed;
+	var yPos = -(backgroundSprite.getHeight(0)) + height;
+	yPos += bgHeight;
+
+	if((bgHeight + height) >= backgroundSprite.getHeight(0))
+		bgHeight = 0;
+
+	backgroundSprite.drawFrame(ctx, bgFrame, 0, yPos);	
+	
+	bgHeight += lvlSpeed;
 }
 
 function clearScene() {	
@@ -285,7 +300,10 @@ function draw() {
 	checkFocus();
 		
 	drawScene();
-	drawSpaceship();
+	
+	if(!spaceship.defunct)
+		drawSpaceship();
+	
 	drawObjects();
 }
 
@@ -297,8 +315,8 @@ function drawScene() {
 	// Zeichnen des Himmels als ein linearer Gradient
 	sky = ctx.createLinearGradient(0, width, 0, height);
 	//sky.addColorStop(Math.random(), SKY_COLOR);
-	sky.addColorStop(1, SKY_COLOR);
-	sky.addColorStop(1, '#FFFFFF');
+	sky.addColorStop(0, SKY_COLOR);
+	//sky.addColorStop(1, '#FFFFFF');
 	ctx.fillStyle = sky;
 	ctx.fillRect(0, 0, width, height);
 	
@@ -314,7 +332,9 @@ function drawSpaceship() {
 	// Zeichne den Ballon
 	updateSpaceship();
 	
-	spaceshipSprite.drawFrame(ctx, spaceship.getFrame(), spaceship.getX(), spaceship.getY());
+	var sprite = spaceship.getSprite(); 
+	sprite.drawFrame(ctx, spaceship.getFrame(), spaceship.getX(), spaceship.getY());
+	//console.log(sprite);
 }
 
 function drawText() {
@@ -328,7 +348,7 @@ function drawObjects() {
 	for (var i = 0; i < objects.length; i++) {
 		// bewege Objekt
 		objects[i].fly();
-		
+			
 		spaceship.checkCollisions(objects[i]);
 		spaceship.checkHit(objects[i]);
 	

@@ -74,12 +74,11 @@ PathManager.prototype = {
 			if(this.getPathNr() < this.paths.length - 1) {
 				this.incPathNr();
 				this.resetPathKey();
-				this.init();
-				//console.log("hier ");
+				//this.init();
 			}
 			else {
-				this.resetPathNr();
-				this.resetPathKey();
+				//this.resetPathNr();
+				//this.resetPathKey();
 			}
 		}
 		return this.paths[this.getPathNr()][this.getPathKey()];
@@ -103,15 +102,4 @@ PathManager.prototype = {
 		}
 		this.incTimer();
 	},
-	
-	/*turn: function(d) {
-		this.incDegree(d);
-		
-		var degree = this.getDegree();
-		var frame;
-				
-		// Ermittle Frame
-		frame = (((degree % 360) + 360) % 360) / 30;
-		this.setFrame(frame);
-	},*/
 }

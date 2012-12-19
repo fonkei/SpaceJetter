@@ -10,7 +10,7 @@ function LevelManager()
 	this.xml;
 	
 	this.spriteRowHeights = [0,			// Spaceship 
-							 100, 		// Bullet
+							 100, 		// Plasma
 							 140, 		// Enemy Bug
 							 240,		// Asteroid
 							 340,		// PowerUp Laser
@@ -18,7 +18,9 @@ function LevelManager()
 							 416,		// PowerUp Shield
 							 454,		// Rocket
 							 485,		// Laser
-							 546		// Shield
+							 546,		// Shield
+							 597,		// Enemy Cubic
+							 639		// Bullet
 							 ];
 }
 
@@ -163,7 +165,7 @@ LevelManager.prototype.loadLevel = function(lvl) {
 }
 
 // Berechne alle Frames anhand der gesammelten Daten
-LevelManager.prototype.calculateFrames = function(data) {
+LevelManager.prototype.calculateFrames = function(data, h) {
 
 	var arr = [];
 	for(i in data) {
@@ -173,8 +175,7 @@ LevelManager.prototype.calculateFrames = function(data) {
 		var width = parseInt(attribs['width']);
 		var height = parseInt(attribs['height']);
 		var row = parseInt(attribs['row']);
-		var y = this.spriteRowHeights[row-1];
-		
+		var y = (h == undefined) ? this.spriteRowHeights[row-1] : h * (row-1);
 		var temp = [];
 		for(j in frames) {
 			var x = (parseInt(frames[j]) * width);
@@ -185,7 +186,8 @@ LevelManager.prototype.calculateFrames = function(data) {
 		arr[i] = temp;
 		
 	}
-
+	
+	//console.log(arr);
 	return arr;
 }
 

@@ -1,0 +1,14 @@
+Hi, I hope you find these presets useful!!
+
+
+To install them, navigate to the VST's folder as shown below and copy/paste the presets folder into there.
+
+e.g. Program Files>Image-Line>FL Studio 9>Data>Patches>Plugin presets>Generators>toxic biohazard
+
+
+its long-winded but once it's done, it's done ;-)
+
+Have Fun.
+
+Psionic
+http://www.psionicgames.com

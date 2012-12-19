@@ -13,7 +13,7 @@ var HBHeight = null;
 var SBHeight = null;
 
 // verschiedene Konstanten 
-var STD_SKY_COLOR = '#6495ED';
+var STD_SKY_COLOR = '#000000';
 var SKY_COLOR = STD_SKY_COLOR;
 var SUN_START_POSITION = -120;
 
@@ -28,11 +28,6 @@ var P_KEY = 80;
 var backgroundPic; 
  
 var countImagesLoading = 0;
-
-// Progressbar
-var maxprogress = 250;   // total to reach
-var actualprogress = 0;  // current value
-var itv = 0;  // id to setinterval
 
 // verschiedene Variablen fuer das Spiel
 var clouds = [];
@@ -80,7 +75,7 @@ var degree = 0;
 var flightAttitude = 0;
 var maxLvlHeight = 0;
 var lvlSpeed = 0;
-var lvlHeight = 0;
+var bgHeight = 0;
 var lvlScore = 0;
 
 var lvlMngr = null;
@@ -92,6 +87,7 @@ var balloonSprite = null;
 var enemySprite = new Array();
 var powerupSprite = new Array();
 var weaponSprite = new Array();
+var explosionSprite = new Array();
 var tanksprite = null;
 var spriteSheet = null;
 var bgFrame = 0;
@@ -99,8 +95,6 @@ var hasFocus = true;
 var isStarted = false;
 
 var keys = {};
-var path = 0;
-var pathkey = 3;
 
 var enemyCounter = 0;
 var pathCounter = 0;

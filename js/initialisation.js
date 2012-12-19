@@ -7,12 +7,6 @@ window.addEventListener("load", function() {
 	if (!myCanvas || !myCanvas.getContext || !myStatusBar || !myStatusBar.getContext) {
 		return;
 	}
-
-	// Events
-	document.addEventListener("mousemove", moveBalloon, false);
-	document.addEventListener("mousedown", onMouseClick, false);
-	document.addEventListener("keydown", keyDown, false);
-	document.addEventListener("keyup", keyUp, false);
 	
 	// Hole das Canvas 2d Context
 	ctx = myCanvas.getContext('2d');
@@ -37,25 +31,33 @@ window.addEventListener("load", function() {
 	imgMngr =  new ImageManager();
 	imgMngr.load({
 		"spriteSheet"			: "./pics/spriteSheets/spriteSheet.png",
+		"bgSheet"				: "./pics/spriteSheets/ParallaxStars2.png",
+		"explosionSprite"		: "./pics/spriteSheets/explosionSprite.png",
 		"windArrow"		 		: "./pics/up_arrow_small.png"
 	}, onDone);
 	
-	spaceship = new Spaceship(spaceshipXPosition, spaceshipYPosition, spaceshipHorSpeed, spaceshipVertSpeed, spaceshipFrame);
 	sound= new Sound();
-	
 	
 }, false);
 
 function onDone() {
 	spriteSheet 	= imgMngr.get("spriteSheet");
+	explosionSheet = imgMngr.get("explosionSprite");
 	
+	bgSheet 		= imgMngr.get("bgSheet");
 	windArrow 		= imgMngr.get("windArrow");
 	
 	/*var bgFrames = [
-				[0, 0, 1, 1, 0, 0],
+				[0, 0, 480, 1300, 0, 0],
+				[481, 0, 480, 1300, 0, 0],
+				[962, 0, 480, 1300, 0, 0]
+			];*/
+			
+	var bgFrames = [
+				[0, 0, 600, 1680, 0, 0],
 			];
 	
-	backgroundSprite = new SpriteSheet(spriteSheet, bgFrames);*/
+	backgroundSprite = new SpriteSheet(bgSheet, bgFrames, 1);
 
 	
 	var spaceshipFrames = [
@@ -68,30 +70,23 @@ function onDone() {
 	spaceshipSprite = new SpriteSheet(spriteSheet, spaceshipFrames);
 	
 	
-	spaceship.setFrame(0);
+	var explosions = new Array();
+	var wh = '64';
+	var frames = new Array('0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15');
 	
-	/*var bulletFrames = [
-				[0, 101, 10, 40, 0, 0]
-			];
+	for(var i=0; i<6; i++){
+		explosions['exp'+i] = {'width' : wh, 'height' : wh, 'frames' : frames, 'row' : ""+(i+1)+""};
+	}
 	
-	bulletSprite = new SpriteSheet(spriteSheet, bulletFrames);*/
+	//console.log(explosions);
 	
-	/*var tankFrames = [
-				[0, 1841, 42, 39, 0, 0],
-				[43, 1841, 42, 39, 0, 0],
-				[86, 1841, 42, 39, 0, 0],
-				[129, 1841, 42, 39, 0, 0],
-				[172, 1841, 42, 39, 0, 0]
-			];
-	
-	tankSprite = new SpriteSheet(spriteSheet, tankFrames);*/
-	
-	/*var powerupFrames = [
-				[0, 1920, 42, 60, 0, 0]
-			];
-	
-	powerupSprite = new SpriteSheet(spriteSheet, powerupFrames);*/
-	
+	var explosionFrames = lvlMngr.calculateFrames(explosions, 64);
+
+	//console.log(explosionFrames);
+	for(e in explosionFrames) {
+		explosionSprite[e] = new SpriteSheet(explosionSheet, explosionFrames[e]);
+	}
+	console.log(explosionSprite);
 }
 
 // Event zum starten des Spieles
@@ -132,8 +127,20 @@ function playBackgroundMusic() {
 function startNewGame(lvl) {
 	clearLevel();
 	
+	// Erstelle Raumschiff
+	spaceship = new Spaceship(spaceshipXPosition, spaceshipYPosition, spaceshipHorSpeed, spaceshipVertSpeed, spaceshipFrame);
+	spaceship.setSprite(spaceshipSprite);
+	spaceship.setFrame(0);
+	
+	// Events
+	document.addEventListener("mousemove", moveBalloon, false);
+	document.addEventListener("mousedown", onMouseClick, false);
+	document.addEventListener("keydown", keyDown, false);
+	document.addEventListener("keyup", keyUp, false);
+	
 	level = lvlMngr.loadLevel(lvl-1);
 	updateLevel(level);
+	
 	sound.levelsound.play();
 	startGame();
 }
@@ -141,19 +148,23 @@ function startNewGame(lvl) {
 function clearLevel() {
 	stopGame();
 
-	spaceship.setFlightAttitude(0);
-	spaceship.setTankStatus(420);
+	if(spaceship != null && spaceship != undefined) {
+		delete spaceship;
+	}
 	
 	objects = [];
 	bullets = [];
 	
+	enemyCounter = 0;
+	pathCounter = 0;
+	
+	lvlSpeed = 0;
+	bgHeight = 0;
+	lvlScore = 0;
+	
 	this.rocketPowerUp = false;
 	this.laserPowerUp = false;
 	this.shieldPowerUp = false;
-	
-	spaceship.setX(200);
-	spaceship.setX(250);
-	spaceship.setFrame(0);
 	
 	hasFocus = true;
 	isStarted = false;
@@ -195,5 +206,4 @@ function pauseGame() {
 		gamePaused = false;
 	}
 }
-
 

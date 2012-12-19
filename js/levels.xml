@@ -3,7 +3,7 @@
 		<title>FirstStage</title>
 		<scene>
 			<background>
-				<color>#6495ED</color>	
+				<color>#000000</color>	
 			</background>
 		</scene>
 		<enemies>
@@ -20,6 +20,13 @@
 				<width>109</width>
 				<height>100</height>
 				<frames>0,1,2,3,4,5,6,7,8,9,10,11</frames>
+			</enemy>
+			<enemy id="2">
+				<desc>cubic</desc>
+				<row>11</row>
+				<width>39</width>
+				<height>40</height>
+				<frames>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23</frames>
 			</enemy>
 		</enemies>
 		<powerUps>
@@ -47,7 +54,7 @@
 		</powerUps>
 		<weapons>
 			<weapon id="0">
-				<desc>bullet</desc>
+				<desc>plasma</desc>
 				<row>2</row>
 				<width>10</width>
 				<height>40</height>
@@ -68,6 +75,13 @@
 				<frames>0</frames>
 			</weapon>
 			<weapon id="3">
+				<desc>bullet</desc>
+				<row>12</row>
+				<width>10</width>
+				<height>10</height>
+				<frames>0</frames>
+			</weapon>
+			<weapon id="4">
 				<desc>shield</desc>
 				<row>10</row>
 				<width>46</width>
@@ -75,24 +89,64 @@
 				<frames>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23</frames>
 			</weapon>
 		</weapons>
-		<lvlHeight>2000</lvlHeight>
+		<lvlHeight>20000</lvlHeight>
 		<lvlSpeed>1</lvlSpeed>
 		<maxWindStrenght>3</maxWindStrenght>
 		<paths>
 			<enemyPath id="0">
 				<enemyId>bug</enemyId>
 				<number>3</number>
-				<path>-100, 100, 5, 0, 330, 300, 270, 270, 270, 270</path>
+				<path>-100, 100, 5, 0, 330, 300, 270</path>
 			</enemyPath>
 			<enemyPath id="1">
-				<enemyId>asteroid</enemyId>
-				<number>3</number>
-				<path>300, -100, 5, 270</path>
+				<enemyId>cubic</enemyId>
+				<number>1</number>
+				<path>100, -100, 2, 270</path>
 			</enemyPath>
 			<enemyPath id="2">
+				<enemyId>cubic</enemyId>
+				<number>1</number>
+				<path>200, -100, 2, 270</path>
+			</enemyPath>
+			<enemyPath id="3">
+				<enemyId>cubic</enemyId>
+				<number>1</number>
+				<path>300, -100, 2, 270</path>
+			</enemyPath>
+			<enemyPath id="4">
 				<enemyId>bug</enemyId>
 				<number>3</number>
-				<path>600, 100, 5, 180, 210, 240, 270, 270, 270, 270</path>
+				<path>600, 100, 5, 180, 210, 240, 270</path>
+			</enemyPath>
+			<enemyPath id="5">
+				<enemyId>asteroid</enemyId>
+				<number>1</number>
+				<path>100, -100, 10, 300</path>
+			</enemyPath>
+			<enemyPath id="6">
+				<enemyId>asteroid</enemyId>
+				<number>1</number>
+				<path>500, -100, 10, 240</path>
+			</enemyPath>
+			<enemyPath id="7">
+				<enemyId>bug</enemyId>
+				<number>1</number>
+				<path>100, -100, 8, 270</path>
+			</enemyPath>
+			<enemyPath id="8">
+				<enemyId>bug</enemyId>
+				<number>1</number>
+				<path>380, -100, 8, 270</path>
+			</enemyPath>
+			<enemyPath id="9">
+				<enemyId>bug</enemyId>
+				<number>1</number>
+				<path>200, -100, 8, 270</path>
+			</enemyPath>
+			<enemyPath id="10">
+				<enemyId>bug</enemyId>
+				<number>1</number>
+				<path>280, -100, 8, 270</path>
 			</enemyPath>
 		</paths>
 	</level>

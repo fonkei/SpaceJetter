@@ -1,4 +1,7 @@
-function SpriteSheet(image, frames) {
+function SpriteSheet(image, frames, bgrepeat) {
+	if(bgrepeat != undefined && bgrepeat == 1)
+		$(image).css({ backgroundRepeat: 'repeat-y' });
+	
 	this._image = image;
 	this._frames = frames;
 }
