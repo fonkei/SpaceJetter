@@ -244,13 +244,13 @@ Bug.prototype = {
 				
 		// Ermittle Frame
 		frame = (((degree % 360) + 360) % 360) / 30;
-		//console.log("degree: "+ d + " frame: " +frame);
-		
+			
 		this.setFrame(frame);
 	},
 	
 	hit: function() {
 		this.isShot = true;
+		shock = true;
 		this.setSprite(explosionSprite['exp1']);
 	},
 	
@@ -380,6 +380,7 @@ Cubic.prototype = {
 	
 	hit: function() {
 		this.isShot = true;
+		shock = true;
 		this.setSprite(explosionSprite['exp4']);
 	},
 	
@@ -485,6 +486,7 @@ Asteroid.prototype = {
 	
 	hit: function() {
 		this.isShot = true;
+		shock = true;
 		this.setSprite(explosionSprite['exp3']);
 	},
 	
@@ -676,8 +678,10 @@ Spaceship.prototype = {
 					object.setDefunct();
 				}
 				if(object instanceof Asteroid || object instanceof Bug || object instanceof Cubic) {
-					this.hit();
-					object.hit();
+					if(!object.isShot) {
+						this.hit();
+						object.hit();
+					}
 				}
 				if(object instanceof Bullet) {
 					console.log("hier");
@@ -729,6 +733,7 @@ Spaceship.prototype = {
 	
 	// getroffen
 	hit: function() {
+		shock = true;
 		// zerstoere Schutzschilder
 		for(s in this.shields) {
 			this.shields[s].setDefunct();

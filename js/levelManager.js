@@ -186,9 +186,24 @@ LevelManager.prototype.calculateFrames = function(data, h) {
 		arr[i] = temp;
 		
 	}
-	
-	//console.log(arr);
+
 	return arr;
+}
+
+LevelManager.prototype.getLevelSelectionData = function() {
+	var levelSelectionData = [];
+	
+
+	$(this.xml).find('level').each(function(){
+		var attribs = []
+		var id = parseInt($(this).attr('id'));
+		attribs['title'] = $(this).find('title').text();
+		attribs['picture'] = $(this).find('picture').text();
+		levelSelectionData[id] = attribs;
+	});
+	
+	console.log(levelSelectionData);
+	return levelSelectionData;
 }
 
 // Naechstes Level
@@ -212,6 +227,11 @@ LevelManager.prototype.reloadLevel = function() {
 // Setze die Level zurueck
 LevelManager.prototype.reset = function() {
 	this.currentLevel = 0;
+}
+
+// Ermittle die Anzahl der Levels
+LevelManager.prototype.getLevelCount = function() {
+	return $(this.xml).find('level').length;
 }
 
 LevelManager.prototype.getCurrentLevel = function() {

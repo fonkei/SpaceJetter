@@ -13,8 +13,8 @@ var HBHeight = null;
 var SBHeight = null;
 
 // verschiedene Konstanten 
-var STD_SKY_COLOR = '#000000';
-var SKY_COLOR = STD_SKY_COLOR;
+
+var SKY_COLOR = '#000000';
 var SUN_START_POSITION = -120;
 
 // Character Codes
@@ -98,3 +98,6 @@ var keys = {};
 
 var enemyCounter = 0;
 var pathCounter = 0;
+
+// Erschuetterung bei Explosion
+var shock = false;

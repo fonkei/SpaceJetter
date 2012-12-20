@@ -1,18 +1,23 @@
 <html>  
   <head>  
-    <title>Simple game with HTML5 Canvas</title>  
+    <title>SpaceJetter</title>  
 	
 	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, target-densitydpi=device-dpi" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
-	<link rel="stylesheet" type="text/css" href="css/game.css">
-	
-	<!-- JQuery und JQuery Mobile einbinden-->
-	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+	<!-- JQuery -->
 	<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
-	<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
-	<script type="text/javascript" src="jquery.spritely-0.6.1/jquery.spritely-0.6.1.js"></script>
 	
+	
+	<!-- JQuery Mobile einbinden-->
+	<link rel="stylesheet" type="text/css" href="css/themes/darkSpace.css" />
+	<link rel="stylesheet" type="text/css" href="css/game.css">
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile.structure-1.2.0.min.css" /> 
+	
+	<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script> 
+	<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script> 
+	
+	<!-- Spielspezifische Dateien -->
 	<script type="text/javascript" src="js/preroll.js"></script>
 	<script type="text/javascript" src="js/data.js"></script>
 	<script type="text/javascript" src="js/PathManager.js"></script>
@@ -41,9 +46,9 @@
 	  </div>
 	 
 	  <div data-role="content" id="overviewMenu"> 
-		<p><a href="#levels" data-role="button" id="startBtn">Start</a></p>
-		<p><a href="#options" data-role="button">Optionen</a></p>    
-		<p><a href="#exit" data-role="button">Beenden</a></p>
+		<p><a href="#levels" data-role="button" data-icon="level-selection" id="startBtn">Levelsauswahl</a></p>
+		<p><a href="#options" data-role="button" data-icon="settings">Optionen</a></p>    
+		<p><a href="#exit" data-role="button" data-icon="quit">Beenden</a></p>
 	  </div>
 	 
 	</div>
@@ -55,17 +60,10 @@
 		</div>
 		
 		<div data-role="content" id="levelOverview">
-			<div class="ui-grid-b" id="levelIcons">
-				<div class="ui-block-a"><a id="level1" href="#main" data-role="button"  data-theme="c">Level 1</a></div> 
-				<div class="ui-block-b"><a id="level2" href ="#main" data-role="button" data-theme="c">Level 2</a></div>	   
-				<div class="ui-block-c"><a id="level3" href="#main" data-role="button" data-theme="c">Level 3</a></div>	   
-			</div>
+			<div class="ui-grid-b" id="levelIcons"></div>
 		
-		<a href="#menu" data-role="button" id="optionBtns">Zurück</a>
-		</div>
-		
-		<!-- #main -->
-		
+		<a href="#menu" data-role="button" data-icon="back2" id="optionBtns">Zurueck</a>
+		</div>		
 	</div>
 	
 	<!-- Optionen -->
@@ -88,7 +86,7 @@
 		</div>
 		<a href="" data-role="button" id="optionBtns">Weiterspielen</a>
 		
-		<a href="#menu" data-role="button" id="optionBtns">Zurück</a>
+		<a href="#menu" data-role="button" data-icon="back2" id="optionBtns">Zurück</a>
 		
 		</div>
 		
@@ -102,8 +100,8 @@
 		</div>
 		
 		<div data-role="content" id="overviewExit"> 
-			<a href="" data-role="button">Ja</a>
-			<a href="#menu" data-role="button">Nein</a>
+			<a href="" data-role="button" data-icon="accept">Ja</a>
+			<a href="#menu" data-role="button" data-icon="decline">Nein</a>
 		</div>
 	</div>
 	
@@ -117,10 +115,9 @@
 	  
 	  <div data-role="footer" id="foot">
 		<div id="music">
-			<a href="" data-role="button" id="musicBtn">&nbsp;</a>
+			<a href="" data-role="button" data-icon="music" id="musicBtn">&nbsp;</a>
 		</div>
 		<div id="gameBtns">
-			<a href="#levels" data-role="button" id="backBtn" >&nbsp;</a>
 			<a href="" data-role="button" id="playBtn">&nbsp;</a>
 			<a href="" data-role="button" id="pauseBtn">&nbsp;</a>		
 		</div>

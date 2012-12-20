@@ -118,39 +118,12 @@ function createEnemy() {
 
 // verringere Geschwindigkeit (beim Fallen)
 function updateSpaceship() {
-	// Flughoehe aktualisieren
-	//spaceship.incFlightAttitude(-spaceship.getVertSpeed());
-	
-	// Geschwindigkeit drosseln
-	//spaceship.derate();
+	// pruefe ob Raumschiff getroffen
 	spaceship.checkIsHit();
 	
+	// pruefe Begrenzungen
 	spaceship.checkBoundary();
-	
-	/*if(spaceship.checkAttitude())
-		nextLevel();*/
 }
-
-// aktualisiere den Windpfeil
-function updateWindArrow() {
-
-	// Berechne Windgeschwindikeit
-	var randSpeed = getRandom(-1, 1);
-	
-	if(windSpeed + randSpeed < maxWindStrenght && windSpeed + randSpeed > -maxWindStrenght)
-		windSpeed += randSpeed;
-	
-	// Ermittle den Windpfeilwinkel
-	degree = windSpeed * 10;
-	
-	// Position des Pfeils
-	var posW = width / 2;
-	var posH = 40 - 5 ;
-	
-	// Rotiere den Windpfeil um diesen Winkel an einer bestimmten Position
-	rotateIt(sctx, windArrow, degree, posW, posH);
-}
-
 
 // Dreht ein Objekt entsprechend der Gradzahl an der gewuenschten Position
 function rotateIt(objContext, objImg, lngPhi, posW, posH){
@@ -175,22 +148,6 @@ function updateStatusBar(){
 	// aktualisiere Text
 	drawText();
 
-	// aktualisiere Windpfeil 
-	updateWindArrow();
-	
-	// zeichne Tankstatus
-	drawTankStatus();
-}
-
-function drawTankStatus() {
-	// Position der Tankanzeige
-	var posW = width - 50;
-	var posH = 1;
-	
-	// Hole die richtige Tankanzeige, entsprechend dem aktuellen Status
-	var frame = spaceship.getTankFrame();
-	
-	//tankSprite.drawFrame(sctx, frame, posW, posH);
 }
 
 // Lade naechstes Level
@@ -204,6 +161,7 @@ function nextLevel() {
 	startGame();
 }
 
+// Aktualliesiere Daten des Levels 
 function updateLevel(level) {
 	maxLvlHeight = level.getLvlHeight();
 	lvlSpeed = level.getLvlSpeed();
@@ -256,6 +214,11 @@ function updateBackground() {
 	if((bgHeight + height) >= backgroundSprite.getHeight(0))
 		bgHeight = 0;
 
+	var x = 0;
+	if(shock) {
+		backgroundSprite.drawFrame(ctx, bgFrame, 3, yPos);	
+		shock = false;
+	}
 	backgroundSprite.drawFrame(ctx, bgFrame, 0, yPos);	
 	
 	bgHeight += lvlSpeed;
@@ -317,7 +280,7 @@ function drawScene() {
 	//sky.addColorStop(Math.random(), SKY_COLOR);
 	sky.addColorStop(0, SKY_COLOR);
 	//sky.addColorStop(1, '#FFFFFF');
-	ctx.fillStyle = sky;
+	ctx.fillStyle = SKY_COLOR;
 	ctx.fillRect(0, 0, width, height);
 	
 	// Hintergrundbild zeichnen
@@ -334,7 +297,6 @@ function drawSpaceship() {
 	
 	var sprite = spaceship.getSprite(); 
 	sprite.drawFrame(ctx, spaceship.getFrame(), spaceship.getX(), spaceship.getY());
-	//console.log(sprite);
 }
 
 function drawText() {

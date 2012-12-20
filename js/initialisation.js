@@ -36,8 +36,22 @@ window.addEventListener("load", function() {
 		"windArrow"		 		: "./pics/up_arrow_small.png"
 	}, onDone);
 	
-	sound= new Sound();
+	var lvlSelectionData = lvlMngr.getLevelSelectionData();
 	
+	var blocks = {0:'a', 1:'b', 2:'c', 3:'d'};
+	var i = 1;
+	for(l in lvlSelectionData) {
+		var attribs = lvlSelectionData[l];
+		console.log(attribs['title'], attribs['picture']);
+		
+		$('.ui-grid-b').append('<div class="ui-block-'+blocks[i-1]+'"><a id="level'+i+'" href="#main" data-role="button" data-theme="c" onclick="startNewGame('+i+')">'+attribs['title']+'</a></div> ');
+		console.log(i);
+		i++;
+		
+	}
+	
+	sound= new Sound();
+
 }, false);
 
 function onDone() {
@@ -110,7 +124,6 @@ $(document).ready(function(){
 	$("#pauseBtn").click(function() {
 		pauseGame();
 	});
-	
 });
 
 

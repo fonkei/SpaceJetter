@@ -143,16 +143,19 @@ html, body {
 #pauseBtn
 {
 	float:left;
-	background-image: url(../pics/button_pause.png);
-	height: 30px;
-	width: 30px;	
+	background-image: url(images/Pause.png);
+	height: 20px;
+	width: 20px;	
 }
 
 #musicBtn
 {
-	background-image: url(../pics/Button_music_on.png);
-	height: 30px;
-	width: 30px;
+	margin-top: auto;
+	margin-left: auto;  
+	margin-right: auto;	
+	background-image: url(images/Music.png);
+	height: 20px;
+	width: 20px;
 }
 
 #windDirection {
@@ -211,5 +214,33 @@ html, body {
 	background-image: url(../pics/Button_level_3.png);
 	height: 170px;
 	width: 170px;
+}
+
+.ui-icon-level-selection {
+	background-image: url("images/Arrange.png");
+}
+
+.ui-icon-settings {
+	background-image: url("images/Settings.png");
+}
+
+.ui-icon-quit {
+	background-image: url("images/ShutDown.png");
+}
+
+.ui-icon-back2 {
+	background-image: url("images/Back.png");
+}
+
+.ui-icon-accept {
+	background-image: url("images/Accept.png");
+}
+
+.ui-icon-decline {
+	background-image: url("images/Decline.png");
+}
+
+.ui-icon-music {
+	background-image: url("images/Music.png");
 }
 
