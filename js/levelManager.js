@@ -20,7 +20,8 @@ function LevelManager()
 							 485,		// Laser
 							 546,		// Shield
 							 597,		// Enemy Cubic
-							 639		// Bullet
+							 639,		// Bullet
+							 650		// Sphere
 							 ];
 }
 

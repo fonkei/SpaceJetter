@@ -150,6 +150,24 @@ PULaser = function(sp) {
 PULaser.prototype = new PowerUp();
 PULaser.prototype.constructor = PULaser;
 
+/****
+*  Sphere
+*
+****/
+Sphere = function(sp, x, y) {
+	this.base = PowerUp;
+	
+	this.base(sp);
+	this.init();
+	
+	this.setX(x);
+	this.setY(y);
+	this.type = "Sphere";
+}
+
+Sphere.prototype = new PowerUp();
+Sphere.prototype.constructor = Sphere;
+
 
 /****
 *  Gegner
@@ -391,6 +409,7 @@ Cubic.prototype = {
 		}
 		else {
 			this.expFrame = 0;
+			objects.push(new Sphere(powerupSprite['sphere'], this.getX(), this.getY()));
 			this.defunct = true;
 		}
 	},
@@ -677,6 +696,10 @@ Spaceship.prototype = {
 					this.laserPowerUp = true;
 					object.setDefunct();
 				}
+				if(object instanceof Sphere) {
+					sphereCount++;
+					object.setDefunct();
+				}
 				if(object instanceof Asteroid || object instanceof Bug || object instanceof Cubic) {
 					if(!object.isShot) {
 						this.hit();
@@ -703,7 +726,7 @@ Spaceship.prototype = {
 			if(bullets[i].getX() + bullets[i].getWidth() >= objectX && bullets[i].getX() <= objectX + objectWidth && bullets[i].getY() + bullets[i].getHeight() >= objectY && bullets[i].getY() <= objectY + objectHeight) {	
 				if(!(object instanceof Shield) && !(object instanceof PUShield) && !(object instanceof PULaser) && !(object instanceof PURocket)) {
 					// Alle, die getroffen sind nicht mehr beruecksichtigen
-					if(!(object instanceof Bullet)) {
+					if(!(object instanceof Bullet ) && !(object instanceof Sphere )) {
 						if(!object.isShot) {
 							object.hit();
 							bullets[i].defunct = true;
@@ -861,7 +884,7 @@ Rocket.prototype = {
 		this.nearestY = height;
 		for(o in objects) {
 			var object = objects[o];
-			if(!(object instanceof Shield) && !(object instanceof PUShield) && !(object instanceof PULaser) && !(object instanceof PURocket) && !(object instanceof Bullet)) {
+			if(!(object instanceof Shield) && !(object instanceof PUShield) && !(object instanceof PULaser) && !(object instanceof PURocket) && !(object instanceof Bullet) && !(object instanceof Sphere)) {
 				if(object.getX() <= this.nearestX && object.getY() <= this.nearestY){
 					this.nearestX = object.getX();
 					this.nearestY = object.getY();

@@ -102,3 +102,4 @@ var pathCounter = 0;
 
 // Erschuetterung bei Explosion
 var shock = false;
+var sphereCount = 0;
