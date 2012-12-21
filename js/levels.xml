@@ -1,6 +1,7 @@
 <levels>
 	<level id="0">
 		<title>FirstStage</title>
+		<picture>pics/level1.png</picture>
 		<scene>
 			<background>
 				<color>#000000</color>	

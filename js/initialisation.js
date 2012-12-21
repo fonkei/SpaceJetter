@@ -36,19 +36,7 @@ window.addEventListener("load", function() {
 		"windArrow"		 		: "./pics/up_arrow_small.png"
 	}, onDone);
 	
-	var lvlSelectionData = lvlMngr.getLevelSelectionData();
-	
-	var blocks = {0:'a', 1:'b', 2:'c', 3:'d'};
-	var i = 1;
-	for(l in lvlSelectionData) {
-		var attribs = lvlSelectionData[l];
-		console.log(attribs['title'], attribs['picture']);
-		
-		$('.ui-grid-b').append('<div class="ui-block-'+blocks[i-1]+'"><a id="level'+i+'" href="#main" data-role="button" data-theme="c" onclick="startNewGame('+i+')">'+attribs['title']+'</a></div> ');
-		console.log(i);
-		i++;
-		
-	}
+	buildLevelSelection();
 	
 	sound= new Sound();
 
@@ -118,10 +106,23 @@ $(document).ready(function(){
 		if(isStarted == true)
 			pauseGame();
 	});
-	$("#playBtn").click(function() {
-		//startGame();
+	$("#soundBtn").click(function() {
+		if(!soundOn) {
+			$(this).css('background-image', 'url(css/images/Mute.png)');
+		}
+		else {
+			$(this).css('background-image', 'url(css/images/Sound2.png)');
+		}
+		mute();
 	});
+	
 	$("#pauseBtn").click(function() {
+		if(gamePaused) {
+			$(this).css('background-image', 'url(css/images/Pause2.png)');
+		}
+		else {
+			$(this).css('background-image', 'url(css/images/Play2.png)');
+		}
 		pauseGame();
 	});
 });
@@ -217,6 +218,42 @@ function pauseGame() {
 	} else if (gamePaused) {
 		startGame();
 		gamePaused = false;
+	}
+}
+
+// Spiel pausieren oder wieder fortsetzen
+function mute() {
+	if (!soundOn) {
+		soundOn = true;
+	} else {
+		soundOn = false;
+	}
+}
+
+function buildLevelSelection() {
+	var lvlSelectionData = lvlMngr.getLevelSelectionData();
+
+	var blocks = {0:'a', 1:'b', 2:'c', 3:'d', 4:'e'};
+	var i = 1;
+	for(l in lvlSelectionData) {
+		var attribs = lvlSelectionData[l];
+
+		var path = attribs['picture']
+		var blockCount  = (i-1) % 5;
+		
+		if(path == null || path == undefined || path == "")
+			path = "pics/nopic.png";
+		else
+			path = attribs['picture'];
+			
+		console.log(path);
+		var cssObj = {'background-image' : 'url('+path+')',
+					  'width' : '50px',
+					  'height' : '50px'};
+		
+		$('.ui-grid-d').append('<div class="ui-block-'+blocks[blockCount]+'"><a id="level'+i+'" href="#main" data-role="button" data-theme="c" onclick="startNewGame('+i+')"/></div> ');
+		$('#level'+i).css(cssObj);
+		i++;
 	}
 }
 

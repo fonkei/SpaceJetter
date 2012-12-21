@@ -63,6 +63,7 @@ var heightBarFrame = 3;
 var sunPosition = -120;
 var timer = 0;
 var gamePaused = false;
+var soundOn = true;
 var gameHandle = 0;
 var cloudHandle = 0;
 var powerUpHandle = 0;
