@@ -80,6 +80,7 @@ var bgHeight = 0;
 var lvlScore = 0;
 
 var lvlMngr = null;
+var prflMngr = null;
 var level = null;
 var imgMngr = null;
 var maxWindStrenght = 0;
@@ -103,3 +104,5 @@ var pathCounter = 0;
 // Erschuetterung bei Explosion
 var shock = false;
 var sphereCount = 0;
+
+var currLevel = 0;

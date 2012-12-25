@@ -190,6 +190,7 @@ Enemy = function(s, sp) {
 Enemy.prototype = new FlyingObject();
 Enemy.prototype.constructor = Enemy;
 
+
 /****
 *  Enemy Bug 
 *
@@ -299,6 +300,133 @@ Bug.prototype = {
 	},
 
 }
+
+/****
+*  Enemy Packman 
+*
+****/
+Packman = function(sp, paths) {
+	this.base = Enemy;
+	
+	var speed = 0;
+
+	this.base(speed, sp);
+	this.init();
+	
+	
+	this.degree = 0;
+	
+	this.type = "Packman";
+	this.currDegree = 270;
+	
+	this.pathFinder = new PathManager(paths);
+	this.newPath();	
+	this.isShot = false;
+	this.expFrame = 0;
+	
+	this.timer = 0;
+	this.shootTimer = 0;
+}
+
+Packman.prototype = new Enemy();
+Packman.prototype.constructor = Packman;
+
+Packman.prototype = {
+	getDir: function() { return this.dir; },
+	setDir: function(d) { this.dir = d; },
+	
+	getDegree: function() { return this.degree; },
+	setDegree: function(d) { this.degree = ((d % 360) + 360) % 360; },
+	
+	incDegree: function(val) {
+		this.degree = (((this.degree + val) % 360) + 360) % 360;
+	},
+	
+	decDegree: function(val) {
+		this.degree = (((this.degree - val) % 360) + 360) % 360;
+	},
+	
+	newPath: function() {
+		this.setX(this.pathFinder.getX());
+		this.setY(this.pathFinder.getY());
+	},
+	
+	fly: function() {	
+		
+		this.pathFinder.calculate();
+		
+		var vx = this.pathFinder.getVX();
+		var vy = this.pathFinder.getVY();
+
+		this.incX(vx);
+		this.decY(vy);
+		
+		if(this.shootTimer == 50) {
+			this.shoot();
+			this.shootTimer = 0;
+		}
+		this.shootTimer++;
+		
+		if(!this.isShot)
+			this.turn(this.pathFinder.getDegree());
+		else {
+			this.explode();
+		}
+	},
+	
+	turn: function(d) {
+		
+		this.setDegree(d);
+		
+		var degree = this.getDegree();
+		var frame;
+		
+		if(this.timer == 3) {
+			if(degree < this.currDegree)
+				this.currDegree -= 15;
+			else if(degree > this.Degree)
+				this.currDegree += 15;
+			else
+				this.currDegree = degree;
+				
+			this.timer = 0;
+		}
+		this.timer++;
+		
+		console.log(degree, this.currDegree);
+		
+		// Ermittle Frame
+		frame = (((this.currDegree % 360) + 360) % 360) / 15;
+			
+		this.setFrame(frame);
+	},
+	
+	shoot: function() {
+		var xPos = this.getX() + (this.getWidth() / 2) - 5 ;
+		var yPos = this.getY() + (this.getHeight() / 2) + 5;
+		
+		objects.push(new Bullet(weaponSprite['bullet'], xPos , yPos, 0, 10));
+	},
+	
+	hit: function() {
+		this.isShot = true;
+		shock = true;
+		this.setSprite(explosionSprite['exp1']);
+	},
+	
+	explode: function() {
+		if(this.expFrame < 16) {
+			this.setFrame(this.expFrame);
+			this.expFrame++;
+		}
+		else {
+			this.expFrame = 0;
+			this.defunct = true;
+		}
+	},
+}
+
+
 
 /****
 *  Enemy Cubic 
@@ -672,7 +800,7 @@ Spaceship.prototype = {
 			var shieldHeigth = shield.getHeight();
 			
 			if(shieldX + shieldWidth >= objectX && shieldX <= objectX + objectWidth  && shieldY + shieldHeigth >= objectY && shieldY <= objectY + objectHeigth) {
-				if(object instanceof Asteroid || object instanceof Bug || object instanceof Cubic)
+				if(object instanceof Asteroid || object instanceof Bug || object instanceof Cubic || object instanceof Packman)
 					object.hit();
 				if(object instanceof Bullet)
 					object.setDefunct();
@@ -700,7 +828,7 @@ Spaceship.prototype = {
 					sphereCount++;
 					object.setDefunct();
 				}
-				if(object instanceof Asteroid || object instanceof Bug || object instanceof Cubic) {
+				if(object instanceof Asteroid || object instanceof Bug || object instanceof Cubic || object instanceof Packman) {
 					if(!object.isShot) {
 						this.hit();
 						object.hit();

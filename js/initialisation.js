@@ -23,6 +23,10 @@ window.addEventListener("load", function() {
 	SBWidth = myStatusBar.width;
 	SBHeight = myStatusBar.height;	
 	
+	// Profil Manager
+	prflMngr = new ProfileManager();
+	prflMngr.init();
+	
 	// Level Manager
 	lvlMngr = new LevelManager();
 	lvlMngr.init("js/levels.xml");
@@ -93,19 +97,15 @@ function onDone() {
 
 // Event zum starten des Spieles
 $(document).ready(function(){
-	$("#level1").click(function() {
-		startNewGame(1);
-	});
-	$("#level2").click(function() {
-		startNewGame(2);
-	});
-	$("#level3").click(function() {
-		startNewGame(3);
-	});
 	$("#backBtn").click(function() {
 		if(isStarted == true)
 			pauseGame();
 	});
+	
+	$("#clearProfileBtn").click(function() {
+		prflMngr.resetProfile();
+	});
+	
 	$("#soundBtn").click(function() {
 		if(!soundOn) {
 			$(this).css('background-image', 'url(css/images/Mute.png)');
@@ -251,7 +251,13 @@ function buildLevelSelection() {
 					  'width' : '50px',
 					  'height' : '50px'};
 		
-		$('.ui-grid-d').append('<div class="ui-block-'+blocks[blockCount]+'"><a id="level'+i+'" href="#main" data-role="button" data-theme="c" onclick="startNewGame('+i+')"/></div> ');
+		if(i <= currLevel) {
+			$('.ui-grid-d').append('<div class="ui-block-'+blocks[blockCount]+'"><a id="level'+i+'" href="#main" data-role="button" data-theme="c" onclick="startNewGame('+i+')"/></div> ');
+		}	
+		else {
+			$('.ui-grid-d').append('<div class="ui-block-'+blocks[blockCount]+'"><a id="level'+i+'" href="#main" data-role="button" data-theme="c" class="ui-disabled"/></div> ');
+		}
+			
 		$('#level'+i).css(cssObj);
 		i++;
 	}

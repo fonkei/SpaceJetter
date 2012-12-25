@@ -21,7 +21,8 @@ function LevelManager()
 							 546,		// Shield
 							 597,		// Enemy Cubic
 							 639,		// Bullet
-							 650		// Sphere
+							 650,		// Sphere
+							 678		// Enemy Packman
 							 ];
 }
 

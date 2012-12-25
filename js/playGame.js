@@ -93,6 +93,10 @@ function createEnemy() {
 					var newEnemy = new Bug(enemySprite['bug'], [path['path']]);
 					objects.push(newEnemy);
 					break;
+				case 'packman':
+					var newEnemy = new Packman(enemySprite['packman'], [path['path']]);
+					objects.push(newEnemy);
+					break;
 				case 'cubic':
 					var newEnemy = new Cubic(enemySprite['cubic'], [path['path']]);
 					objects.push(newEnemy);
@@ -318,7 +322,7 @@ function drawObjects() {
 		var sprite = objects[i].getSprite();
 		sprite.drawFrame(ctx, objects[i].getFrame(), objects[i].getX(), objects[i].getY());
 		
-		if (objects[i].defunct == true || objects[i].getX() > (width + 100) || (objects[i].getX() + objects[i].getWidth()) < -100 || objects[i].getY() > height ) {
+		if (objects[i].defunct == true || objects[i].getX() > (width + 100) || (objects[i].getX() + objects[i].getWidth()) < -100 || objects[i].getY() > height + 100 ) {
 			delete objects[i];
 			objects.splice(i, 1);
 			i--;
