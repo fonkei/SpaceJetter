@@ -10,19 +10,19 @@ function LevelManager()
 	this.xml;
 	
 	this.spriteRowHeights = [0,			// Spaceship 
-							 100, 		// Plasma
-							 140, 		// Enemy Bug
-							 240,		// Asteroid
-							 340,		// PowerUp Laser
-							 378,		// PowerUp Rocket
-							 416,		// PowerUp Shield
-							 454,		// Rocket
-							 485,		// Laser
-							 546,		// Shield
-							 597,		// Enemy Cubic
-							 639,		// Bullet
-							 650,		// Sphere
-							 678		// Enemy Packman
+							 110, 		// Plasma
+							 150, 		// Enemy Bug
+							 250,		// Asteroid
+							 350,		// PowerUp Laser
+							 388,		// PowerUp Rocket
+							 426,		// PowerUp Shield
+							 464,		// Rocket
+							 495,		// Laser
+							 556,		// Shield
+							 607,		// Enemy Cubic
+							 649,		// Bullet
+							 660,		// Sphere
+							 688		// Enemy Packman
 							 ];
 }
 

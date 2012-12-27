@@ -3,19 +3,26 @@ var ctx = null;		// Spiel Canvas
 var sctx = null;	// Statusbar Canvas
 
 // width of the canvas
-var width = 480; 
+var width = 600; 
 var HBWidth = null;
 var SBWidth = null; 
 
 // height of the canvas  
-var height = 600; 
+var height = 800; 
 var HBHeight = null;
 var SBHeight = null;
 
 // verschiedene Konstanten 
 
 var SKY_COLOR = '#000000';
-var SUN_START_POSITION = -120;
+var RATIO = null;
+
+var currentWidth = null;
+var currentHeight = null;
+
+var ua = navigator.userAgent.toLowerCase();
+var android = ua.indexOf('android') > -1 ? true : false;
+var ios = ( ua.indexOf('iphone') > -1 || ua.indexOf('ipad') > -1  ) ? true : false;
 
 // Character Codes
 var LEFT_ARROW = 37;
@@ -106,3 +113,4 @@ var shock = false;
 var sphereCount = 0;
 
 var currLevel = 0;
+var lastX = 0;

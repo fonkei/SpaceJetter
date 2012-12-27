@@ -1,9 +1,40 @@
 
-// Bewege den Ballon zur Mausposition (horizontal)
-function moveBalloon(e) {
+// Bewege das Raumschiff zur Mausposition (horizontal)
+function moveSpaceship(e) {
+	e.preventDefault();
+	
 	if(!spaceship.isShot) {
-		spaceship.setX(e.clientX - myCanvas.offsetLeft - (spaceship.getWidth() / 2));
-		spaceship.setY(e.clientY - myCanvas.offsetTop - (spaceship.getHeight() / 2));
+		if(e.touches != undefined) {
+			e = e.touches[0];
+		}
+			
+		var mouseX = (e.pageX - myCanvas.offsetLeft - (spaceship.getWidth() / 2));
+		var mouseY = (e.pageY - myCanvas.offsetTop - (spaceship.getHeight() / 2));
+	
+		console.log(e.pageX, e.pageY, myCanvas.offsetLeft, myCanvas.offsetTop);
+	
+		// Berechne die Neigung des Raumschiffs anhand Mausposition
+		var diff = Math.round((lastX - mouseX) / 10);
+		var frame = 5;
+		
+		if(diff > 0){			// nach rechts
+			if(diff > 5)
+				diff = 5;
+
+			frame -= diff;
+		}
+		else if(diff < 0) {		// nach links
+			if(diff < -5)
+				diff = -5;
+				
+			frame += Math.abs(diff); 
+		}
+		
+		spaceship.setFrame(frame);
+		spaceship.setX(mouseX);
+		spaceship.setY(mouseY);
+		
+		console.log(spaceship.getX(), spaceship.getY(), spaceship.getWidth(), spaceship.getHeight());
 	}
 }
 
@@ -17,17 +48,17 @@ function keyDown(e) {
 
 function keyUp(e) {
 	delete keys[e.which];
-	spaceship.setFrame(0);
+	spaceship.setFrame(5);
 }
 
 function move() {
 	if (keys[LEFT_ARROW]) {
 		spaceship.decX(20);
-		spaceship.setFrame(1);
+		spaceship.setFrame(0);
 	}
 	if (keys[RIGHT_ARROW]) {
 		spaceship.incX(20);
-		spaceship.setFrame(2);
+		spaceship.setFrame(10);
 	}
 	if (keys[UP_ARROW]) {
 		spaceship.decY(20);
@@ -124,6 +155,8 @@ function createEnemy() {
 function updateSpaceship() {
 	// pruefe ob Raumschiff getroffen
 	spaceship.checkIsHit();
+	
+	lastX = spaceship.getX();
 	
 	// pruefe Begrenzungen
 	spaceship.checkBoundary();

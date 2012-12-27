@@ -15,20 +15,12 @@ html, body {
 
 #gameCanvas{
 	opacity:0;
-	margin-top: auto;
-	margin-left: auto;  
-	margin-right: auto;
+	display: block; 
+	margin: 0 auto; 
+	background: #fff;
 }
 
 #statusbar {
-	opacity:0;
-	background-color: #0F0F0F; 	
-	margin-top: auto;
-	margin-left: auto;  
-	margin-right: auto; 
-}
-
-#heightBar {
 	opacity:0;
 	background-color: #0F0F0F; 	
 	margin-top: auto;
@@ -152,9 +144,9 @@ html, body {
 
 #options
 {
-	margin-top: auto;
+	/*margin-top: auto;
 	margin-left: auto;  
-	margin-right: auto;	
+	margin-right: auto;	*/
 }
 
 #overviewOptions
@@ -178,30 +170,8 @@ html, body {
 	margin-top: auto;
 	margin-left: auto;  
 	margin-right: auto;	
-	height:180px;
-	width:550px;
 }
 
-#level1
-{
-	background-image: url(../pics/Button_level_1.png);
-	height: 170px;
-	width: 170px;
-}
-
-#level2
-{
-	background-image: url(../pics/Button_level_2.png);	
-	height: 170px;
-	width: 170px;
-}
-
-#level3
-{
-	background-image: url(../pics/Button_level_3.png);
-	height: 170px;
-	width: 170px;
-}
 
 .ui-icon-level-selection {
 	background-image: url("images/Arrange.png");

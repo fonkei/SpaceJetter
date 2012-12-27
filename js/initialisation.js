@@ -18,9 +18,14 @@ window.addEventListener("load", function() {
 	myCanvas.style.opacity = 1;
 	myStatusBar.style.opacity = 1;
 	
-	width = myCanvas.width;
-	height = myCanvas.height;
-	SBWidth = myStatusBar.width;
+	RATIO = width / height; 
+	
+	currentWidth = width;
+	currentHeight = height;
+	
+	myCanvas.width = width;
+	myCanvas.height = height;
+	SBWidth = myStatusBar.width = width;
 	SBHeight = myStatusBar.height;	
 	
 	// Profil Manager
@@ -67,10 +72,17 @@ function onDone() {
 
 	
 	var spaceshipFrames = [
-				[0, 0, 128, 100, 0, 0],
-				[129, 0, 128, 100, 0, 0],
-				[258, 0, 128, 100, 0, 0],
-				[387, 0, 12, 12, 0, 0]
+				[0, 0, 67, 110, 0, 0],
+				[67, 0, 67, 110, 0, 0],
+				[135, 0, 67, 110, 0, 0],
+				[201, 0, 67, 110, 0, 0],
+				[268, 0, 67, 110, 0, 0],
+				[335, 0, 67, 110, 0, 0],
+				[402, 0, 67, 110, 0, 0],
+				[469, 0, 67, 110, 0, 0],
+				[536, 0, 67, 110, 0, 0],
+				[603, 0, 67, 110, 0, 0],
+				[670, 0, 67, 110, 0, 0],
 			];
 	
 	spaceshipSprite = new SpriteSheet(spriteSheet, spaceshipFrames);
@@ -144,14 +156,18 @@ function startNewGame(lvl) {
 	// Erstelle Raumschiff
 	spaceship = new Spaceship(spaceshipXPosition, spaceshipYPosition, spaceshipHorSpeed, spaceshipVertSpeed, spaceshipFrame);
 	spaceship.setSprite(spaceshipSprite);
-	spaceship.setFrame(0);
+	spaceship.setFrame(5);
 	
 	// Events
-	document.addEventListener("mousemove", moveBalloon, false);
+	document.addEventListener("mousemove", moveSpaceship, false);
 	document.addEventListener("mousedown", onMouseClick, false);
 	document.addEventListener("keydown", keyDown, false);
 	document.addEventListener("keyup", keyUp, false);
-	
+	document.addEventListener("touchmove", moveSpaceship, false);
+	document.addEventListener("touchstart", onMouseClick, false);
+	window.addEventListener('resize', resize, false);
+
+	resize();
 	level = lvlMngr.loadLevel(lvl-1);
 	updateLevel(level);
 	
@@ -262,4 +278,27 @@ function buildLevelSelection() {
 		i++;
 	}
 }
+
+function resize() {
+	currentHeight = window.innerHeight - 90;
+	// resize the width in proportion
+	// to the new height
+	currentWidth = currentHeight * RATIO;
+
+	// this will create some extra space on the
+	// page, allowing us to scroll past
+	// the address bar, thus hiding it.
+	if (android || ios) {
+		document.body.style.height = (window.innerHeight + 50) + 'px';
+	}
+
+	spaceship.setWidth(spaceship.getWidth() * RATIO);
+	myCanvas.style.width = currentWidth + 'px';
+	myCanvas.style.height = currentHeight + 'px';
+	// a short delay
+	window.setTimeout(function() {
+			window.scrollTo(0,1);
+	}, 1);
+}
+
 

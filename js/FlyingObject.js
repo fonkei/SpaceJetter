@@ -208,6 +208,7 @@ Bug = function(sp, paths) {
 	
 	this.type = "Bug";
 
+	this.shootTimer = 0;
 	this.pathFinder = new PathManager(paths);
 	this.newPath();	
 	this.isShot = false;
@@ -247,6 +248,12 @@ Bug.prototype = {
 		this.incX(vx);
 		this.decY(vy);
 		
+		if(this.shootTimer == 50) {
+			this.shoot(vx, vy);
+			this.shootTimer = 0;
+		}
+		this.shootTimer++;
+		
 		if(!this.isShot)
 			this.turn(this.pathFinder.getDegree());
 		else {
@@ -263,8 +270,23 @@ Bug.prototype = {
 				
 		// Ermittle Frame
 		frame = (((degree % 360) + 360) % 360) / 30;
-			
+				
 		this.setFrame(frame);
+	},
+	
+	shoot: function(vx, vy) {
+		var speed = 2;
+		var xPos1 = this.getX() + (this.getWidth() / 2) - 40 ;
+		var yPos1 = this.getY() + (this.getHeight() / 2) + 5;
+		
+		var xPos2 = this.getX() + (this.getWidth() / 2) + 40 ;
+		var yPos2 = this.getY() + (this.getHeight() / 2) + 5;
+		
+		vx = vx * speed;
+		vy = -vy * speed;
+		
+		objects.push(new Bullet(weaponSprite['bullet'], xPos1 , yPos1, vx, vy));
+		objects.push(new Bullet(weaponSprite['bullet'], xPos2 , yPos2, vx, vy));
 	},
 	
 	hit: function() {
@@ -392,8 +414,6 @@ Packman.prototype = {
 			this.timer = 0;
 		}
 		this.timer++;
-		
-		console.log(degree, this.currDegree);
 		
 		// Ermittle Frame
 		frame = (((this.currDegree % 360) + 360) % 360) / 15;
@@ -674,8 +694,8 @@ Spaceship = function(x, y, horSpeed, vertSpeed, f) {
 	this.base(x, y, horSpeed, f);
 
 	this.type = "Spaceship";
-	this.width = 128;
-	this.height = 100;
+	this.width = 67;
+	this.height = 110;
 	this.vertSpeed = vertSpeed;
 	this.fligtAttitude = 0;
 	this.tankStatus = 420;
@@ -949,12 +969,12 @@ Plasma = function(sp, shooterX, shooterY, side) {
 	
 	if(side == 0) {
 		
-		xPos = shooterX;
-		yPos = shooterY + 40;
+		xPos = shooterX + 15;
+		yPos = shooterY + 10;
 	}
 	else {
-		xPos = shooterX + 120;
-		yPos = shooterY + 40;
+		xPos = shooterX + 40;
+		yPos = shooterY + 10;
 	}
 		
 	var frame = 0;
@@ -983,7 +1003,7 @@ Plasma.prototype = {
 Rocket = function(sp, shooterX, shooterY) {
 	this.base = FlyingObject;
 	
-	var xPos = shooterX + 64;		
+	var xPos = shooterX + 33;		
 	var yPos = shooterY + 40;
 		
 	var frame = 0;
@@ -1057,8 +1077,8 @@ Rocket.prototype = {
 Laser = function(sp, shooterX, shooterY) {
 	this.base = FlyingObject;
 	
-	var xPos = shooterX + 64 - 5;		
-	var yPos = shooterY + 40;	
+	var xPos = shooterX + 33 - 5;		
+	var yPos = shooterY;	
 	var frame = 0;
 	var speed = 60;
 	
