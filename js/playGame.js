@@ -6,12 +6,15 @@ function moveSpaceship(e) {
 	if(!spaceship.isShot) {
 		if(e.touches != undefined) {
 			e = e.touches[0];
+			gbMove = true;
 		}
 			
-		var mouseX = (e.pageX - myCanvas.offsetLeft - (spaceship.getWidth() / 2));
-		var mouseY = (e.pageY - myCanvas.offsetTop - (spaceship.getHeight() / 2));
+		var mouseX = (e.pageX - myCanvas.offsetLeft);
+		var mouseY = (e.pageY - myCanvas.offsetTop);
+		
+		mouseX = (mouseX / scale)  - (spaceship.getWidth() / 2);
+		mouseY = (mouseY / scale)  - (spaceship.getHeight() / 2);
 	
-		console.log(e.pageX, e.pageY, myCanvas.offsetLeft, myCanvas.offsetTop);
 	
 		// Berechne die Neigung des Raumschiffs anhand Mausposition
 		var diff = Math.round((lastX - mouseX) / 10);
@@ -29,12 +32,12 @@ function moveSpaceship(e) {
 				
 			frame += Math.abs(diff); 
 		}
-		
+
 		spaceship.setFrame(frame);
 		spaceship.setX(mouseX);
 		spaceship.setY(mouseY);
 		
-		console.log(spaceship.getX(), spaceship.getY(), spaceship.getWidth(), spaceship.getHeight());
+		//console.log(spaceship.getX(), spaceship.getY(), mouseX, mouseY, spaceship.getWidth(), spaceship.getHeight());
 	}
 }
 
@@ -86,6 +89,25 @@ function onMouseClick(e) {
 	e.preventDefault();  // verhindern des Normalverhaltens des Browsers
 	if(!spaceship.isShot) {
 		fireBullet();
+	}
+}
+
+function onTouchStart(e) {
+	gnStartTime = Number(new Date());
+	setTimeout('checkTapHold(' + gnStartTime + ');clearTimeout();',2000);
+}
+
+function onTouchEnd(e) {
+	gbStillTouching = false;
+}
+
+function checkTapHold(nID) {
+	if ((!gbMove) && (gbStillTouching) && (gnStartTime == nID)) {
+		gnStartTime = 0;
+		gbMove = false; 
+		if(!spaceship.isShot) {
+			fireBullet();
+		}
 	}
 }
 
@@ -157,6 +179,9 @@ function updateSpaceship() {
 	spaceship.checkIsHit();
 	
 	lastX = spaceship.getX();
+	
+	ctx.strokeStyle = "#fc0";        // Linienstil
+    ctx.strokeRect(spaceship.getX(), spaceship.getY(), spaceship.getWidth(), spaceship.getHeight());  // Ungefülltes Rechteck
 	
 	// pruefe Begrenzungen
 	spaceship.checkBoundary();

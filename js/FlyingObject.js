@@ -275,18 +275,20 @@ Bug.prototype = {
 	},
 	
 	shoot: function(vx, vy) {
-		var speed = 2;
-		var xPos1 = this.getX() + (this.getWidth() / 2) - 40 ;
-		var yPos1 = this.getY() + (this.getHeight() / 2) + 5;
-		
-		var xPos2 = this.getX() + (this.getWidth() / 2) + 40 ;
-		var yPos2 = this.getY() + (this.getHeight() / 2) + 5;
-		
-		vx = vx * speed;
-		vy = -vy * speed;
-		
-		objects.push(new Bullet(weaponSprite['bullet'], xPos1 , yPos1, vx, vy));
-		objects.push(new Bullet(weaponSprite['bullet'], xPos2 , yPos2, vx, vy));
+		if(!this.isShot) {
+			var speed = 2;
+			var xPos1 = this.getX() + (this.getWidth() / 2) - 40 ;
+			var yPos1 = this.getY() + (this.getHeight() / 2) + 5;
+			
+			var xPos2 = this.getX() + (this.getWidth() / 2) + 40 ;
+			var yPos2 = this.getY() + (this.getHeight() / 2) + 5;
+			
+			vx = vx * speed;
+			vy = -vy * speed;
+			
+			objects.push(new Bullet(weaponSprite['bullet'], xPos1 , yPos1, vx, vy));
+			objects.push(new Bullet(weaponSprite['bullet'], xPos2 , yPos2, vx, vy));
+		}
 	},
 	
 	hit: function() {
@@ -422,10 +424,12 @@ Packman.prototype = {
 	},
 	
 	shoot: function() {
-		var xPos = this.getX() + (this.getWidth() / 2) - 5 ;
-		var yPos = this.getY() + (this.getHeight() / 2) + 5;
+		if(!this.isShot) {
+			var xPos = this.getX() + (this.getWidth() / 2) - 5 ;
+			var yPos = this.getY() + (this.getHeight() / 2) + 5;
 		
-		objects.push(new Bullet(weaponSprite['bullet'], xPos , yPos, 0, 10));
+			objects.push(new Bullet(weaponSprite['bullet'], xPos , yPos, 0, 10));
+		}
 	},
 	
 	hit: function() {
@@ -700,6 +704,8 @@ Spaceship = function(x, y, horSpeed, vertSpeed, f) {
 	this.fligtAttitude = 0;
 	this.tankStatus = 420;
 	this.timer = 0;
+	this.shootTimer = 0;
+	
 	this.heightBarFrame = 3;
 	this.rocketPowerUp = false;
 	this.laserPowerUp = false;
@@ -765,17 +771,19 @@ Spaceship.prototype = {
 		var w = this.getWidth();
 		var h = this.getHeight();
 		
+		console.log(x, y, w, h);
+		
 		if(x <= 0) { 				// linker Rand
 			this.setX(0);
 		}
 		if((x + w) >= width) {		// rechter Rand
-			this.setX((width - w));
+			this.setX(width - w);
 		}		
 		if(y <= 0) { 			// oberer Rand
 			this.setY(0);
 		}
-		if((y + w) >= height) {		// unterer Rand
-			this.setY((height - h));
+		if((y + h) >= height) {		// unterer Rand
+			this.setY(height - h);
 		}
 	},
 	
@@ -893,13 +901,23 @@ Spaceship.prototype = {
 	
 	// schieﬂen
 	shoot: function() {
-		bullets.push(new Plasma(weaponSprite['plasma'], this.getX(), this.getY(), 0));
-		bullets.push(new Plasma(weaponSprite['plasma'], this.getX(), this.getY(), 1));
+		if(this.shootTimer % 10 == 0) {
+			bullets.push(new Plasma(weaponSprite['plasma'], this.getX(), this.getY(), 0));
+			bullets.push(new Plasma(weaponSprite['plasma'], this.getX(), this.getY(), 1));
+		}
+		if(this.rocketPowerUp) {
+			if(this.shootTimer % 20 == 0)
+				bullets.push(new Rocket(weaponSprite['rocket'], this.getX(), this.getY()));
+		}
+		if(this.laserPowerUp) {
+			if(this.shootTimer % 20 == 0)
+				bullets.push(new Laser(weaponSprite['laser'], this.getX(), this.getY()));
+		}
 		
-		if(this.rocketPowerUp)
-			bullets.push(new Rocket(weaponSprite['rocket'], this.getX(), this.getY()));
-		if(this.laserPowerUp)
-			bullets.push(new Laser(weaponSprite['laser'], this.getX(), this.getY()));
+		if(this.shootTimer % 25 == 0)
+			this.shootTimer = 0;
+			
+		this.shootTimer++;
 	},
 	
 	// getroffen

@@ -2,7 +2,8 @@
 window.addEventListener("load", function() {
 	// Hole das Canvas Element
 	myCanvas = document.getElementById('gameCanvas');
-	var myStatusBar = document.getElementById('statusbar');
+	myStatusBar = document.getElementById('statusbar');
+	myFooter = document.getElementById('foot');
 	
 	if (!myCanvas || !myCanvas.getContext || !myStatusBar || !myStatusBar.getContext) {
 		return;
@@ -22,6 +23,7 @@ window.addEventListener("load", function() {
 	
 	currentWidth = width;
 	currentHeight = height;
+	currStatusHeight = 40;
 	
 	myCanvas.width = width;
 	myCanvas.height = height;
@@ -137,6 +139,15 @@ $(document).ready(function(){
 		}
 		pauseGame();
 	});
+	
+	$("#levelBtn").click(function() {
+		buildLevelSelection();
+		stopGame();
+	});
+	
+	$("#reloadBtn").click(function() {
+		startNewGame(currLevel);
+	});
 });
 
 
@@ -164,10 +175,12 @@ function startNewGame(lvl) {
 	document.addEventListener("keydown", keyDown, false);
 	document.addEventListener("keyup", keyUp, false);
 	document.addEventListener("touchmove", moveSpaceship, false);
-	document.addEventListener("touchstart", onMouseClick, false);
-	window.addEventListener('resize', resize, false);
-
+	document.addEventListener("touchstart", onTouchStart, false);
+	document.addEventListener("touchend", onTouchEnd, false);
+	window.addEventListener("resize", resize, false);
+	
 	resize();
+	currLevel = lvl;
 	level = lvlMngr.loadLevel(lvl-1);
 	updateLevel(level);
 	
@@ -267,7 +280,7 @@ function buildLevelSelection() {
 					  'width' : '50px',
 					  'height' : '50px'};
 		
-		if(i <= currLevel) {
+		if(i <= storedLevel) {
 			$('.ui-grid-d').append('<div class="ui-block-'+blocks[blockCount]+'"><a id="level'+i+'" href="#main" data-role="button" data-theme="c" onclick="startNewGame('+i+')"/></div> ');
 		}	
 		else {
@@ -280,24 +293,38 @@ function buildLevelSelection() {
 }
 
 function resize() {
-	currentHeight = window.innerHeight - 90;
+	currentHeight = window.innerHeight * 0.87;
+	currStatusHeight = window.innerHeight * 0.05;
+	currFooterHeight = window.innerHeight * 0.08;
+	
 	// resize the width in proportion
 	// to the new height
 	currentWidth = currentHeight * RATIO;
-
+	scale = currentWidth / width;
+	
+	
+	//console.log(widthRatio,heightRatio, RATIO);
 	// this will create some extra space on the
 	// page, allowing us to scroll past
 	// the address bar, thus hiding it.
 	if (android || ios) {
 		document.body.style.height = (window.innerHeight + 50) + 'px';
 	}
-
-	spaceship.setWidth(spaceship.getWidth() * RATIO);
+	
 	myCanvas.style.width = currentWidth + 'px';
 	myCanvas.style.height = currentHeight + 'px';
+	
+	myStatusBar.style.width = currentWidth + 'px';
+	myStatusBar.style.height = currStatusHeight + 'px';
+	
+	myFooter.style.width = currentWidth + 'px';
+	myFooter.style.height = currFooterHeight + 'px';
+	
+	
+	
 	// a short delay
 	window.setTimeout(function() {
-			window.scrollTo(0,1);
+		window.scrollTo(0,1);
 	}, 1);
 }
 

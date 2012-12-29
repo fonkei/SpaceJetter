@@ -1,4 +1,6 @@
 var myCanvas = null;
+var myStatusBar = null;
+var myFooter = null;
 var ctx = null;		// Spiel Canvas
 var sctx = null;	// Statusbar Canvas
 
@@ -12,6 +14,8 @@ var height = 800;
 var HBHeight = null;
 var SBHeight = null;
 
+var scale = null;
+
 // verschiedene Konstanten 
 
 var SKY_COLOR = '#000000';
@@ -19,6 +23,8 @@ var RATIO = null;
 
 var currentWidth = null;
 var currentHeight = null;
+var currStatusHeight = null;
+var currFooterHeight = null;
 
 var ua = navigator.userAgent.toLowerCase();
 var android = ua.indexOf('android') > -1 ? true : false;
@@ -113,4 +119,11 @@ var shock = false;
 var sphereCount = 0;
 
 var currLevel = 0;
+var storedLevel = 0;
 var lastX = 0;
+
+var gnStartTime = 0;
+var gbMove = false;
+var gbStillTouching = false;
+
+var timeoutId = 0;

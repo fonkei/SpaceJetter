@@ -57,28 +57,10 @@ html, body {
 	margin-top: auto;
 	margin-left: auto;  
 	margin-right: auto; 
-	width: 600px;
-	height: 50px;
-	padding: 0px;
+	text-align:center;
 }
 
-#music
-{
-	float:left;
-	height: 60px;
-	width: 50px;
-	margin-left:10px;
-}
-
-#gameBtns
-{
-	float:left;
-	height: 40px;
-	width: 250px;
-	margin-top: auto;
-	margin-left: 150px;  
-	margin-right: auto; 
-}
+#foot div {display:inline-block;}
 
 
 #backBtn
@@ -89,6 +71,7 @@ html, body {
 	height: 30px;
 	width: 30px;	
 }
+
 
 #optionBtns
 {	
@@ -123,6 +106,13 @@ html, body {
 	margin: 2pt -2pt 0pt;
 }
 
+#levelBtn
+{
+	background-image: url(images/Level.png);
+	height: 32px;
+	width: 32px;	
+}
+
 #pauseBtn
 {
 	background-image: url(images/Pause2.png);
@@ -137,16 +127,18 @@ html, body {
 	width: 32px;
 }
 
-#windDirection {
-	float:right;
-	padding:4px;
+#reloadBtn
+{
+	background-image: url(images/Reload.png);
+	height: 32px;
+	width: 32px;
 }
 
 #options
 {
-	/*margin-top: auto;
+	margin-top: auto;
 	margin-left: auto;  
-	margin-right: auto;	*/
+	margin-right: auto;	
 }
 
 #overviewOptions
@@ -199,5 +191,9 @@ html, body {
 
 .ui-icon-music {
 	background-image: url("images/Music.png");
+}
+
+.ui-icon-lelev {
+	background-image: url("images/Level.png");
 }
 

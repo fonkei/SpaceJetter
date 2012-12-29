@@ -15,10 +15,10 @@ ProfileManager.prototype.init = function() {
 // Lade Profil
 ProfileManager.prototype.loadProfile = function() {
 	if(localStorage.getItem("currLevel") != undefined)
-		currLevel = localStorage.getItem("currLevel");
+		storedLevel = localStorage.getItem("currLevel");
 	else {
 		localStorage.setItem("currLevel", 1);
-		currLevel = localStorage.getItem("currLevel");
+		storedLevel = localStorage.getItem("currLevel");
 	}
 }
 
