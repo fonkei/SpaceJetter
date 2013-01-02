@@ -39,33 +39,47 @@ window.addEventListener("load", function() {
 	lvlMngr.init("js/levels.xml");
 	
 	// Image Manager
-	imgMngr =  new ImageManager();
-	imgMngr.load({
+	resMngr =  new RessourceManager();
+	resMngr.loadImg({
 		"spriteSheet"			: "./pics/spriteSheets/spriteSheet.png",
-		"bgSheet"				: "./pics/spriteSheets/ParallaxStars2.png",
+		"bgSprite"				: "./pics/spriteSheets/ParallaxStars2.png",
 		"explosionSprite"		: "./pics/spriteSheets/explosionSprite.png",
-		"windArrow"		 		: "./pics/up_arrow_small.png"
-	}, onDone);
+		"enemySprite"		 	: "./pics/spriteSheets/enemySprite.png",
+		"powerUpSprite"		 	: "./pics/spriteSheets/powerUpSprite.png",
+		"weaponSprite"		 	: "./pics/spriteSheets/weaponSprite.png",
+		"spaceshipSprite"		: "./pics/spriteSheets/destroyerSprite.png",
+	}, onImgDone);
 	
+	resMngr.loadSnd({
+		"buu"				: "./audio/laser1.ogg",
+		"bang"				: "./audio/clickclick3.wav",
+	}, onSndDone);
+
 	buildLevelSelection();
 	
-	sound= new Sound();
+	//sound= new Sound();
 
 }, false);
 
-function onDone() {
-	spriteSheet 	= imgMngr.get("spriteSheet");
-	explosionSheet = imgMngr.get("explosionSprite");
+function onSndDone() {
+	// Sounds
+	bangSnd 		= resMngr.get("bang");
+	laserSnd 		= resMngr.get("buu");
+	console.log("blub");
+	console.log(typeof(laserSnd));
+	laserSnd.play();
+}
+
+function onImgDone() {
+	// Bilder
+	//spriteSheet 	= resMngr.get("spriteSheet");
+	explosionSheet  = resMngr.get("explosionSprite");
+	bgSheet 		= resMngr.get("bgSprite");
+	enemySheet 		= resMngr.get("enemySprite");
+	powerUpSheet 	= resMngr.get("powerUpSprite");
+	weaponSheet 	= resMngr.get("weaponSprite");
+	spaceshipSheet 	= resMngr.get("spaceshipSprite");
 	
-	bgSheet 		= imgMngr.get("bgSheet");
-	windArrow 		= imgMngr.get("windArrow");
-	
-	/*var bgFrames = [
-				[0, 0, 480, 1300, 0, 0],
-				[481, 0, 480, 1300, 0, 0],
-				[962, 0, 480, 1300, 0, 0]
-			];*/
-			
 	var bgFrames = [
 				[0, 0, 600, 1680, 0, 0],
 			];
@@ -87,7 +101,7 @@ function onDone() {
 				[670, 0, 67, 110, 0, 0],
 			];
 	
-	spaceshipSprite = new SpriteSheet(spriteSheet, spaceshipFrames);
+	spaceshipSprite = new SpriteSheet(spaceshipSheet, spaceshipFrames);
 	
 	
 	var explosions = new Array();
@@ -98,9 +112,7 @@ function onDone() {
 		explosions['exp'+i] = {'width' : wh, 'height' : wh, 'frames' : frames, 'row' : ""+(i+1)+""};
 	}
 	
-	//console.log(explosions);
-	
-	var explosionFrames = lvlMngr.calculateFrames(explosions, 64);
+	var explosionFrames = lvlMngr.calculateFrames(explosions, -1, 64);
 
 	//console.log(explosionFrames);
 	for(e in explosionFrames) {
@@ -111,6 +123,8 @@ function onDone() {
 
 // Event zum starten des Spieles
 $(document).ready(function(){
+	$("#soundOn").attr("checked", "checked");
+
 	$("#backBtn").click(function() {
 		if(isStarted == true)
 			pauseGame();
@@ -119,15 +133,34 @@ $(document).ready(function(){
 	$("#clearProfileBtn").click(function() {
 		prflMngr.resetProfile();
 	});
-	
+
 	$("#soundBtn").click(function() {
-		if(!soundOn) {
+		if(soundOn) {
 			$(this).css('background-image', 'url(css/images/Mute.png)');
+			$("#soundOff").attr("checked", true);
+			$("#soundOn").attr("checked", false);
+			
 		}
 		else {
 			$(this).css('background-image', 'url(css/images/Sound2.png)');
+			$("#soundOn").attr("checked", true);
+			$("#soundOff").attr("checked", false);
 		}
 		mute();
+	});
+	
+	$("#soundOn").click(function() {
+		if(!soundOn) {
+			$("#soundBtn").css('background-image', 'url(css/images/Sound2.png)');
+			mute();
+		}
+	});
+	
+	$("#soundOff").click(function() {
+		if(soundOn) {
+			$("#soundBtn").css('background-image', 'url(css/images/Mute.png)');
+			mute();
+		}
 	});
 	
 	$("#pauseBtn").click(function() {
@@ -153,11 +186,13 @@ $(document).ready(function(){
 
 // Spiele Hintergrundmusik ab
 function playBackgroundMusic() {
-	var audio = document.createElement('audio');
-	audio.addEventListener("canplay", function () { audio.play(); }, false);
-	audio.loop = true;
-	audio.volume = 0.5;
-	audio.src = "audio/backgroundMusic.mp3";
+	audio = new Audio();//document.createElement("audio");
+	audio.src = "audio/squawky2.ogg";
+	audio.volume = 0.1;
+	audio.addEventListener('ended', function () {
+	// Wait 500 milliseconds before next loop
+	setTimeout(function () { audio.play(); }, 0);}, false);
+	audio.play();
 }
 
 // starte ein neues Spiel
@@ -184,7 +219,7 @@ function startNewGame(lvl) {
 	level = lvlMngr.loadLevel(lvl-1);
 	updateLevel(level);
 	
-	sound.levelsound.play();
+	//sound.levelsound.play();
 	startGame();
 }
 
@@ -195,6 +230,7 @@ function clearLevel() {
 		delete spaceship;
 	}
 	
+	powerUps = [];
 	objects = [];
 	bullets = [];
 	
@@ -235,7 +271,7 @@ function stopGame() {
 		powerUpHandle = 0;
 		enemyHandle = 0;
 		
-		sound.levelsound.pause();
+		//sound.levelsound.pause();
 	}
 }
 
@@ -254,8 +290,10 @@ function pauseGame() {
 function mute() {
 	if (!soundOn) {
 		soundOn = true;
+		audio.play();
 	} else {
 		soundOn = false;
+		audio.pause();
 	}
 }
 

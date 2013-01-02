@@ -8,22 +8,34 @@ function LevelManager()
 	this.currentLevel = 0;
 	this.levels;
 	this.xml;
-	
-	this.spriteRowHeights = [0,			// Spaceship 
-							 110, 		// Plasma
-							 150, 		// Enemy Bug
-							 250,		// Asteroid
-							 350,		// PowerUp Laser
-							 388,		// PowerUp Rocket
-							 426,		// PowerUp Shield
-							 464,		// Rocket
-							 495,		// Laser
-							 556,		// Shield
-							 607,		// Enemy Cubic
-							 649,		// Bullet
-							 660,		// Sphere
-							 688		// Enemy Packman
+							 
+	this.spriteRowHeights = [];
+							 
+	this.weaponRowHeights = [0, 		// Plasma
+							 20, 		// Laser
+							 60, 		// Rocket
+							 90, 		// Bullet
+							 100		// Shield
 							 ];
+							 
+	this.enemyRowHeights = 	 [0,		// Raider
+							  202,		// Hawk
+							  407, 		// Asteroid
+							  507,		// Bug
+							  604,		// Packman
+							  661		// Cubic
+							  ];
+							  
+	this.powerUpRowHeights = [0,		// PowerUp Laser
+							  37,		// PowerUp Rocket
+							  74,		// PowerUp Shield
+							  111		// PowerUp Sphere
+							  ];
+							  
+	this.spriteRowHeights[0] = this.weaponRowHeights;
+	this.spriteRowHeights[1] = this.enemyRowHeights;
+	this.spriteRowHeights[2] = this.powerUpRowHeights;
+	
 }
 
 // Initialisation
@@ -149,25 +161,22 @@ LevelManager.prototype.loadLevel = function(lvl) {
 		}
 	});
 	
-	var eFrames = this.calculateFrames(enemies);
-	Level.prototype.setEnemyFrames(eFrames);
-	
-	var oFrames = this.calculateFrames(objects);
-	Level.prototype.setObjectFrames(oFrames);
-	
-	var pFrames = this.calculateFrames(powerUps);
-	Level.prototype.setPowerUpFrames(pFrames);
-	
-	var wFrames = this.calculateFrames(weapons);
+	var wFrames = this.calculateFrames(weapons, 0);
 	Level.prototype.setWeaponFrames(wFrames);
 	
+	var eFrames = this.calculateFrames(enemies, 1);
+	Level.prototype.setEnemyFrames(eFrames);
+	
+	var pFrames = this.calculateFrames(powerUps, 2);
+	Level.prototype.setPowerUpFrames(pFrames);
+
 	Level.prototype.setPathData(pathData);
 	
 	return this.level;
 }
 
 // Berechne alle Frames anhand der gesammelten Daten
-LevelManager.prototype.calculateFrames = function(data, h) {
+LevelManager.prototype.calculateFrames = function(data, s, h) {
 
 	var arr = [];
 	for(i in data) {
@@ -177,7 +186,7 @@ LevelManager.prototype.calculateFrames = function(data, h) {
 		var width = parseInt(attribs['width']);
 		var height = parseInt(attribs['height']);
 		var row = parseInt(attribs['row']);
-		var y = (h == undefined) ? this.spriteRowHeights[row-1] : h * (row-1);
+		var y = (h == undefined) ? this.spriteRowHeights[s][row-1] : h * (row-1);
 		var temp = [];
 		for(j in frames) {
 			var x = (parseInt(frames[j]) * width);
@@ -204,7 +213,6 @@ LevelManager.prototype.getLevelSelectionData = function() {
 		levelSelectionData[id] = attribs;
 	});
 	
-	console.log(levelSelectionData);
 	return levelSelectionData;
 }
 

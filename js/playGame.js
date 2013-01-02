@@ -158,6 +158,16 @@ function createEnemy() {
 					var newEnemy = new Asteroid(enemySprite['asteroid'], [path['path']]);
 					objects.push(newEnemy);
 					break;
+				case 'raider':
+					var newEnemy = new Raider(enemySprite['raider'], [path['path']]);
+					console.log("Raider");
+					objects.push(newEnemy);
+					break;
+				case 'hawk':
+					var newEnemy = new Hawk(enemySprite['hawk'], [path['path']]);
+					console.log("Hawk");
+					objects.push(newEnemy);
+					break;
 			}
 			enemyCounter++;
 		}
@@ -209,7 +219,16 @@ function rotateIt(objContext, objImg, lngPhi, posW, posH){
 function updateStatusBar(){
 	// aktualisiere Text
 	drawText();
-
+	
+	// pruefe eingesammelte PowerUps
+	var i = 1;
+	for(pwu in powerUps) {
+		var object = powerUps[pwu];
+		var oWidth = object.getWidth();
+		var sprite = object.getSprite();
+		sprite.drawFrame(sctx, object.getFrame(), width - i*oWidth, 5);
+		i++;
+	}
 }
 
 // Lade naechstes Level
@@ -233,19 +252,19 @@ function updateLevel(level) {
 	// Gegnersprite anlegen
 	var enemyFrames = level.getEnemyFrames();
 	for(e in enemyFrames) {
-		enemySprite[e] = new SpriteSheet(spriteSheet, enemyFrames[e]);
+		enemySprite[e] = new SpriteSheet(enemySheet, enemyFrames[e]);
 	}
 	
 	// PowerUp-Sprite anlegen
 	var powerUpFrames = level.getPowerUpFrames();
 	for(p in powerUpFrames) {
-		powerupSprite[p] = new SpriteSheet(spriteSheet, powerUpFrames[p]);
+		powerupSprite[p] = new SpriteSheet(powerUpSheet, powerUpFrames[p]);
 	}
 	
 	// Weapon-Sprite anlegen
 	var weaponFrames = level.getWeaponFrames();
 	for(w in weaponFrames) {
-		weaponSprite[w] = new SpriteSheet(spriteSheet, weaponFrames[w]);
+		weaponSprite[w] = new SpriteSheet(weaponSheet, weaponFrames[w]);
 	}
 }
 
@@ -375,7 +394,7 @@ function drawObjects() {
 			
 		spaceship.checkCollisions(objects[i]);
 		spaceship.checkHit(objects[i]);
-	
+			
 		// Zeichne Objekt
 		var sprite = objects[i].getSprite();
 		sprite.drawFrame(ctx, objects[i].getFrame(), objects[i].getX(), objects[i].getY());
@@ -386,7 +405,7 @@ function drawObjects() {
 			i--;
 		}
 	}
-	
+
 	for (var b = 0; b < bullets.length; b++) {
 		bullets[b].fly();
 			

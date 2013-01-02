@@ -206,7 +206,7 @@ Bug = function(sp, paths) {
 	
 	this.degree = 0;
 	
-	this.type = "Bug";
+	this.type = "Enemy";
 
 	this.shootTimer = 0;
 	this.pathFinder = new PathManager(paths);
@@ -295,6 +295,7 @@ Bug.prototype = {
 		this.isShot = true;
 		shock = true;
 		this.setSprite(explosionSprite['exp1']);
+		this.setFrame(this.expFrame);
 	},
 	
 	explode: function() {
@@ -340,7 +341,7 @@ Packman = function(sp, paths) {
 	
 	this.degree = 0;
 	
-	this.type = "Packman";
+	this.type = "Enemy";
 	this.currDegree = 270;
 	
 	this.pathFinder = new PathManager(paths);
@@ -436,6 +437,7 @@ Packman.prototype = {
 		this.isShot = true;
 		shock = true;
 		this.setSprite(explosionSprite['exp1']);
+		this.setFrame(this.expFrame);
 	},
 	
 	explode: function() {
@@ -450,6 +452,258 @@ Packman.prototype = {
 	},
 }
 
+/****
+*  Enemy Raider 
+*
+****/
+Raider = function(sp, paths) {
+	this.base = Enemy;
+	
+	var speed = 0;
+
+	this.base(speed, sp);
+	this.init();
+	
+	
+	this.degree = 0;
+	
+	this.type = "Enemy";
+	this.currDegree = 270;
+	
+	this.pathFinder = new PathManager(paths);
+	this.newPath();	
+	this.isShot = false;
+	this.expFrame = 5;
+	
+	this.timer = 0;
+	this.shootTimer = 0;
+}
+
+Raider.prototype = new Enemy();
+Raider.prototype.constructor = Raider;
+
+Raider.prototype = {
+	getDir: function() { return this.dir; },
+	setDir: function(d) { this.dir = d; },
+	
+	getDegree: function() { return this.degree; },
+	setDegree: function(d) { this.degree = ((d % 360) + 360) % 360; },
+	
+	incDegree: function(val) {
+		this.degree = (((this.degree + val) % 360) + 360) % 360;
+	},
+	
+	decDegree: function(val) {
+		this.degree = (((this.degree - val) % 360) + 360) % 360;
+	},
+	
+	newPath: function() {
+		this.setX(this.pathFinder.getX());
+		this.setY(this.pathFinder.getY());
+	},
+	
+	fly: function() {	
+		
+		this.pathFinder.calculate();
+		
+		var vx = this.pathFinder.getVX();
+		var vy = this.pathFinder.getVY();
+
+		this.incX(vx);
+		this.decY(vy);
+		
+		if(this.shootTimer == 50) {
+			this.shoot();
+			this.shootTimer = 0;
+		}
+		this.shootTimer++;
+		
+		if(!this.isShot)
+			this.turn(this.pathFinder.getDegree());
+		else {
+			this.explode();
+		}
+	},
+	
+	turn: function(d) {
+		
+		this.setDegree(d);
+		
+		var degree = this.getDegree();
+		var frame;
+		
+		if(this.timer == 2) {
+			if(degree < this.currDegree)
+				this.currDegree -= 15;
+			else if(degree > this.Degree)
+				this.currDegree += 15;
+			else
+				this.currDegree = degree;
+				
+			this.timer = 0;
+		}
+		this.timer++;
+		
+		// Ermittle Frame
+		frame = Math.round(((((this.currDegree -120) % 360) + 360) % 360) / 30);
+			
+		this.setFrame(frame);
+	},
+	
+	shoot: function() {
+		if(!this.isShot) {
+			var xPos = this.getX() + (this.getWidth() / 2) - 5 ;
+			var yPos = this.getY() + (this.getHeight() / 2) + 5;
+		
+			objects.push(new Bullet(weaponSprite['bullet'], xPos , yPos, 0, 10));
+		}
+	},
+	
+	hit: function() {
+		this.isShot = true;
+		shock = true;
+		this.setSprite(explosionSprite['exp1']);
+		this.setFrame(this.expFrame);
+	},
+	
+	explode: function() {
+		if(this.expFrame < 16) {
+			this.setFrame(this.expFrame);
+			this.expFrame++;
+		}
+		else {
+			this.expFrame = 0;
+			this.defunct = true;
+		}
+	},
+}
+
+
+/****
+*  Enemy Hawk 
+*
+****/
+Hawk = function(sp, paths) {
+	this.base = Enemy;
+	
+	var speed = 0;
+
+	this.base(speed, sp);
+	this.init();
+	
+	
+	this.degree = 0;
+	
+	this.type = "Enemy";
+	this.currDegree = 270;
+	
+	this.pathFinder = new PathManager(paths);
+	this.newPath();	
+	this.isShot = false;
+	this.expFrame = 5;
+	
+	this.timer = 0;
+	this.shootTimer = 0;
+}
+
+Hawk.prototype = new Enemy();
+Hawk.prototype.constructor = Hawk;
+
+Hawk.prototype = {
+	getDir: function() { return this.dir; },
+	setDir: function(d) { this.dir = d; },
+	
+	getDegree: function() { return this.degree; },
+	setDegree: function(d) { this.degree = ((d % 360) + 360) % 360; },
+	
+	incDegree: function(val) {
+		this.degree = (((this.degree + val) % 360) + 360) % 360;
+	},
+	
+	decDegree: function(val) {	
+		this.degree = (((this.degree - val) % 360) + 360) % 360;
+	},
+	
+	newPath: function() {
+		this.setX(this.pathFinder.getX());
+		this.setY(this.pathFinder.getY());
+	},
+	
+	fly: function() {	
+		
+		this.pathFinder.calculate();
+		
+		var vx = this.pathFinder.getVX();
+		var vy = this.pathFinder.getVY();
+
+		this.incX(vx);
+		this.decY(vy);
+		
+		if(this.shootTimer == 50) {
+			this.shoot();
+			this.shootTimer = 0;
+		}
+		this.shootTimer++;
+		
+		if(!this.isShot)
+			this.turn(this.pathFinder.getDegree());
+		else {
+			this.explode();
+		}
+	},
+	
+	turn: function(d) {
+		
+		this.setDegree(d);
+		
+		var degree = this.getDegree();
+		var frame;
+		
+		if(this.timer == 2) {
+			if(degree < this.currDegree)
+				this.currDegree -= 15;
+			else if(degree > this.Degree)
+				this.currDegree += 15;
+			else
+				this.currDegree = degree;
+				
+			this.timer = 0;
+		}
+		this.timer++;
+		
+		// Ermittle Frame
+		frame = Math.round(((((this.currDegree -120) % 360) + 360) % 360) / 30);
+			
+		this.setFrame(frame);
+	},
+	
+	shoot: function() {
+		if(!this.isShot) {
+			var xPos = this.getX() + (this.getWidth() / 2) - 5 ;
+			var yPos = this.getY() + (this.getHeight() / 2) + 5;
+		
+			objects.push(new Bullet(weaponSprite['bullet'], xPos , yPos, 0, 10));
+		}
+	},
+	
+	hit: function() {
+		this.isShot = true;
+		shock = true;
+		this.setSprite(explosionSprite['exp1']);
+		this.setFrame(this.expFrame);
+	},
+	
+	explode: function() {
+		if(this.expFrame < 16) {
+			this.setFrame(this.expFrame);
+			this.expFrame++;
+		}
+		else {
+			this.expFrame = 0;
+			this.defunct = true;
+		}
+	},
+}
 
 
 /****
@@ -467,7 +721,7 @@ Cubic = function(sp, paths) {
 	
 	this.degree = 0;
 	
-	this.type = "Cubic";
+	this.type = "Enemy";
 	this.frame = 0;
 
 	this.pathFinder = new PathManager(paths);
@@ -552,6 +806,7 @@ Cubic.prototype = {
 		this.isShot = true;
 		shock = true;
 		this.setSprite(explosionSprite['exp4']);
+		this.setFrame(this.expFrame);
 	},
 	
 	explode: function() {
@@ -582,7 +837,7 @@ Asteroid = function(sp, paths) {
 	
 	this.degree = 0;
 	
-	this.type = "Asteroid";
+	this.type = "Enemy";
 	this.picNr = getRandom(0, 11);
 	this.pathFinder = new PathManager(paths);
 	this.newPath();	
@@ -659,6 +914,7 @@ Asteroid.prototype = {
 		this.isShot = true;
 		shock = true;
 		this.setSprite(explosionSprite['exp3']);
+		this.setFrame(this.expFrame);
 	},
 	
 	explode: function() {
@@ -705,8 +961,7 @@ Spaceship = function(x, y, horSpeed, vertSpeed, f) {
 	this.tankStatus = 420;
 	this.timer = 0;
 	this.shootTimer = 0;
-	
-	this.heightBarFrame = 3;
+
 	this.rocketPowerUp = false;
 	this.laserPowerUp = false;
 	this.shieldPowerUp = false;
@@ -771,8 +1026,6 @@ Spaceship.prototype = {
 		var w = this.getWidth();
 		var h = this.getHeight();
 		
-		console.log(x, y, w, h);
-		
 		if(x <= 0) { 				// linker Rand
 			this.setX(0);
 		}
@@ -828,7 +1081,7 @@ Spaceship.prototype = {
 			var shieldHeigth = shield.getHeight();
 			
 			if(shieldX + shieldWidth >= objectX && shieldX <= objectX + objectWidth  && shieldY + shieldHeigth >= objectY && shieldY <= objectY + objectHeigth) {
-				if(object instanceof Asteroid || object instanceof Bug || object instanceof Cubic || object instanceof Packman)
+				if(object.type == "Enemy")
 					object.hit();
 				if(object instanceof Bullet)
 					object.setDefunct();
@@ -838,33 +1091,58 @@ Spaceship.prototype = {
 		if(!this.isShot){
 			if(spaceshipX + this.width >= objectX && spaceshipX <= objectX + objectWidth  && spaceshipY + this.height >= objectY && spaceshipY <= objectY + objectHeigth) {
 				if(object instanceof PUShield) {
-					this.shieldPowerUp = true;
+					
 					var newShield = new Shield(weaponSprite['shield'], this);
 					this.shields.push(newShield);
 					objects.push(newShield);
+					
+					if($.grep(powerUps, function(e){ return e instanceof PUShield; }) == "") { // durchsuche Array nach dem Shield Objekt
+						powerUps.push(new PUShield(powerupSprite['shield']));
+						this.shieldPowerUp = true;
+					}
 					object.setDefunct();
 				}
 				if(object instanceof PURocket) {
-					this.rocketPowerUp = true;
+					if($.grep(powerUps, function(e){ return e instanceof PURocket; }) == "") { // durchsuche Array nach dem Rocket Objekt
+						powerUps.push(new PURocket(powerupSprite['rocket']));
+						this.rocketPowerUp = true;
+					}
+						
 					object.setDefunct();
 				}
 				if(object instanceof PULaser) {
-					this.laserPowerUp = true;
+					if($.grep(powerUps, function(e){ return e instanceof PULaser; }) == "") {// durchsuche Array nach dem Laser Objekt
+						powerUps.push(new PULaser(powerupSprite['laser']));
+						this.laserPowerUp = true;
+					}
+					
 					object.setDefunct();
 				}
 				if(object instanceof Sphere) {
 					sphereCount++;
 					object.setDefunct();
 				}
-				if(object instanceof Asteroid || object instanceof Bug || object instanceof Cubic || object instanceof Packman) {
+				if(object.type == "Enemy") {
 					if(!object.isShot) {
-						this.hit();
+						if(powerUps.length > 0) {
+							shock = true;
+							powerUps = [];
+							this.destroyShields();
+						}
+						else  
+							this.hit();
+							
 						object.hit();
 					}
 				}
 				if(object instanceof Bullet) {
-					console.log("hier");
-					this.hit();
+					if(powerUps.length > 0) {
+						shock = true;
+						powerUps = [];
+						this.destroyShields();
+					}
+					else
+						this.hit();
 					object.setDefunct();
 				}
 			}
@@ -880,15 +1158,13 @@ Spaceship.prototype = {
 		
 		for (var i = 0; i < bullets.length; i++) {
 			if(bullets[i].getX() + bullets[i].getWidth() >= objectX && bullets[i].getX() <= objectX + objectWidth && bullets[i].getY() + bullets[i].getHeight() >= objectY && bullets[i].getY() <= objectY + objectHeight) {	
-				if(!(object instanceof Shield) && !(object instanceof PUShield) && !(object instanceof PULaser) && !(object instanceof PURocket)) {
+				if(object.type ==  "Enemy") {
 					// Alle, die getroffen sind nicht mehr beruecksichtigen
-					if(!(object instanceof Bullet ) && !(object instanceof Sphere )) {
-						if(!object.isShot) {
-							object.hit();
-							bullets[i].defunct = true;
-							lvlScore += 100;
-						}	
-					}
+					if(!object.isShot) {
+						object.hit();
+						bullets[i].defunct = true;
+						lvlScore += 100;
+					}				
 				}
 			}
 		}
@@ -901,23 +1177,24 @@ Spaceship.prototype = {
 	
 	// schießen
 	shoot: function() {
-		if(this.shootTimer % 10 == 0) {
+		laserSnd.play();
+		//if(this.shootTimer % 10 == 0) {
 			bullets.push(new Plasma(weaponSprite['plasma'], this.getX(), this.getY(), 0));
 			bullets.push(new Plasma(weaponSprite['plasma'], this.getX(), this.getY(), 1));
-		}
+		//}
 		if(this.rocketPowerUp) {
-			if(this.shootTimer % 20 == 0)
+			//if(this.shootTimer % 20 == 0)
 				bullets.push(new Rocket(weaponSprite['rocket'], this.getX(), this.getY()));
 		}
 		if(this.laserPowerUp) {
-			if(this.shootTimer % 20 == 0)
+			//if(this.shootTimer % 20 == 0)
 				bullets.push(new Laser(weaponSprite['laser'], this.getX(), this.getY()));
 		}
 		
-		if(this.shootTimer % 25 == 0)
-			this.shootTimer = 0;
+		//if(this.shootTimer % 25 == 0)
+		//	this.shootTimer = 0;
 			
-		this.shootTimer++;
+		//this.shootTimer++;
 	},
 	
 	// getroffen
@@ -943,9 +1220,16 @@ Spaceship.prototype = {
 			this.expFrame = 0;
 			this.defunct = true;
 		}
-		
-		console.log(this.isShot, this.expFrame);
 	},
+	
+	destroyShields: function() {
+		for(s in this.shields) {
+			var shield = this.shields[s];
+			shield.setDefunct();
+		}
+		this.shieldPowerUp = this.rocketPowerUp = this.laserPowerUp = false;
+		this.shields = [];
+	}
 }
 
 /****
@@ -1050,8 +1334,11 @@ Rocket.prototype = {
 		this.nearestY = height;
 		for(o in objects) {
 			var object = objects[o];
-			if(!(object instanceof Shield) && !(object instanceof PUShield) && !(object instanceof PULaser) && !(object instanceof PURocket) && !(object instanceof Bullet) && !(object instanceof Sphere)) {
-				if(object.getX() <= this.nearestX && object.getY() <= this.nearestY){
+			if(object.type == "Enemy") {
+				var objX = Math.abs(object.getX() - this.getX());
+				var objY = Math.abs(object.getY() - this.getY());
+			
+				if(objX <= this.nearestX && objY <= this.nearestY){
 					this.nearestX = object.getX();
 					this.nearestY = object.getY();
 					this.nearestObject = object;
@@ -1061,12 +1348,12 @@ Rocket.prototype = {
 	},
 
 	fly: function() {
-		if(this.nearestObject != undefined && this.nearestObject.defunct == false) {
+		if(this.nearestObject != undefined && !this.nearestObject.defunct) {
 			var x1 = this.getX() + (this.getWidth() / 2);
-			var x2 = this.nearestObject.getX() + (this.nearestObject.getWidth() / 2);
+			var x2 = this.nearestX + (this.nearestObject.getWidth() / 2);
 			
 			var y1 = this.getY();
-			var y2 = this.nearestObject.getY() + (this.nearestObject.getHeight() / 2);
+			var y2 = this.nearestY + (this.nearestObject.getHeight() / 2);
 			
 			var angle = Math.atan2(y2-y1, x2-x1);
 			
@@ -1075,16 +1362,17 @@ Rocket.prototype = {
 			if(y1 < y2)
 				degree = degree + 360;
 				
-			var	frame = Math.floor(degree / 10);
+			var	frame = Math.round(degree / 10);
 			
 			this.setFrame(frame);
 			
 			this.vx = this.getSpeed() * Math.cos(angle);
 			this.vy = this.getSpeed() * Math.sin(angle);
 		}
-
+		
 		this.incX(this.vx);
 		this.incY(this.vy);
+		
 	}
 }
 
@@ -1167,6 +1455,9 @@ Shield.prototype = {
 		this.setY(this.vy);		
 	}
 }
+
+
+
 
 function getRandom(a, b) {
 	var z = Math.random();

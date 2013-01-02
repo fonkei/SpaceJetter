@@ -15,7 +15,7 @@ var HBHeight = null;
 var SBHeight = null;
 
 var scale = null;
-
+var audio = null;
 // verschiedene Konstanten 
 
 var SKY_COLOR = '#000000';
@@ -43,12 +43,10 @@ var backgroundPic;
 var countImagesLoading = 0;
 
 // verschiedene Variablen fuer das Spiel
-var clouds = [];
-var powerUps = [];
 var enemies = [];
-
 var objects = [];
 var bullets = [];
+var powerUps = [];
 
 var tankStatus = 420;
 
@@ -95,7 +93,7 @@ var lvlScore = 0;
 var lvlMngr = null;
 var prflMngr = null;
 var level = null;
-var imgMngr = null;
+var resMngr = null;
 var maxWindStrenght = 0;
 var cloudSprite = null;
 var balloonSprite = null;
@@ -127,3 +125,12 @@ var gbMove = false;
 var gbStillTouching = false;
 
 var timeoutId = 0;
+
+var explosionSheet  = null;
+var bgSheet 		= null;
+var enemySheet 		= null;
+var powerUpSheet 	= null;
+var weaponSheet 	= null;
+var spaceshipSheet 	= null;
+var laserSnd 	= null;
+var bangSnd 	= null;

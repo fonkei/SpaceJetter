@@ -3,6 +3,8 @@ function SpriteSheet(image, frames, bgrepeat) {
 		$(image).css({ backgroundRepeat: 'repeat-y' });
 	
 	this._image = image;
+	
+	console.log(image);
 	this._frames = frames;
 }
 
@@ -21,7 +23,7 @@ _p.drawFrame = function(ctx, index, x, y) {
 		console.log("Return: " + index + " " + x + " " + y);
 		return;
 	}
-	
+
 	ctx.drawImage(this._image,
 		frame[SpriteSheet.FRAME_X], frame[SpriteSheet.FRAME_Y],
 		frame[SpriteSheet.FRAME_WIDTH], frame[SpriteSheet.FRAME_HEIGHT],
