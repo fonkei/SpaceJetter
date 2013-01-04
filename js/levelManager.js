@@ -23,7 +23,7 @@ function LevelManager()
 							  407, 		// Asteroid
 							  507,		// Bug
 							  604,		// Packman
-							  661		// Cubic
+							  662		// Cubic
 							  ];
 							  
 	this.powerUpRowHeights = [0,		// PowerUp Laser
@@ -152,7 +152,7 @@ LevelManager.prototype.loadLevel = function(lvl) {
 				var pathId = $(this).attr('id');
 				data = {'number' : $(this).find('number').text(),
 						'enemyId': $(this).find('enemyId').text(),
-						'path' : $(this).find('path').text().split(',').map(function(e) {return +e})	// Splitte Alle Werte und wandle diese in Integer um
+						'path' : $(this).find('path').text().split(',')						// Splitte Alle Werte und wandle diese in Integer um
 					   };
 								
 				pathData[pathId] = data;

@@ -57,11 +57,10 @@ PathManager.prototype = {
 	
 	init: function() {
 		var pathNr = this.getPathNr();
-		
-		this.setDegree(this.paths[pathNr][3]);
-		this.setX(this.paths[pathNr][0]);
-		this.setY(this.paths[pathNr][1]);
-		this.setSpeed(this.paths[pathNr][2]);
+		this.setValue(this.paths[pathNr][3]);
+		this.setValue(this.paths[pathNr][0]);
+		this.setValue(this.paths[pathNr][1]);
+		this.setValue(this.paths[pathNr][2]);
 	},
 	
 	getNextPathDir: function() {
@@ -89,17 +88,41 @@ PathManager.prototype = {
 		this.setAngle(this.getDegree() * Math.PI / 180);
 		
 		var angle = this.getAngle();
-		
 		this.setVX(this.getSpeed() * Math.cos(angle));
 		this.setVY(this.getSpeed() * Math.sin(angle));
 		
 		if(this.getTimer() == 20) {
 			
-			var deg = this.getNextPathDir();
-			this.setDegree(deg);
+			var pathkey = this.getNextPathDir();
+			this.setValue(pathkey);
 			
 			this.setTimer(0);
 		}
 		this.incTimer();
 	},
+	
+	setValue: function(pathkey) {
+		if(!isNaN(parseInt(pathkey))) {
+			this.setDegree(pathkey);
+		}
+		else {
+			var values = pathkey.split('|', 2);
+			if(values.length >=	1) {
+				var key = $.trim(values[0]);
+				
+				var val = parseInt(values[1]);
+				switch(key) {
+					case 'x':
+						this.setX(val);
+						break;
+					case 'y':
+						this.setY(val);
+						break;
+					case 's':
+						this.setSpeed(val);
+						break;
+				}
+			} 
+		}
+	}
 }

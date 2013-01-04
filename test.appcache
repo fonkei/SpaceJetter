@@ -1,0 +1,30 @@
+CACHE MANIFEST
+# 2013-01-03:v1
+
+# Explicitly cached entries
+game.html
+css/game.css
+css/themes/darkSpace.css
+
+# offline.html will be displayed if the user is offline
+FALLBACK:
+/ /game.html
+
+# All other resources (e.g. sites) require the user to be online. 
+NETWORK:
+*
+
+# Additional resources to cache
+CACHE:
+js/levels.xml
+
+pics/spriteSheets/destroyerSprite.png
+pics/spriteSheets/enemySprite.png
+pics/spriteSheets/explosionSprite.png
+pics/spriteSheets/powerUpSprite.png
+pics/spriteSheets/weaponSprite.png
+pics/spriteSheets/ParallaxStars2.png
+
+audio/laser1.ogg
+audio/clickclick3.wav
+audio/chairmove.wav

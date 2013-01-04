@@ -512,11 +512,19 @@ Raider.prototype = {
 		this.incX(vx);
 		this.decY(vy);
 		
-		if(this.shootTimer == 50) {
-			this.shoot();
-			this.shootTimer = 0;
+		if(!spaceship.defunct) {
+			if(this.shootTimer % 20 == 0) {
+				this.shootPlasma();
+			}
+			if(this.shootTimer % 50 == 0) {
+				this.shootBullet();
+			}
+			if(this.shootTimer % 70 == 0) {
+				this.shootRocket();
+				this.shootTimer = 0;
+			}
+			this.shootTimer++;
 		}
-		this.shootTimer++;
 		
 		if(!this.isShot)
 			this.turn(this.pathFinder.getDegree());
@@ -545,17 +553,55 @@ Raider.prototype = {
 		this.timer++;
 		
 		// Ermittle Frame
-		frame = Math.round(((((this.currDegree -120) % 360) + 360) % 360) / 30);
+		var frame;
+		var deg = this.currDegree;
+		if(deg < 180) {
+			if(deg == 0)
+				frame = 10;
+			else
+				frame = 11 - (this.currDegree / 15);
+		}
+		else {
+			if(deg == 180)
+				frame = 0;
+			else if(deg == 360)
+				frame = 10;
+			else
+				frame = (this.currDegree / 15) - 13;
+		}
 			
 		this.setFrame(frame);
 	},
 	
-	shoot: function() {
+	shootBullet: function() {
 		if(!this.isShot) {
 			var xPos = this.getX() + (this.getWidth() / 2) - 5 ;
 			var yPos = this.getY() + (this.getHeight() / 2) + 5;
 		
+			objects.push(new Bullet(weaponSprite['bullet'], xPos , yPos, 3, 8));
+			objects.push(new Bullet(weaponSprite['bullet'], xPos , yPos, 1.5, 9));
 			objects.push(new Bullet(weaponSprite['bullet'], xPos , yPos, 0, 10));
+			objects.push(new Bullet(weaponSprite['bullet'], xPos , yPos, -1.5, 9));
+			objects.push(new Bullet(weaponSprite['bullet'], xPos , yPos, -3, 8));
+		}
+	},
+	
+	shootPlasma: function() {
+		if(!this.isShot) {
+			var xPos = this.getX() + (this.getWidth() / 2) - 5 ;
+			var yPos = this.getY() + (this.getHeight() / 2) + 5;
+			
+			objects.push(new Plasma(weaponSprite['plasma'], xPos, yPos, 0, -30, 10, 1, 20, "Enemy"));
+			objects.push(new Plasma(weaponSprite['plasma'], xPos, yPos, 1, 30, 10, 1, 20, "Enemy"));
+		}
+	},
+	
+	shootRocket: function() {
+		if(!this.isShot) {
+			var xPos = this.getX() + (this.getWidth() / 2) - 5 ;
+			var yPos = this.getY() + (this.getHeight() / 2) + 5;
+			
+			objects.push(new Rocket(weaponSprite['rocket'], xPos, yPos, "Enemy", 3));
 		}
 	},
 	
@@ -639,8 +685,11 @@ Hawk.prototype = {
 		this.incX(vx);
 		this.decY(vy);
 		
-		if(this.shootTimer == 50) {
-			this.shoot();
+		if(this.shootTimer % 20 == 0) {
+			this.shootPlasma();
+		}
+		if(this.shootTimer % 50 == 0) {
+			this.shootBullet();
 			this.shootTimer = 0;
 		}
 		this.shootTimer++;
@@ -672,17 +721,55 @@ Hawk.prototype = {
 		this.timer++;
 		
 		// Ermittle Frame
-		frame = Math.round(((((this.currDegree -120) % 360) + 360) % 360) / 30);
+		var frame;
+		var deg = this.currDegree;
+		if(deg < 180) {
+			if(deg == 0)
+				frame = 10;
+			else
+				frame = 11 - (this.currDegree / 15);
+		}
+		else {
+			if(deg == 180)
+				frame = 0;
+			else if(deg == 360)
+				frame = 10;
+			else
+				frame = (this.currDegree / 15) - 13;
+		}
 			
 		this.setFrame(frame);
 	},
 	
-	shoot: function() {
+	shootBullet: function() {
 		if(!this.isShot) {
 			var xPos = this.getX() + (this.getWidth() / 2) - 5 ;
 			var yPos = this.getY() + (this.getHeight() / 2) + 5;
 		
+			objects.push(new Bullet(weaponSprite['bullet'], xPos , yPos, 3, 8));
+			objects.push(new Bullet(weaponSprite['bullet'], xPos , yPos, 1.5, 9));
 			objects.push(new Bullet(weaponSprite['bullet'], xPos , yPos, 0, 10));
+			objects.push(new Bullet(weaponSprite['bullet'], xPos , yPos, -1.5, 9));
+			objects.push(new Bullet(weaponSprite['bullet'], xPos , yPos, -3, 8));
+		}
+	},
+	
+	shootPlasma: function() {
+		if(!this.isShot) {
+			var xPos = this.getX() + (this.getWidth() / 2) - 5 ;
+			var yPos = this.getY() + (this.getHeight() / 2) + 5;
+			
+			objects.push(new Plasma(weaponSprite['plasma'], xPos, yPos, 0, -30, 10, 1, 20, "Enemy"));
+			objects.push(new Plasma(weaponSprite['plasma'], xPos, yPos, 1, 30, 10, 1, 20, "Enemy"));
+		}
+	},
+	
+	shootRocket: function() {
+		if(!this.isShot) {
+			var xPos = this.getX() + (this.getWidth() / 2) - 5 ;
+			var yPos = this.getY() + (this.getHeight() / 2) + 5;
+			
+			objects.push(new Rocket(weaponSprite['plasma'], xPos, yPos, 0, -30, 10, 1, 20, "Enemy"));
 		}
 	},
 	
@@ -1081,10 +1168,14 @@ Spaceship.prototype = {
 			var shieldHeigth = shield.getHeight();
 			
 			if(shieldX + shieldWidth >= objectX && shieldX <= objectX + objectWidth  && shieldY + shieldHeigth >= objectY && shieldY <= objectY + objectHeigth) {
-				if(object.type == "Enemy")
-					object.hit();
+				if(object.type == "Enemy") {
+					if(object instanceof Plasma || object instanceof Rocket )
+						object.setDefunct();
+					else	
+						object.hit();
+				}
 				if(object instanceof Bullet)
-					object.setDefunct();
+					object.setDefunct();				
 			}
 		}
 		
@@ -1131,8 +1222,11 @@ Spaceship.prototype = {
 						}
 						else  
 							this.hit();
-							
-						object.hit();
+						
+						if(object instanceof Plasma || object instanceof Rocket )
+							object.setDefunct();
+						else
+							object.hit();
 					}
 				}
 				if(object instanceof Bullet) {
@@ -1160,11 +1254,13 @@ Spaceship.prototype = {
 			if(bullets[i].getX() + bullets[i].getWidth() >= objectX && bullets[i].getX() <= objectX + objectWidth && bullets[i].getY() + bullets[i].getHeight() >= objectY && bullets[i].getY() <= objectY + objectHeight) {	
 				if(object.type ==  "Enemy") {
 					// Alle, die getroffen sind nicht mehr beruecksichtigen
-					if(!object.isShot) {
-						object.hit();
-						bullets[i].defunct = true;
-						lvlScore += 100;
-					}				
+					if(!(object instanceof Plasma) && !(object instanceof Rocket)) {
+						if(!object.isShot) {
+							object.hit();
+							bullets[i].defunct = true;
+							lvlScore += 100;
+						}
+					}
 				}
 			}
 		}
@@ -1177,19 +1273,20 @@ Spaceship.prototype = {
 	
 	// schießen
 	shoot: function() {
-		laserSnd.play();
+		
 		//if(this.shootTimer % 10 == 0) {
-			bullets.push(new Plasma(weaponSprite['plasma'], this.getX(), this.getY(), 0));
-			bullets.push(new Plasma(weaponSprite['plasma'], this.getX(), this.getY(), 1));
+			bullets.push(new Plasma(weaponSprite['plasma'], this.getX(), this.getY(), 0, 15, 10, 0, 40));
+			bullets.push(new Plasma(weaponSprite['plasma'], this.getX(), this.getY(), 1, 45, 10, 0, 40));
 		//}
-		if(this.rocketPowerUp) {
-			//if(this.shootTimer % 20 == 0)
-				bullets.push(new Rocket(weaponSprite['rocket'], this.getX(), this.getY()));
-		}
-		if(this.laserPowerUp) {
-			//if(this.shootTimer % 20 == 0)
-				bullets.push(new Laser(weaponSprite['laser'], this.getX(), this.getY()));
-		}
+			if(this.rocketPowerUp) {
+				//if(this.shootTimer % 20 == 0)
+					bullets.push(new Rocket(weaponSprite['rocket'], this.getX(), this.getY()));
+					
+			}
+			if(this.laserPowerUp) {
+				//if(this.shootTimer % 20 == 0)
+					bullets.push(new Laser(weaponSprite['laser'], this.getX(), this.getY()));
+			}
 		
 		//if(this.shootTimer % 25 == 0)
 		//	this.shootTimer = 0;
@@ -1263,30 +1360,30 @@ Bullet.prototype = {
 *  Plasma
 *
 ****/
-Plasma = function(sp, shooterX, shooterY, side) {
+Plasma = function(sp, shooterX, shooterY, side, offsetX, offsetY, dir, speed, t) {
 	this.base = FlyingObject;
 	
 	var xPos;		
 	var yPos;
 	
 	if(side == 0) {
-		
-		xPos = shooterX + 15;
-		yPos = shooterY + 10;
+		xPos = shooterX + offsetX; // 15;
+		yPos = shooterY + offsetY; // 10;
 	}
 	else {
-		xPos = shooterX + 40;
-		yPos = shooterY + 10;
+		xPos = shooterX + offsetX; // 40;
+		yPos = shooterY + offsetY; // 10;
 	}
-		
-	var frame = 0;
-	var speed = 40;
+	this.dir = dir;
+	var frame = dir; // 0 = hochschiessen; 1 = runterschiessen
+	var speed = speed;
 	
 	this.canShoot = false;
-	this.base(xPos, yPos, speed, 0, sp);
+	this.base(xPos, yPos, speed, frame, sp);
 	this.init();
 	
-	this.type = "Plasma";
+	this.type = (t != undefined) ? t : "Plasma";
+
 }
 
 Plasma.prototype = new FlyingObject();
@@ -1294,7 +1391,10 @@ Plasma.prototype.constructor = Plasma;
 
 Plasma.prototype = {
 	fly: function() {
-		this.decY(this.getSpeed());
+		if(this.dir == 0)
+			this.decY(this.getSpeed());
+		else
+			this.incY(this.getSpeed());
 	}
 }
 
@@ -1302,77 +1402,138 @@ Plasma.prototype = {
 *  Rocket
 *
 ****/
-Rocket = function(sp, shooterX, shooterY) {
+Rocket = function(sp, shooterX, shooterY, t, delay) {
 	this.base = FlyingObject;
 	
 	var xPos = shooterX + 33;		
 	var yPos = shooterY + 40;
-		
-	var frame = 0;
-	var speed = 20;
 	
+	var frame = 9;
+	var speed = 20;	
 	
 	this.base(xPos, yPos, speed, frame, sp);
 	this.init();
 	
 	this.canShoot = false;
-	this.searchNearest();
+	this.angle = -1.57;
+	this.degree = 90;
 	this.nearestX;
 	this.nearestY;
 	this.nearestObject;
-	this.vx;
-	this.vy;
-	this.type = "Rocket";
+	this.vx = 0;
+	this.vy = -20;
+	this.delay = delay != undefined ? delay : 1;
+	this.timer = 0;
+
+	this.type = (t != undefined ? t : "Rocket");
+	this.searchNearest();
 }
 
 Rocket.prototype = new FlyingObject();
 Rocket.prototype.constructor = Rocket;
 
 Rocket.prototype = {
+	getAngle: function() { return this.angle; },
+	setAngle: function(a) { this.angle = a; },
+	
+	incVX: function(inc) { this.vx += inc; },
+	decVX: function(dec) { this.vx -= dec; },
+	
+	setVY: function(vy) { this.vy = vy; },
+	getVY: function() { return this.vy; },
+	
+	incVY: function(inc) { this.vy += inc; },
+	decVY: function(dec) { this.vy -= dec; },
+	
+	incAngle: function(inc) { this.angle += inc; },
+	decAngle: function(dec) { this.angle -= dec; },
+	
+	incDegree: function(inc) { this.degree += inc; },
+	decDegree: function(dec) { this.degree -= dec; },
+
 	searchNearest: function() {
 		this.nearestX = width;
 		this.nearestY = height;
-		for(o in objects) {
-			var object = objects[o];
-			if(object.type == "Enemy") {
-				var objX = Math.abs(object.getX() - this.getX());
-				var objY = Math.abs(object.getY() - this.getY());
-			
-				if(objX <= this.nearestX && objY <= this.nearestY){
-					this.nearestX = object.getX();
-					this.nearestY = object.getY();
-					this.nearestObject = object;
+		if(this.type != "Enemy") {
+			for(o in objects) {
+				var object = objects[o];
+				if(object.type == "Enemy" && !(object instanceof Rocket) && !(object instanceof Plasma)) {
+					var objX = Math.abs(object.getX() - this.getX());
+					var objY = Math.abs(object.getY() - this.getY());
+				
+					if(objX <= this.nearestX && objY <= this.nearestY){
+						this.nearestX = object.getX();
+						this.nearestY = object.getY();
+						this.nearestObject = object;
+					}
 				}
 			}
-		}	
+			this.calculate();
+		}
+		else {
+			if(!spaceship.defunct) {
+				var spX = spaceship.getX();
+				var spY = spaceship.getY();
+				var objX = Math.abs(spX - this.getX());
+				var objY = Math.abs(spY - this.getY());
+				this.nearestX = spX;
+				this.nearestY = spY;
+				this.nearestObject = spaceship;
+				this.setFrame(27);
+				this.calculate();
+			}	
+		}
+		
 	},
 
 	fly: function() {
 		if(this.nearestObject != undefined && !this.nearestObject.defunct) {
-			var x1 = this.getX() + (this.getWidth() / 2);
-			var x2 = this.nearestX + (this.nearestObject.getWidth() / 2);
-			
-			var y1 = this.getY();
-			var y2 = this.nearestY + (this.nearestObject.getHeight() / 2);
-			
-			var angle = Math.atan2(y2-y1, x2-x1);
-			
-			var degree = (-angle * 360) / (2 * Math.PI);
-			
-			if(y1 < y2)
-				degree = degree + 360;
-				
-			var	frame = Math.round(degree / 10);
-			
-			this.setFrame(frame);
-			
-			this.vx = this.getSpeed() * Math.cos(angle);
-			this.vy = this.getSpeed() * Math.sin(angle);
+			if(this.timer == this.delay){
+				this.calculate();	
+				this.timer = 0;
+			}
+			this.timer++;
 		}
 		
 		this.incX(this.vx);
 		this.incY(this.vy);
-		
+	},
+	
+	calculate: function() {
+		if(this.nearestObject != undefined && !this.nearestObject.defunct) {
+			var x1 = this.getX() + (this.getWidth() / 2);
+			var x2 = this.nearestObject.getX() + (this.nearestObject.getWidth() / 2);
+			
+			var y1 = this.getY();
+			var y2 = this.nearestObject.getY() + (this.nearestObject.getHeight() / 2);
+			
+			var angle = Math.atan2(y2-y1, x2-x1);
+			
+			
+			
+			//console.log(angle, this.angle);
+			//var degree = (-angle * 360) / (2 * Math.PI);
+			
+			/*if(angle < this.angle)
+				this.decAngle(0.1);
+			else if(angle > this.angle)
+				this.incAngle(0.1);*/
+				
+			var degree = -angle * (180 / Math.PI);
+			
+			if(y1 < y2) {
+				
+				degree = 360 + degree;
+			}
+			
+			var	frame = Math.floor((degree-1) / 10);
+			//console.log(angle, this.angle, degree, frame);
+			
+			this.setFrame(frame);
+				
+			this.vx = this.getSpeed() * Math.cos(angle);
+			this.vy = this.getSpeed() * Math.sin(angle);
+		}
 	}
 }
 
@@ -1420,6 +1581,7 @@ Shield = function(sp, obj) {
 	this.base(xPos, yPos, speed, frame, sp);
 	this.init();
 	
+	this.degree = 0;
 	this.canShoot = false;
 	this.vx;
 	this.vy;

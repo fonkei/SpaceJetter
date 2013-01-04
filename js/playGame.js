@@ -168,6 +168,8 @@ function createEnemy() {
 					console.log("Hawk");
 					objects.push(newEnemy);
 					break;
+				default:
+					break;
 			}
 			enemyCounter++;
 		}
@@ -177,7 +179,7 @@ function createEnemy() {
 		}	
 	}
 	else {
-		pathCounter = 0;
+		//pathCounter = 0;
 		enemyCounter = 0;
 	}
 	
@@ -355,7 +357,7 @@ function draw() {
 function drawScene() {
 	// loeschen des Inhaltes vom Canvas-Elements
 	clearScene();
-	
+
 	// Zeichnen des Himmels als ein linearer Gradient
 	sky = ctx.createLinearGradient(0, width, 0, height);
 	//sky.addColorStop(Math.random(), SKY_COLOR);

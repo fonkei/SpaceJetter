@@ -124,72 +124,72 @@
 			<enemyPath id="0">
 				<enemyId>bug</enemyId>
 				<number>3</number>
-				<path>-100, 100, 5, 0, 330, 300, 270</path>
+				<path>x|-100, y|100, s|5, 0, 330, 300, 270</path>
 			</enemyPath>
 			<enemyPath id="1">
 				<enemyId>packman</enemyId>
 				<number>5</number>
-				<path>200, -100, 3, 270, 300, 330, 300, 270, 240, 210, 240, 270</path>
+				<path>x|200, y|-100, s|3, 270, 300, 330, 300, 270, 240, 210, 240, 270</path>
 			</enemyPath>
 			<enemyPath id="2">
 				<enemyId>cubic</enemyId>
 				<number>1</number>
-				<path>100, -100, 2, 270</path>
+				<path>x|100, y|-100, s|2, 270</path>
 			</enemyPath>
 			<enemyPath id="3">
 				<enemyId>cubic</enemyId>
 				<number>1</number>
-				<path>200, -100, 2, 270</path>
+				<path>x|200, y|-100, s|2, 270</path>
 			</enemyPath>
 			<enemyPath id="4">
 				<enemyId>cubic</enemyId>
 				<number>1</number>
-				<path>300, -100, 2, 270</path>
+				<path>x|300, y|-100, s|2, 270</path>
 			</enemyPath>
 			<enemyPath id="5">
 				<enemyId>bug</enemyId>
 				<number>3</number>
-				<path>600, 100, 5, 180, 210, 240, 270</path>
+				<path>x|600, y|100, s|5, 180, 210, 240, 270</path>
 			</enemyPath>
 			<enemyPath id="6">
 				<enemyId>asteroid</enemyId>
 				<number>1</number>
-				<path>100, -100, 10, 300</path>
+				<path>x|100, y|-100, s|10, 300</path>
 			</enemyPath>
 			<enemyPath id="7">
 				<enemyId>asteroid</enemyId>
 				<number>1</number>
-				<path>500, -100, 10, 240</path>
+				<path>x|500, y|-100, s|10, 240</path>
 			</enemyPath>
 			<enemyPath id="8">
 				<enemyId>bug</enemyId>
 				<number>1</number>
-				<path>100, -100, 8, 270</path>
+				<path>x|100, y|-100, s|8, 270</path>
 			</enemyPath>
 			<enemyPath id="9">
 				<enemyId>bug</enemyId>
 				<number>1</number>
-				<path>380, -100, 8, 270</path>
+				<path>x|380, y|-100, s|8, 270</path>
 			</enemyPath>
 			<enemyPath id="10">
 				<enemyId>bug</enemyId>
 				<number>1</number>
-				<path>200, -100, 8, 270</path>
+				<path>x|200, y|-100, s|8, 270</path>
 			</enemyPath>
 			<enemyPath id="11">
 				<enemyId>bug</enemyId>
 				<number>1</number>
-				<path>280, -100, 8, 270</path>
+				<path>x|280, y|-100, s|8, 270</path>
 			</enemyPath>
 			<enemyPath id="12">
-				<enemyId>raider</enemyId>
-				<number>1</number>
-				<path>300, -100, 1, 270, 210, 210, 270, 330, 330, 270</path>
+				<enemyId></enemyId>
+				<number></number>
+				<path></path>
 			</enemyPath>
 			<enemyPath id="13">
-				<enemyId>hawk</enemyId>
+				<enemyId>raider</enemyId>
 				<number>1</number>
-				<path>300, -100, 1, 270, 240, 240, 270, 300, 300, 270</path>
+				<path>x|200, y|-100, s|3, 270, 210, 210, 210, 270, 330, 330, 330, 330, 270, 180, 180, 0, 0, s|0, 90, 90, 270, s|8</path>
 			</enemyPath>
 		</paths>
 	</level>

@@ -77,51 +77,34 @@ _p.updatePath = function(obj, path) {
 
 _p._loadImage = function(queueItem, itemCounter, onDone, onProgress) {
 	var self = this;
+
 	
-	//var n = queueItem.path.match(/audio/g);
+	var img = new Image();
+
+	img.onload = function() {
+		self._ressources[queueItem.key] = img;
+		self._onItemLoaded(queueItem, itemCounter, onDone, onProgress, true);
+	};
 	
-	//if(n == null){
-		var img = new Image();
+	img.onerror = function() {
+		self._ressources[queueItem.key] = self._placeholder ? self._placeholder : null;
+		self._onItemLoaded(queueItem, itemCounter, onDone, onProgress, false);
+	};
 	
-		img.onload = function() {
-			self._ressources[queueItem.key] = img;
-			self._onItemLoaded(queueItem, itemCounter, onDone, onProgress, true);
-		};
-		
-		img.onerror = function() {
-			self._ressources[queueItem.key] = self._placeholder ? self._placeholder : null;
-			self._onItemLoaded(queueItem, itemCounter, onDone, onProgress, false);
-		};
-		
-		img.src = queueItem.path;	
-	//}
-	/*else {
-	console.log("Audio");
-		var audio = new Audio();
-		audio.src = queueItem.path;
-		
-		audio.addEventListener('oncanplaythrough', function () {
-			self._ressources[queueItem.key] = audio;
-			self._onItemLoaded(queueItem, itemCounter, onDone, onProgress, true);
-		});
-		
-		audio.onerror = function() {
-			self._ressources[queueItem.key] = self._placeholder ? self._placeholder : null;
-			self._onItemLoaded(queueItem, itemCounter, onDone, onProgress, false);
-		};
-	
-		
-	}*/
+	img.src = queueItem.path;	
+
 };
 
 _p._loadSound = function(queueItem, itemCounter, onDone, onProgress) {
 	var self = this;
 	
-	var audio = new Audio();
-	audio.src = queueItem.path;
+	var audio = new Audio(queueItem.path);
+	audio.preload = "auto";
+	audio.volume = 1;
 	
 	audio.oncanplaythrough = function () {
 		self._ressources[queueItem.key] = audio;
+		audio.load();
 		self._onItemLoaded(queueItem, itemCounter, onDone, onProgress, true);
 	};
 	
@@ -129,7 +112,6 @@ _p._loadSound = function(queueItem, itemCounter, onDone, onProgress) {
 		self._ressources[queueItem.key] = self._placeholder ? self._placeholder : null;
 		self._onItemLoaded(queueItem, itemCounter, onDone, onProgress, false);
 	};
-	
 };
 
 

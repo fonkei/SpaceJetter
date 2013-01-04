@@ -51,8 +51,10 @@ window.addEventListener("load", function() {
 	}, onImgDone);
 	
 	resMngr.loadSnd({
-		"buu"				: "./audio/laser1.ogg",
-		"bang"				: "./audio/clickclick3.wav",
+		"bang"					: "audio/clickclick3.wav",
+		"laser"					: "audio/laser1.ogg",
+		"chairmove"				: "audio/chairmove.wav",
+		"fbang"					: "audio/fbang06.wav"
 	}, onSndDone);
 
 	buildLevelSelection();
@@ -64,10 +66,20 @@ window.addEventListener("load", function() {
 function onSndDone() {
 	// Sounds
 	bangSnd 		= resMngr.get("bang");
-	laserSnd 		= resMngr.get("buu");
-	console.log("blub");
-	console.log(typeof(laserSnd));
-	laserSnd.play();
+	laserSnd 		= resMngr.get("laser");
+	chairSnd 		= resMngr.get("chairmove");
+	fbangSnd 		= resMngr.get("fbang");
+	
+	bangSnd.play();
+	console.log(laserSnd);
+	console.log(bangSnd);
+	console.log(chairSnd);
+	console.log(fbangSnd);
+	
+	
+	console.log(resMngr.getAll());
+
+	
 }
 
 function onImgDone() {
@@ -254,8 +266,8 @@ function startGame() {
 		isStarted = true;
 		
 		gameHandle = setInterval(draw, 50);
-		powerUpHandle = setInterval(createPowerUp, 15000);
-		enemyHandle = setInterval(createEnemy, 1000);
+		powerUpHandle = setInterval(createPowerUp, 2000);//15000);
+		enemyHandle = setInterval(createEnemy, 1500);
 	}
 }
 
