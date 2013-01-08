@@ -205,7 +205,7 @@ Bug = function(sp, paths) {
 	
 	
 	this.degree = 0;
-	
+	this.hitCount = 4;
 	this.type = "Enemy";
 
 	this.shootTimer = 0;
@@ -340,7 +340,7 @@ Packman = function(sp, paths) {
 	
 	
 	this.degree = 0;
-	
+	this.hitCount = 2;
 	this.type = "Enemy";
 	this.currDegree = 270;
 	
@@ -466,7 +466,7 @@ Raider = function(sp, paths) {
 	
 	
 	this.degree = 0;
-	
+	this.hitCount = 20;
 	this.type = "Enemy";
 	this.currDegree = 270;
 	
@@ -543,7 +543,7 @@ Raider.prototype = {
 		if(this.timer == 2) {
 			if(degree < this.currDegree)
 				this.currDegree -= 15;
-			else if(degree > this.Degree)
+			else if(degree > this.currDegree)
 				this.currDegree += 15;
 			else
 				this.currDegree = degree;
@@ -639,7 +639,7 @@ Hawk = function(sp, paths) {
 	
 	
 	this.degree = 0;
-	
+	this.hitCount = 20;
 	this.type = "Enemy";
 	this.currDegree = 270;
 	
@@ -807,7 +807,7 @@ Cubic = function(sp, paths) {
 	
 	
 	this.degree = 0;
-	
+	this.hitCount = 4;
 	this.type = "Enemy";
 	this.frame = 0;
 
@@ -923,7 +923,7 @@ Asteroid = function(sp, paths) {
 	
 	
 	this.degree = 0;
-	
+	this.hitCount = 1;
 	this.type = "Enemy";
 	this.picNr = getRandom(0, 11);
 	this.pathFinder = new PathManager(paths);
@@ -1256,9 +1256,14 @@ Spaceship.prototype = {
 					// Alle, die getroffen sind nicht mehr beruecksichtigen
 					if(!(object instanceof Plasma) && !(object instanceof Rocket)) {
 						if(!object.isShot) {
-							object.hit();
+							if(object.hitCount == 0) {
+								object.hit();
+								lvlScore += 100;
+							}
+							else
+								object.hitCount--;
+								
 							bullets[i].defunct = true;
-							lvlScore += 100;
 						}
 					}
 				}
@@ -1415,14 +1420,14 @@ Rocket = function(sp, shooterX, shooterY, t, delay) {
 	this.init();
 	
 	this.canShoot = false;
-	this.angle = -1.57;
+	this.angle = 1.57;
 	this.degree = 90;
 	this.nearestX;
 	this.nearestY;
 	this.nearestObject;
 	this.vx = 0;
 	this.vy = -20;
-	this.delay = delay != undefined ? delay : 1;
+	this.delay = delay != undefined ? delay : 0;
 	this.timer = 0;
 
 	this.type = (t != undefined ? t : "Rocket");
@@ -1480,6 +1485,7 @@ Rocket.prototype = {
 				this.nearestY = spY;
 				this.nearestObject = spaceship;
 				this.setFrame(27);
+				this.angle = 4.7;
 				this.calculate();
 			}	
 		}
@@ -1488,11 +1494,15 @@ Rocket.prototype = {
 
 	fly: function() {
 		if(this.nearestObject != undefined && !this.nearestObject.defunct) {
-			if(this.timer == this.delay){
-				this.calculate();	
-				this.timer = 0;
+			if(this.type == "Enemy") {
+				if(this.timer == this.delay){
+					this.calculate();	
+					this.timer = 0;
+				}
+				this.timer++;
 			}
-			this.timer++;
+			else 
+				this.calculate();
 		}
 		
 		this.incX(this.vx);
@@ -1507,32 +1517,24 @@ Rocket.prototype = {
 			var y1 = this.getY();
 			var y2 = this.nearestObject.getY() + (this.nearestObject.getHeight() / 2);
 			
-			var angle = Math.atan2(y2-y1, x2-x1);
+			var theta = Math.atan2(-(y2-y1), x2-x1);
 			
+			if(theta < 0)
+				theta += 2 * Math.PI;
 			
-			
-			//console.log(angle, this.angle);
-			//var degree = (-angle * 360) / (2 * Math.PI);
-			
-			/*if(angle < this.angle)
+			if(theta < this.angle)
 				this.decAngle(0.1);
-			else if(angle > this.angle)
-				this.incAngle(0.1);*/
-				
-			var degree = -angle * (180 / Math.PI);
+			else if(theta > this.angle)
+				this.incAngle(0.1);
 			
-			if(y1 < y2) {
-				
-				degree = 360 + degree;
-			}
+			var degree = this.angle * (180 / Math.PI);
 			
-			var	frame = Math.floor((degree-1) / 10);
-			//console.log(angle, this.angle, degree, frame);
+			var	frame = Math.floor(degree / 10);
 			
 			this.setFrame(frame);
 				
-			this.vx = this.getSpeed() * Math.cos(angle);
-			this.vy = this.getSpeed() * Math.sin(angle);
+			this.vx = this.getSpeed() * Math.cos(this.angle);
+			this.vy = this.getSpeed() * -Math.sin(this.angle);
 		}
 	}
 }

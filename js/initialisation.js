@@ -266,7 +266,7 @@ function startGame() {
 		isStarted = true;
 		
 		gameHandle = setInterval(draw, 50);
-		powerUpHandle = setInterval(createPowerUp, 2000);//15000);
+		powerUpHandle = setInterval(createPowerUp, 15000);//15000);
 		enemyHandle = setInterval(createEnemy, 1500);
 	}
 }

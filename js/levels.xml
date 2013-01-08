@@ -131,7 +131,7 @@
 				<number>5</number>
 				<path>x|200, y|-100, s|3, 270, 300, 330, 300, 270, 240, 210, 240, 270</path>
 			</enemyPath>
-			<enemyPath id="2">
+			<!--enemyPath id="2">
 				<enemyId>cubic</enemyId>
 				<number>1</number>
 				<path>x|100, y|-100, s|2, 270</path>
@@ -140,56 +140,56 @@
 				<enemyId>cubic</enemyId>
 				<number>1</number>
 				<path>x|200, y|-100, s|2, 270</path>
-			</enemyPath>
-			<enemyPath id="4">
+			</enemyPath-->
+			<enemyPath id="2">
 				<enemyId>cubic</enemyId>
 				<number>1</number>
 				<path>x|300, y|-100, s|2, 270</path>
 			</enemyPath>
-			<enemyPath id="5">
+			<enemyPath id="3">
 				<enemyId>bug</enemyId>
 				<number>3</number>
 				<path>x|600, y|100, s|5, 180, 210, 240, 270</path>
 			</enemyPath>
-			<enemyPath id="6">
+			<enemyPath id="4">
 				<enemyId>asteroid</enemyId>
 				<number>1</number>
 				<path>x|100, y|-100, s|10, 300</path>
 			</enemyPath>
-			<enemyPath id="7">
+			<enemyPath id="5">
 				<enemyId>asteroid</enemyId>
 				<number>1</number>
 				<path>x|500, y|-100, s|10, 240</path>
 			</enemyPath>
-			<enemyPath id="8">
+			<enemyPath id="6">
 				<enemyId>bug</enemyId>
 				<number>1</number>
 				<path>x|100, y|-100, s|8, 270</path>
 			</enemyPath>
-			<enemyPath id="9">
+			<enemyPath id="7">
 				<enemyId>bug</enemyId>
 				<number>1</number>
 				<path>x|380, y|-100, s|8, 270</path>
 			</enemyPath>
-			<enemyPath id="10">
+			<enemyPath id="8">
 				<enemyId>bug</enemyId>
 				<number>1</number>
 				<path>x|200, y|-100, s|8, 270</path>
 			</enemyPath>
-			<enemyPath id="11">
+			<enemyPath id="9">
 				<enemyId>bug</enemyId>
 				<number>1</number>
 				<path>x|280, y|-100, s|8, 270</path>
 			</enemyPath>
-			<enemyPath id="12">
+			<enemyPath id="10">
 				<enemyId></enemyId>
 				<number></number>
 				<path></path>
 			</enemyPath>
-			<enemyPath id="13">
+			<enemyPath id="11">
 				<enemyId>raider</enemyId>
 				<number>1</number>
-				<path>x|200, y|-100, s|3, 270, 210, 210, 210, 270, 330, 330, 330, 330, 270, 180, 180, 0, 0, s|0, 90, 90, 270, s|8</path>
+				<path>x|200, y|-100, s|3, 270, s|0, 180, s|2, 180, 180, 180, s|0, 360, s|2, 360, 360, 360, 360, 360, 360, 360, s|0, 180, s|2, 180, 180, 180, s|0, 0, s|2, 0, 0, 0, s|0, 270, s|15</path>
 			</enemyPath>
 		</paths>
 	</level>
