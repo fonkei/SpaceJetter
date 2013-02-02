@@ -106,30 +106,37 @@ html, body {
 	margin: 2pt -2pt 0pt;
 }
 
-#levelBtn
+.levelSelection
 {
 	background-image: url(images/Level.png);
 	height: 32px;
 	width: 32px;	
 }
 
-#pauseBtn
+.pause
 {
 	background-image: url(images/Pause2.png);
 	height: 32px;
 	width: 32px;	
 }
 
-#soundBtn
+.sound
 {
 	background-image: url(images/Sound2.png);
 	height: 32px;
 	width: 32px;
 }
 
-#reloadBtn
+.reloadLevel
 {
 	background-image: url(images/Reload.png);
+	height: 32px;
+	width: 32px;
+}
+
+.nextLevel
+{
+	background-image: url(images/Forward2.png);
 	height: 32px;
 	width: 32px;
 }
@@ -164,6 +171,31 @@ html, body {
 	margin-right: auto;	
 }
 
+.levelIcons
+{
+	float:left;
+}
+
+.ui-grid-d {
+    float: center;
+}
+
+.lvlDesc {
+	float: left;
+}
+
+.ui-dialog-contain {
+	width: 92.5%;
+	max-width: 400px;
+	margin: 10% auto 15px auto;
+	padding: 0;
+	position: relative;
+	top: -15px;
+}
+
+.ui-dialog  .ui-header .ui-btn-icon-notext  { 
+	display:none;
+} 
 
 .ui-icon-level-selection {
 	background-image: url("images/Arrange.png");

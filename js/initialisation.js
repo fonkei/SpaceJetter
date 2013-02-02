@@ -14,7 +14,7 @@ window.addEventListener("load", function() {
 	sctx = myStatusBar.getContext('2d');
 	
 	// Initialisiere das Spiel
-	//playBackgroundMusic();
+	playBackgroundMusic();
 	
 	myCanvas.style.opacity = 1;
 	myStatusBar.style.opacity = 1;
@@ -39,8 +39,8 @@ window.addEventListener("load", function() {
 	lvlMngr.init("js/levels.xml");
 	
 	// Image Manager
-	resMngr =  new RessourceManager();
-	resMngr.loadImg({
+	imgMngr =  new ImageManager();
+	imgMngr.loadImg({
 		"spriteSheet"			: "./pics/spriteSheets/spriteSheet.png",
 		"bgSprite"				: "./pics/spriteSheets/ParallaxStars2.png",
 		"explosionSprite"		: "./pics/spriteSheets/explosionSprite.png",
@@ -49,48 +49,41 @@ window.addEventListener("load", function() {
 		"weaponSprite"		 	: "./pics/spriteSheets/weaponSprite.png",
 		"spaceshipSprite"		: "./pics/spriteSheets/destroyerSprite.png",
 	}, onImgDone);
-	
-	resMngr.loadSnd({
-		"bang"					: "audio/clickclick3.wav",
-		"laser"					: "audio/laser1.ogg",
-		"chairmove"				: "audio/chairmove.wav",
-		"fbang"					: "audio/fbang06.wav"
-	}, onSndDone);
+
+	audioMngr = new AudioManager();
+	audioMngr.loadSnd({
+        "laser"					: "./audio/laser1",
+		"exp1"					: "./audio/exp1",
+		"exp2"					: "./audio/exp2",
+		"exp4"					: "./audio/exp4",
+		"exp5"					: "./audio/exp5",
+		"exp6"					: "./audio/exp6",
+		"exp7"					: "./audio/exp7",
+		"exp8"					: "./audio/exp8",
+		"exp9"					: "./audio/exp9"
+    }, onSndDone);
 
 	buildLevelSelection();
-	
-	//sound= new Sound();
 
 }, false);
 
 function onSndDone() {
-	// Sounds
-	bangSnd 		= resMngr.get("bang");
-	laserSnd 		= resMngr.get("laser");
-	chairSnd 		= resMngr.get("chairmove");
-	fbangSnd 		= resMngr.get("fbang");
-	
-	bangSnd.play();
-	console.log(laserSnd);
-	console.log(bangSnd);
-	console.log(chairSnd);
-	console.log(fbangSnd);
-	
-	
-	console.log(resMngr.getAll());
 
-	
+	//audioMngr.setRepeat("laser");
+
+	//audioMngr.play("laser");
+	//audioMngr.play("background");
 }
 
 function onImgDone() {
 	// Bilder
 	//spriteSheet 	= resMngr.get("spriteSheet");
-	explosionSheet  = resMngr.get("explosionSprite");
-	bgSheet 		= resMngr.get("bgSprite");
-	enemySheet 		= resMngr.get("enemySprite");
-	powerUpSheet 	= resMngr.get("powerUpSprite");
-	weaponSheet 	= resMngr.get("weaponSprite");
-	spaceshipSheet 	= resMngr.get("spaceshipSprite");
+	explosionSheet  = imgMngr.get("explosionSprite");
+	bgSheet 		= imgMngr.get("bgSprite");
+	enemySheet 		= imgMngr.get("enemySprite");
+	powerUpSheet 	= imgMngr.get("powerUpSprite");
+	weaponSheet 	= imgMngr.get("weaponSprite");
+	spaceshipSheet 	= imgMngr.get("spaceshipSprite");
 	
 	var bgFrames = [
 				[0, 0, 600, 1680, 0, 0],
@@ -126,11 +119,9 @@ function onImgDone() {
 	
 	var explosionFrames = lvlMngr.calculateFrames(explosions, -1, 64);
 
-	//console.log(explosionFrames);
 	for(e in explosionFrames) {
 		explosionSprite[e] = new SpriteSheet(explosionSheet, explosionFrames[e]);
 	}
-	console.log(explosionSprite);
 }
 
 // Event zum starten des Spieles
@@ -142,11 +133,12 @@ $(document).ready(function(){
 			pauseGame();
 	});
 	
-	$("#clearProfileBtn").click(function() {
+	$(".clearProfile").click(function() {
 		prflMngr.resetProfile();
+		buildLevelSelection();
 	});
 
-	$("#soundBtn").click(function() {
+	$(".sound").click(function() {
 		if(soundOn) {
 			$(this).css('background-image', 'url(css/images/Mute.png)');
 			$("#soundOff").attr("checked", true);
@@ -175,22 +167,27 @@ $(document).ready(function(){
 		}
 	});
 	
-	$("#pauseBtn").click(function() {
+	$(".pause").click(function() {
+		pauseGame();
 		if(gamePaused) {
-			$(this).css('background-image', 'url(css/images/Pause2.png)');
-		}
-		else {
 			$(this).css('background-image', 'url(css/images/Play2.png)');
 		}
-		pauseGame();
+		else {
+			$(this).css('background-image', 'url(css/images/Pause2.png)');
+		}
 	});
 	
-	$("#levelBtn").click(function() {
+	$(".levelSelection").click(function() {
 		buildLevelSelection();
 		stopGame();
 	});
 	
-	$("#reloadBtn").click(function() {
+	$(".reloadLevel").click(function() {
+		startNewGame(currLevel);
+	});
+	
+	$(".nextLevel").click(function() {
+		prflMngr.updateProfile();
 		startNewGame(currLevel);
 	});
 });
@@ -215,7 +212,7 @@ function startNewGame(lvl) {
 	spaceship = new Spaceship(spaceshipXPosition, spaceshipYPosition, spaceshipHorSpeed, spaceshipVertSpeed, spaceshipFrame);
 	spaceship.setSprite(spaceshipSprite);
 	spaceship.setFrame(5);
-	
+		
 	// Events
 	document.addEventListener("mousemove", moveSpaceship, false);
 	document.addEventListener("mousedown", onMouseClick, false);
@@ -252,6 +249,9 @@ function clearLevel() {
 	lvlSpeed = 0;
 	bgHeight = 0;
 	lvlScore = 0;
+	powerUpCount = 0;
+	
+	$(".score").remove();
 	
 	this.rocketPowerUp = false;
 	this.laserPowerUp = false;
@@ -266,7 +266,6 @@ function startGame() {
 		isStarted = true;
 		
 		gameHandle = setInterval(draw, 50);
-		powerUpHandle = setInterval(createPowerUp, 15000);//15000);
 		enemyHandle = setInterval(createEnemy, 1500);
 	}
 }
@@ -276,11 +275,9 @@ function stopGame() {
 		isStarted = false;
 	
 		clearInterval(gameHandle);
-		clearInterval(powerUpHandle);
 		clearInterval(enemyHandle);
 	
 		gameHandle = 0;
-		powerUpHandle = 0;
 		enemyHandle = 0;
 		
 		//sound.levelsound.pause();
@@ -310,14 +307,23 @@ function mute() {
 }
 
 function buildLevelSelection() {
+	// clear level Selectio
+
 	var lvlSelectionData = lvlMngr.getLevelSelectionData();
+
+	maxLevel = lvlSelectionData.length;
 
 	var blocks = {0:'a', 1:'b', 2:'c', 3:'d', 4:'e'};
 	var i = 1;
+
+	//$("#levelIcons").children().detach().remove();
+	//document.getElementById('levelIcons').innerHTML = "";
+	
 	for(l in lvlSelectionData) {
 		var attribs = lvlSelectionData[l];
 
-		var path = attribs['picture']
+		var path = attribs['picture'];
+		var title = attribs['title'];
 		var blockCount  = (i-1) % 5;
 		
 		if(path == null || path == undefined || path == "")
@@ -325,16 +331,15 @@ function buildLevelSelection() {
 		else
 			path = attribs['picture'];
 			
-		console.log(path);
 		var cssObj = {'background-image' : 'url('+path+')',
 					  'width' : '50px',
 					  'height' : '50px'};
-		
-		if(i <= storedLevel) {
-			$('.ui-grid-d').append('<div class="ui-block-'+blocks[blockCount]+'"><a id="level'+i+'" href="#main" data-role="button" data-theme="c" onclick="startNewGame('+i+')"/></div> ');
+
+		if(i <= currLevel) {
+			$('.ui-grid-d').append('<div class="ui-block-'+blocks[blockCount]+'"><a id="level'+i+'" href="#main" data-role="button" data-theme="c" onclick="startNewGame('+i+')"/><a class="lvlDesc">'+title+'</a></div> ');
 		}	
 		else {
-			$('.ui-grid-d').append('<div class="ui-block-'+blocks[blockCount]+'"><a id="level'+i+'" href="#main" data-role="button" data-theme="c" class="ui-disabled"/></div> ');
+			$('.ui-grid-d').append('<div class="ui-block-'+blocks[blockCount]+'"><a id="level'+i+'" href="#main" data-role="button" data-theme="c" class="ui-disabled"/><a class="lvlDesc ui-disabled">'+title+'</a></div> ');
 		}
 			
 		$('#level'+i).css(cssObj);

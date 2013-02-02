@@ -3,37 +3,18 @@
 function moveSpaceship(e) {
 	e.preventDefault();
 	
-	if(!spaceship.isShot) {
+	if(!spaceship.isShot && !spaceship.levelDone) {
 		if(e.touches != undefined) {
 			e = e.touches[0];
 			gbMove = true;
 		}
 			
-		var mouseX = (e.pageX - myCanvas.offsetLeft);
-		var mouseY = (e.pageY - myCanvas.offsetTop);
+		mouseX = (e.pageX - myCanvas.offsetLeft);
+		mouseY = (e.pageY - myCanvas.offsetTop);
 		
 		mouseX = (mouseX / scale)  - (spaceship.getWidth() / 2);
 		mouseY = (mouseY / scale)  - (spaceship.getHeight() / 2);
-	
-	
-		// Berechne die Neigung des Raumschiffs anhand Mausposition
-		var diff = Math.round((lastX - mouseX) / 10);
-		var frame = 5;
-		
-		if(diff > 0){			// nach rechts
-			if(diff > 5)
-				diff = 5;
 
-			frame -= diff;
-		}
-		else if(diff < 0) {		// nach links
-			if(diff < -5)
-				diff = -5;
-				
-			frame += Math.abs(diff); 
-		}
-
-		spaceship.setFrame(frame);
 		spaceship.setX(mouseX);
 		spaceship.setY(mouseY);
 		
@@ -112,8 +93,28 @@ function checkTapHold(nID) {
 }
 
 //Erzeugt ein zufälliges Power Up
-function createPowerUp() {
-	for(p in powerupSprite) {
+function createPowerUp(xPos, yPos) {
+	if(powerUpCount >= 5) {
+		var rand = getRandom(0, 2);
+
+		switch(rand) {
+			case 0:
+				objects.push(new PUShield(powerupSprite['shield'], xPos, yPos));
+				break;
+			case 1:
+				objects.push(new PURocket(powerupSprite['rocket'], xPos, yPos));
+				break;
+			case 2:
+				objects.push(new PULaser(powerupSprite['laser'], xPos, yPos));
+				break;
+		}
+		powerUpCount = 0;
+	}
+	else
+		objects.push(new Sphere(powerupSprite['sphere'], xPos, yPos));
+
+
+	/*for(p in powerupSprite) {
 		switch(p) {
 			case 'shield':
 				var newpowerUp = new PUShield(powerupSprite['shield']);
@@ -128,7 +129,7 @@ function createPowerUp() {
 				objects.push(newpowerUp);
 				break;
 		}
-	}
+	}*/
 }
 
 //Erzeugt ein zufälliges Power Up
@@ -188,15 +189,39 @@ function createEnemy() {
 // verringere Geschwindigkeit (beim Fallen)
 function updateSpaceship() {
 	// pruefe ob Raumschiff getroffen
-	spaceship.checkIsHit();
+	if(!spaceship.levelDone)
+		spaceship.checkIsHit();
 	
-	lastX = spaceship.getX();
+	if(!spaceship.isShot) {
+		// Berechne die Neigung des Raumschiffs anhand Mausposition
+		var currX = spaceship.getX();
+		var diff = Math.round((lastX - currX) / 10);
+		var frame = 5;
+		
+		if(diff > 0){			// nach rechts
+			if(diff > 5)
+				diff = 5;
+
+			frame -= diff;
+		}
+		else if(diff < 0) {		// nach links
+			if(diff < -5)
+				diff = -5;
+				
+			frame += Math.abs(diff); 
+		}
+
+		spaceship.setFrame(frame);
+
+		lastX = spaceship.getX();
+	}
 	
 	ctx.strokeStyle = "#fc0";        // Linienstil
     ctx.strokeRect(spaceship.getX(), spaceship.getY(), spaceship.getWidth(), spaceship.getHeight());  // Ungefülltes Rechteck
 	
 	// pruefe Begrenzungen
-	spaceship.checkBoundary();
+	if(!spaceship.levelDone)
+		spaceship.checkBoundary();
 }
 
 // Dreht ein Objekt entsprechend der Gradzahl an der gewuenschten Position
@@ -236,12 +261,13 @@ function updateStatusBar(){
 // Lade naechstes Level
 function nextLevel() {
 	clearScene();
-	clearLevel();
 	
-	level = lvlMngr.nextLevel();
-	updateLevel(level);
+	lvlMngr.nextLevel();
 	
-	startGame();
+	prflMngr.updateProfile();
+	updateLevel(storedLevel);
+
+	startNewGame(storedLevel);
 }
 
 // Aktualliesiere Daten des Levels 
@@ -249,7 +275,8 @@ function updateLevel(level) {
 	maxLvlHeight = level.getLvlHeight();
 	lvlSpeed = level.getLvlSpeed();
 	maxWindStrenght = level.getMaxWindStrenght();
-	bgFrame = level.getLevelNr();
+	SKY_COLOR = level.getColor();
+	bgFrame = 0;//level.getLevelNr();
 	
 	// Gegnersprite anlegen
 	var enemyFrames = level.getEnemyFrames();
@@ -329,12 +356,31 @@ function checkFocus() {
         hasFocus = true;
     });
 	
-	if(hasFocus)
+	if(hasFocus) {
 		startGame();
-	else
+		$('.pause').css('background-image', 'url(css/images/Pause2.png)');
+	}
+	else {
 		pauseGame();
+		$('.pause').css('background-image', 'url(css/images/Play2.png)');
+	}
 		
 	//console.log("hasFocus: " + hasFocus + " isStarted: " + isStarted);
+}
+
+function levelDone() {
+		$('.successlvlScore').append('<h5 class="score" id="score">'+lvlScore+'</h5>');
+		
+		//if(currLevel >= storedLevel)
+			//$(".nextLevel").remove();
+
+		$.mobile.changePage('#successDialog', 'pop', true, true);
+}
+
+function gameOver() {
+		stopGame();
+		$.mobile.changePage('#gameOverDialog', 'pop', true, true);
+		$('.gameOverlvlScore').append('<h5 class="score" id="lvlScore">'+lvlScore+'</h5>');
 }
 
 //===========================================================
@@ -358,11 +404,7 @@ function drawScene() {
 	// loeschen des Inhaltes vom Canvas-Elements
 	clearScene();
 
-	// Zeichnen des Himmels als ein linearer Gradient
-	sky = ctx.createLinearGradient(0, width, 0, height);
-	//sky.addColorStop(Math.random(), SKY_COLOR);
-	sky.addColorStop(0, SKY_COLOR);
-	//sky.addColorStop(1, '#FFFFFF');
+	// Zeichnen des Himmels
 	ctx.fillStyle = SKY_COLOR;
 	ctx.fillRect(0, 0, width, height);
 	
@@ -377,7 +419,7 @@ function drawScene() {
 function drawSpaceship() {
 	// Zeichne den Ballon
 	updateSpaceship();
-	
+
 	var sprite = spaceship.getSprite(); 
 	sprite.drawFrame(ctx, spaceship.getFrame(), spaceship.getX(), spaceship.getY());
 }
@@ -385,7 +427,7 @@ function drawSpaceship() {
 function drawText() {
 	// Flughoehe
 	sctx.fillStyle = "white";
-    sctx.font = "Bold 16px Sans-Serif";
+    sctx.font = "Bold 16px Arial";
 	sctx.fillText(lvlScore, 10, 20);
 }
 
@@ -393,9 +435,14 @@ function drawObjects() {
 	for (var i = 0; i < objects.length; i++) {
 		// bewege Objekt
 		objects[i].fly();
-			
-		spaceship.checkCollisions(objects[i]);
-		spaceship.checkHit(objects[i]);
+		
+		if(!spaceship.levelDone) {
+			spaceship.checkCollisions(objects[i]);
+			spaceship.checkHit(objects[i]);
+		}
+		else {
+			spaceship.levelDoneSequence();
+		}
 			
 		// Zeichne Objekt
 		var sprite = objects[i].getSprite();

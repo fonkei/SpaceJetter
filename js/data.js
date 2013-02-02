@@ -93,7 +93,8 @@ var lvlScore = 0;
 var lvlMngr = null;
 var prflMngr = null;
 var level = null;
-var resMngr = null;
+var imgMngr = null;
+var audioMngr = null;
 var maxWindStrenght = 0;
 var cloudSprite = null;
 var balloonSprite = null;
@@ -119,6 +120,7 @@ var sphereCount = 0;
 var currLevel = 0;
 var storedLevel = 0;
 var lastX = 0;
+var maxLevel = 0;
 
 var gnStartTime = 0;
 var gbMove = false;
@@ -133,4 +135,25 @@ var powerUpSheet 	= null;
 var weaponSheet 	= null;
 var spaceshipSheet 	= null;
 var laserSnd 	= null;
+var laserSound1	= null;
+var laserSound2 = null;
+var laserSound3 = null;
+var laserSound4 = null;
+var laserSound5 = null;
+
+var expSound1	= null;
+var expSound2 = null;
+var expSound3 = null;
+var expSound4 = null;
+var expSound5 = null;
+var expSound6 = null;
+var expSound7 = null;
+var expSound8 = null;
+var expSound9 = null;
+
 var bangSnd 	= null;
+
+var mouseX = 0;
+var mouseY = 0;
+
+var powerUpCount = 0;

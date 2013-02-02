@@ -60,16 +60,13 @@ FlyingObject = function(x, y, s, f, sp, w, h) {
 *  PowerUp
 *
 ****/
-PowerUp = function(sp) {
+PowerUp = function(sp, xPos, yPos) {
 	this.base = FlyingObject;
 
-	var x = getRandom(0, width-40);
-	var y = getRandom(-100 , -50);
-	
 	var frame = 0;
 	var speed = getRandom(3, 7);
 	
-	this.base(x, y, speed, frame, sp);
+	this.base(xPos, yPos, speed, frame, sp);
 	
 	var degree = getRandom(210, 330);
 	var angle = degree * Math.PI / 180;
@@ -106,10 +103,10 @@ PowerUp.prototype = {
 *  PowerUp Shield
 *
 ****/
-PUShield = function(sp) {
+PUShield = function(sp, xPos, yPos) {
 	this.base = PowerUp;
 
-	this.base(sp);
+	this.base(sp, xPos, yPos);
 	this.init();
 	
 	this.type = "PUShield";
@@ -122,10 +119,10 @@ PUShield.prototype.constructor = PUShield;
 *  PowerUp Rocket
 *
 ****/
-PURocket = function(sp) {
+PURocket = function(sp, xPos, yPos) {
 	this.base = PowerUp;
 
-	this.base(sp);
+	this.base(sp, xPos, yPos);
 	this.init();
 	
 	this.type = "PURocket";
@@ -138,10 +135,10 @@ PURocket.prototype.constructor = PURocket;
 *  PowerUp PULaser
 *
 ****/
-PULaser = function(sp) {
+PULaser = function(sp, xPos, yPos) {
 	this.base = PowerUp;
 
-	this.base(sp);
+	this.base(sp, xPos, yPos);
 	this.init();
 	
 	this.type = "Shield";
@@ -154,14 +151,12 @@ PULaser.prototype.constructor = PULaser;
 *  Sphere
 *
 ****/
-Sphere = function(sp, x, y) {
+Sphere = function(sp, xPos, yPos) {
 	this.base = PowerUp;
 	
-	this.base(sp);
+	this.base(sp, xPos, yPos);
 	this.init();
-	
-	this.setX(x);
-	this.setY(y);
+
 	this.type = "Sphere";
 }
 
@@ -294,6 +289,8 @@ Bug.prototype = {
 	hit: function() {
 		this.isShot = true;
 		shock = true;
+		audioMngr.play("exp4");
+
 		this.setSprite(explosionSprite['exp1']);
 		this.setFrame(this.expFrame);
 	},
@@ -306,6 +303,7 @@ Bug.prototype = {
 		else {
 			this.expFrame = 0;
 			this.defunct = true;
+			createPowerUp(this.getX(), this.getY());
 		}
 	},
 	
@@ -436,6 +434,7 @@ Packman.prototype = {
 	hit: function() {
 		this.isShot = true;
 		shock = true;
+		audioMngr.play("exp1");
 		this.setSprite(explosionSprite['exp1']);
 		this.setFrame(this.expFrame);
 	},
@@ -448,6 +447,7 @@ Packman.prototype = {
 		else {
 			this.expFrame = 0;
 			this.defunct = true;
+			createPowerUp(this.getX(), this.getY());
 		}
 	},
 }
@@ -608,6 +608,7 @@ Raider.prototype = {
 	hit: function() {
 		this.isShot = true;
 		shock = true;
+		audioMngr.play("exp5");
 		this.setSprite(explosionSprite['exp1']);
 		this.setFrame(this.expFrame);
 	},
@@ -615,6 +616,15 @@ Raider.prototype = {
 	explode: function() {
 		if(this.expFrame < 16) {
 			this.setFrame(this.expFrame);
+			explosionSprite['exp1'].drawFrame(ctx, this.expFrame, this.getX() + 20, this.getY() + 20);
+			explosionSprite['exp0'].drawFrame(ctx, this.expFrame, this.getX() - 20, this.getY() - 20);
+			explosionSprite['exp3'].drawFrame(ctx, this.expFrame, this.getX() + 20, this.getY() - 20);
+			explosionSprite['exp1'].drawFrame(ctx, this.expFrame, this.getX() - 20, this.getY() + 20);
+
+			explosionSprite['exp1'].drawFrame(ctx, this.expFrame, this.getX() + 40, this.getY() + 40);
+			explosionSprite['exp0'].drawFrame(ctx, this.expFrame, this.getX() - 40, this.getY() - 40);
+			explosionSprite['exp3'].drawFrame(ctx, this.expFrame, this.getX() + 40, this.getY() - 40);
+			explosionSprite['exp1'].drawFrame(ctx, this.expFrame, this.getX() - 40, this.getY() + 40);
 			this.expFrame++;
 		}
 		else {
@@ -690,6 +700,10 @@ Hawk.prototype = {
 		}
 		if(this.shootTimer % 50 == 0) {
 			this.shootBullet();
+			
+		}
+		if(this.shootTimer % 150 == 0) {
+			this.createEnemy();
 			this.shootTimer = 0;
 		}
 		this.shootTimer++;
@@ -772,17 +786,53 @@ Hawk.prototype = {
 			objects.push(new Rocket(weaponSprite['plasma'], xPos, yPos, 0, -30, 10, 1, 20, "Enemy"));
 		}
 	},
+
+	createEnemy: function() {
+		if(!this.isShot) {
+			var xPos = this.getX() + (this.getWidth() / 2) - 30;
+			var yPos = this.getY() + (this.getHeight() / 2);
+			var paths = ['x|'+xPos, 'y|'+yPos, 's|8', '270'];
+
+			var newEnemy = new Packman(enemySprite['packman'], [paths]);
+			objects.push(newEnemy);
+			objects.sort();
+		}
+	},
 	
 	hit: function() {
 		this.isShot = true;
 		shock = true;
+		audioMngr.play("exp5");
 		this.setSprite(explosionSprite['exp1']);
 		this.setFrame(this.expFrame);
 	},
 	
 	explode: function() {
 		if(this.expFrame < 16) {
+			var xPos = this.getX() + (this.getWidth() / 2);
+			var yPos = this.getY() + (this.getHeight() / 2);
+
 			this.setFrame(this.expFrame);
+
+			explosionSprite['exp1'].drawFrame(ctx, this.expFrame, xPos + 20, yPos + 20);
+			explosionSprite['exp0'].drawFrame(ctx, this.expFrame, xPos - 20, yPos - 20);
+			explosionSprite['exp3'].drawFrame(ctx, this.expFrame, xPos + 20, yPos - 20);
+			explosionSprite['exp1'].drawFrame(ctx, this.expFrame, xPos - 20, yPos + 20);
+
+			explosionSprite['exp1'].drawFrame(ctx, this.expFrame, xPos + 40, yPos + 40);
+			explosionSprite['exp0'].drawFrame(ctx, this.expFrame, xPos - 40, yPos - 40);
+			explosionSprite['exp3'].drawFrame(ctx, this.expFrame, xPos + 40, yPos - 40);
+			explosionSprite['exp1'].drawFrame(ctx, this.expFrame, xPos - 40, yPos + 40);
+
+			explosionSprite['exp1'].drawFrame(ctx, this.expFrame, xPos, yPos + 40);
+			explosionSprite['exp0'].drawFrame(ctx, this.expFrame, xPos, yPos - 40);
+			explosionSprite['exp3'].drawFrame(ctx, this.expFrame, xPos + 40, yPos);
+			explosionSprite['exp1'].drawFrame(ctx, this.expFrame, xPos - 40, yPos);
+
+			explosionSprite['exp1'].drawFrame(ctx, this.expFrame, xPos, yPos + 60);
+			explosionSprite['exp0'].drawFrame(ctx, this.expFrame, xPos, yPos - 60);
+			explosionSprite['exp3'].drawFrame(ctx, this.expFrame, xPos + 60, yPos);
+			explosionSprite['exp1'].drawFrame(ctx, this.expFrame, xPos - 60, yPos);
 			this.expFrame++;
 		}
 		else {
@@ -874,7 +924,7 @@ Cubic.prototype = {
 		
 		if(degree < 355) {
 			this.incDegree(15);
-			if(this.timer == 3) {
+			if(this.timer == 4) {
 				var posX = this.getX() + (this.getWidth() / 2);
 				var posY = this.getY() + (this.getHeight() / 2);
 				
@@ -892,6 +942,7 @@ Cubic.prototype = {
 	hit: function() {
 		this.isShot = true;
 		shock = true;
+		audioMngr.play("exp4");
 		this.setSprite(explosionSprite['exp4']);
 		this.setFrame(this.expFrame);
 	},
@@ -903,8 +954,8 @@ Cubic.prototype = {
 		}
 		else {
 			this.expFrame = 0;
-			objects.push(new Sphere(powerupSprite['sphere'], this.getX(), this.getY()));
 			this.defunct = true;
+			createPowerUp(this.getX(), this.getY());
 		}
 	},
 }
@@ -1000,6 +1051,7 @@ Asteroid.prototype = {
 	hit: function() {
 		this.isShot = true;
 		shock = true;
+		audioMngr.play("exp1");
 		this.setSprite(explosionSprite['exp3']);
 		this.setFrame(this.expFrame);
 	},
@@ -1056,6 +1108,11 @@ Spaceship = function(x, y, horSpeed, vertSpeed, f) {
 	this.isShot = false;
 	this.expFrame = 0;
 	this.shields = [];
+	this.levelDone = false;
+	this.endPositionFound = false;
+	this.sequenceDone = false;
+	this.speed = 0.01;
+	this.soundNum = 0;
 }
 
 Spaceship.prototype = new FlyingObject();
@@ -1256,8 +1313,13 @@ Spaceship.prototype = {
 					// Alle, die getroffen sind nicht mehr beruecksichtigen
 					if(!(object instanceof Plasma) && !(object instanceof Rocket)) {
 						if(!object.isShot) {
-							if(object.hitCount == 0) {
+							if(object.hitCount <= 0) {
+								if(object instanceof Raider || object instanceof Hawk)
+									this.levelDone = true;
+								
+								// Objekt zerstoeren 	
 								object.hit();
+								powerUpCount++;
 								lvlScore += 100;
 							}
 							else
@@ -1279,6 +1341,8 @@ Spaceship.prototype = {
 	// schießen
 	shoot: function() {
 		
+		audioMngr.play("laser");
+
 		//if(this.shootTimer % 10 == 0) {
 			bullets.push(new Plasma(weaponSprite['plasma'], this.getX(), this.getY(), 0, 15, 10, 0, 40));
 			bullets.push(new Plasma(weaponSprite['plasma'], this.getX(), this.getY(), 1, 45, 10, 0, 40));
@@ -1302,6 +1366,8 @@ Spaceship.prototype = {
 	// getroffen
 	hit: function() {
 		shock = true;
+
+		audioMngr.play("exp2");
 		// zerstoere Schutzschilder
 		for(s in this.shields) {
 			this.shields[s].setDefunct();
@@ -1311,16 +1377,24 @@ Spaceship.prototype = {
 		this.shields = [];
 		this.isShot = true;
 		this.setSprite(explosionSprite['exp1']);
+		this.setFrame(this.expFrame);
 	},
 	
 	explode: function() {
 		if(this.expFrame < 16) {
 			this.setFrame(this.expFrame);
+			explosionSprite['exp1'].drawFrame(ctx, this.expFrame, this.getX() + 20, this.getY() + 20);
+			explosionSprite['exp0'].drawFrame(ctx, this.expFrame, this.getX() - 20, this.getY() - 20);
+			explosionSprite['exp3'].drawFrame(ctx, this.expFrame, this.getX() + 20, this.getY() - 20);
+			explosionSprite['exp1'].drawFrame(ctx, this.expFrame, this.getX() - 20, this.getY() + 20);
+
 			this.expFrame++;
+
 		}
 		else {
 			this.expFrame = 0;
-			this.defunct = true;
+			this.setDefunct();
+			gameOver();
 		}
 	},
 	
@@ -1331,6 +1405,40 @@ Spaceship.prototype = {
 		}
 		this.shieldPowerUp = this.rocketPowerUp = this.laserPowerUp = false;
 		this.shields = [];
+	},
+	
+	levelDoneSequence: function() {
+		/*for(o in objects)
+			objects[o].setDefunct();*/
+			
+		var x = Math.round(this.getX() + (this.getWidth() / 2));
+		var y = Math.round(this.getY() + (this.getHeight() / 2));
+		var xPos = Math.round(width / 2);
+		var yPos = Math.round(height - 200);
+		
+		if(!this.endPositionFound && (x != xPos || y != yPos)) {
+			if(x > xPos)
+				this.decX(0.5);
+			else if(x < xPos)
+				this.incX(0.5);
+			
+			if(y > yPos)
+				this.decY(0.5);
+			else if(y < yPos)
+				this.incY(0.5);
+		}
+		else {
+			this.endPositionFound = true;
+			if(y > -100) {
+				this.speed += 0.05;
+				this.decY(this.speed);
+			}
+			else if(y <= -100 && !this.sequenceDone) { 
+				this.sequenceDone = true;
+				stopGame();
+				levelDone();
+			}
+		}
 	}
 }
 

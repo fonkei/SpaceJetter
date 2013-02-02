@@ -14,20 +14,26 @@ ProfileManager.prototype.init = function() {
 
 // Lade Profil
 ProfileManager.prototype.loadProfile = function() {
-	if(localStorage.getItem("currLevel") != undefined)
-		storedLevel = localStorage.getItem("currLevel");
+	if(localStorage.getItem("currLevel") != undefined) 
+		currLevel = localStorage.getItem("currLevel");
 	else {
 		localStorage.setItem("currLevel", 1);
-		storedLevel = localStorage.getItem("currLevel");
+		currLevel = localStorage.getItem("currLevel");
 	}
 }
 
 ProfileManager.prototype.updateProfile = function() {
-	currLevel++;
-	localStorage.setItem("currLevel", currLevel);
+	if((storedLevel + 1) <= maxLevel) {
+		currLevel++;
+		localStorage.setItem("currLevel", currLevel);
+	}
+	else {
+		// TODO: Alle Level geschafft
+	}
 }
 
 ProfileManager.prototype.resetProfile = function() {
 	localStorage.clear();
+	this.loadProfile();
 }
 

@@ -4,7 +4,6 @@ function SpriteSheet(image, frames, bgrepeat) {
 	
 	this._image = image;
 	
-	console.log(image);
 	this._frames = frames;
 }
 

@@ -1,4 +1,4 @@
-<html manifest="test.appcache">  
+<html>  
   <head>  
     <title>SpaceJetter</title>  
 	
@@ -30,7 +30,8 @@
 	<script type="text/javascript" src="js/level.js"></script>
 	<script type="text/javascript" src="js/ProfileManager.js"></script>
 	<script type="text/javascript" src="js/levelManager.js"></script>
-	<script type="text/javascript" src="js/RessourceManager.js"></script>
+	<script type="text/javascript" src="js/ImageManager.js"></script>
+	<script type="text/javascript" src="js/AudioManager.js"></script>
 	<script type="text/javascript" src="js/sound.js"></script>
   </head>  
   <!--body onload='new Preroll().init(["pics/spaceship.png", "pics/sun.png"], 2000, 1000, document.getElementById("menu"))'-->
@@ -81,7 +82,7 @@
 					<input type='radio' id='soundOff' name='music' value='2' checked=""/>
 				</fieldset>
 			</div>
-			<a href="#" data-role="button" data-icon="" id="clearProfileBtn">Profil zur&uuml;cksetzen</a>
+			<a href="#" data-role="button" data-icon="" class="clearProfile" id="clearProfileBtn">Profil zur&uuml;cksetzen</a>
 			<a href="#menu" data-role="button" data-icon="back2" id="optionBtns">Zur&uuml;ck</a>
 		
 		</div>
@@ -111,13 +112,52 @@
 	  
 	  <div data-role="footer" id="foot">
 		<fieldset data-role="controlgroup" data-type="horizontal">
-			<a href="#levels" data-role="button" id="levelBtn">&nbsp;</a>
-			<a href="" data-role="button" id="soundBtn">&nbsp;</a>
-			<a href="" data-role="button" id="pauseBtn">&nbsp;</a>
-			<a href="" data-role="button" id="reloadBtn">&nbsp;</a>
+			<a href="#levels" data-role="button" class="levelSelection" id="levelBtn">&nbsp;</a>
+			<a href="" data-role="button" class="sound" id="soundBtn">&nbsp;</a>
+			<a href="" data-role="button" class="pause" id="pauseBtn">&nbsp;</a>
+			<a href="#main" data-role="button" class="reloadLevel" id="reloadBtn">&nbsp;</a>
 		</fieldset>
 	  </div>
 	 
+	</div>
+	
+	<div data-role="dialog" id="gameOverDialog">
+		<div data-role="header">
+			<h1>Game Over</h1>
+		</div>    
+		<h2>Sie haben leider verloren</h2>
+		
+		<div data-role="content" id="gameOverDialogText">
+			<div class="gameOverVars">
+				<div class="gameOverlvlScore">
+					<h4>Punktestand: </h4>
+				</div>
+			</div>
+			<fieldset data-role="controlgroup" data-type="horizontal">
+				<a href="#levels" data-role="button" class="levelSelection" id="gameOverlevelBtn">&nbsp;</a>
+				<a href="#main" data-role="button" class="reloadLevel" id="reloadDialBtn">&nbsp;</a>
+			</fieldset>
+		</div>    
+	</div>
+	
+	<div data-role="dialog" id="successDialog">
+		<div data-role="header">
+			<h1>Geschafft!</h1>
+		</div>    
+		<h2>Herzlichen Gl&uuml;ckwunsch!!!</h2>
+		
+		<div data-role="content" id="successDialogText">
+			<div class="successVars">
+				<div class="successlvlScore">
+					<h4>Punktestand: </h4>
+				</div>
+			</div>
+			<fieldset class="successFldset" data-role="controlgroup" data-type="horizontal">
+				<a href="#levels" data-role="button" class="levelSelection" id="successlevelBtn">&nbsp;</a>
+				<a href="#main" data-role="button" class="reloadLevel" id="reloadDialBtn">&nbsp;</a>
+				<a href="#main" data-role="button" class="nextLevel" id="forwardDialBtn">&nbsp;</a>
+			</fieldset>
+		</div>    
 	</div>
 
 	<div id="pwidget">  
