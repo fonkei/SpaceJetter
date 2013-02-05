@@ -106,6 +106,13 @@ html, body {
 	margin: 2pt -2pt 0pt;
 }
 
+.firstLevelSelection
+{
+	background-image: url(images/Level.png);
+	height: 32px;
+	width: 32px;	
+}
+
 .levelSelection
 {
 	background-image: url(images/Level.png);
@@ -120,7 +127,7 @@ html, body {
 	width: 32px;	
 }
 
-.sound
+.audio
 {
 	background-image: url(images/Sound2.png);
 	height: 32px;

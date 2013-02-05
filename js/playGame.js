@@ -25,7 +25,7 @@ function moveSpaceship(e) {
 // Tastenaktionen
 function keyDown(e) {
 	keys[e.which] = true;
-	if(!spaceship.isShot) {
+	if(!spaceship.isShot && isStarted) {
 		move();
 	}
 }
@@ -62,15 +62,16 @@ function move() {
 
 // Feuert eine Kugel ab
 function fireBullet() {
-	spaceship.shoot();	
+	if(!spaceship.isShot && isStarted) 
+		spaceship.shoot();	
 }
 
 function onMouseClick(e) {
 	e.stopPropagation();
 	e.preventDefault();  // verhindern des Normalverhaltens des Browsers
-	if(!spaceship.isShot) {
-		fireBullet();
-	}
+	
+	fireBullet();
+	
 }
 
 function onTouchStart(e) {

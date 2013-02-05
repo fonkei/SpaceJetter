@@ -4,6 +4,26 @@
 		"selected_items":
 		[
 			[
+				"aud",
+				"audioMngr"
+			],
+			[
+				"_",
+				"_loadFinished"
+			],
+			[
+				"Au",
+				"AudioManager"
+			],
+			[
+				"expS",
+				"expSound3"
+			],
+			[
+				"laser",
+				"laserSound2"
+			],
+			[
 				"lo",
 				"log"
 			],
@@ -27,7 +47,7 @@
 			"file": "js/FlyingObject.js",
 			"settings":
 			{
-				"buffer_size": 38122,
+				"buffer_size": 38355,
 				"line_ending": "Windows"
 			}
 		},
@@ -35,7 +55,7 @@
 			"file": "js/data.js",
 			"settings":
 			{
-				"buffer_size": 2753,
+				"buffer_size": 3093,
 				"line_ending": "Windows"
 			}
 		},
@@ -43,7 +63,7 @@
 			"file": "js/initialisation.js",
 			"settings":
 			{
-				"buffer_size": 9590,
+				"buffer_size": 9334,
 				"line_ending": "Windows"
 			}
 		},
@@ -51,7 +71,7 @@
 			"file": "game.html",
 			"settings":
 			{
-				"buffer_size": 5810,
+				"buffer_size": 5807,
 				"line_ending": "Windows"
 			}
 		},
@@ -91,7 +111,7 @@
 			"file": "js/PathManager.js",
 			"settings":
 			{
-				"buffer_size": 2938,
+				"buffer_size": 2905,
 				"line_ending": "Windows"
 			}
 		},
@@ -115,7 +135,7 @@
 			"file": "js/ProfileManager.js",
 			"settings":
 			{
-				"buffer_size": 793,
+				"buffer_size": 708,
 				"line_ending": "Windows"
 			}
 		},
@@ -123,15 +143,23 @@
 			"file": "js/RessourceManager.js",
 			"settings":
 			{
-				"buffer_size": 2736,
+				"buffer_size": 1707,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "js/sound.js",
+			"file": "js/ImageManager.js",
 			"settings":
 			{
-				"buffer_size": 112,
+				"buffer_size": 1707,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "js/AudioManager.js",
+			"settings":
+			{
+				"buffer_size": 2666,
 				"line_ending": "Windows"
 			}
 		},
@@ -139,7 +167,7 @@
 			"file": "js/SpriteSheet.js",
 			"settings":
 			{
-				"buffer_size": 1160,
+				"buffer_size": 1139,
 				"line_ending": "Windows"
 			}
 		}
@@ -172,6 +200,8 @@
 	},
 	"file_history":
 	[
+		"/C/Users/kfein/Documents/GitHub/SpaceJetter/js/RessourceManager.js",
+		"/C/Users/kfein/Documents/GitHub/SpaceJetter/js/sound.js"
 	],
 	"find":
 	{
@@ -189,6 +219,22 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"new Sprite",
+			"getSprite",
+			"{\n",
+			"\");\n",
+			"audioMngr",
+			"conso",
+			"Sound",
+			"Snd",
+			"resMng",
+			"\"));\n",
+			"expSound3",
+			"console",
+			"	\n",
+			"consol",
+			"conso",
+			"consol",
 			"foot",
 			"music",
 			"storedLevel",
@@ -236,7 +282,7 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -244,15 +290,15 @@
 					"file": "js/FlyingObject.js",
 					"settings":
 					{
-						"buffer_size": 38122,
+						"buffer_size": 38355,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								16842,
-								16842
+								3928,
+								3932
 							]
 						],
 						"settings":
@@ -261,7 +307,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 11890.0,
+						"translation.y": 2526.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -271,15 +317,15 @@
 					"file": "js/data.js",
 					"settings":
 					{
-						"buffer_size": 2753,
+						"buffer_size": 3093,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2753,
-								2736
+								1670,
+								1670
 							]
 						],
 						"settings":
@@ -287,7 +333,7 @@
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1463.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -297,15 +343,15 @@
 					"file": "js/initialisation.js",
 					"settings":
 					{
-						"buffer_size": 9590,
+						"buffer_size": 9334,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7639,
-								7639
+								2944,
+								2944
 							]
 						],
 						"settings":
@@ -314,7 +360,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4677.0,
+						"translation.y": 3879.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -324,15 +370,15 @@
 					"file": "game.html",
 					"settings":
 					{
-						"buffer_size": 5810,
+						"buffer_size": 5807,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								212,
-								212
+								4341,
+								4341
 							]
 						],
 						"settings":
@@ -341,7 +387,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1395.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -395,7 +441,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 225.0,
+						"translation.y": 300.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -422,7 +468,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1999.0,
+						"translation.y": 2880.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -439,8 +485,8 @@
 						"selection":
 						[
 							[
-								16336,
-								16336
+								3495,
+								3634
 							]
 						],
 						"settings":
@@ -449,7 +495,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1965.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -459,15 +505,15 @@
 					"file": "js/PathManager.js",
 					"settings":
 					{
-						"buffer_size": 2938,
+						"buffer_size": 2905,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1420,
-								1420
+								2611,
+								2611
 							]
 						],
 						"settings":
@@ -476,7 +522,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1165.0,
+						"translation.y": 1273.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -493,8 +539,8 @@
 						"selection":
 						[
 							[
-								233,
-								233
+								442,
+								442
 							]
 						],
 						"settings":
@@ -503,7 +549,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4900.0,
+						"translation.y": 3133.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -539,15 +585,15 @@
 					"file": "js/ProfileManager.js",
 					"settings":
 					{
-						"buffer_size": 793,
+						"buffer_size": 708,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								361,
-								361
+								558,
+								558
 							]
 						],
 						"settings":
@@ -566,7 +612,7 @@
 					"file": "js/RessourceManager.js",
 					"settings":
 					{
-						"buffer_size": 2736,
+						"buffer_size": 1707,
 						"regions":
 						{
 						},
@@ -590,23 +636,24 @@
 				},
 				{
 					"buffer": 13,
-					"file": "js/sound.js",
+					"file": "js/ImageManager.js",
 					"settings":
 					{
-						"buffer_size": 112,
+						"buffer_size": 1707,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								206,
+								206
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -616,18 +663,45 @@
 				},
 				{
 					"buffer": 14,
-					"file": "js/SpriteSheet.js",
+					"file": "js/AudioManager.js",
 					"settings":
 					{
-						"buffer_size": 1160,
+						"buffer_size": 2666,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								47,
-								47
+								2666,
+								2666
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 915.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 15,
+					"file": "js/SpriteSheet.js",
+					"settings":
+					{
+						"buffer_size": 1139,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								166,
+								168
 							]
 						],
 						"settings":

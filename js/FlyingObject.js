@@ -287,10 +287,11 @@ Bug.prototype = {
 	},
 	
 	hit: function() {
-		this.isShot = true;
 		shock = true;
-		audioMngr.play("exp4");
+		if(!this.isShot)
+			audioMngr.play("exp4");
 
+		this.isShot = true;
 		this.setSprite(explosionSprite['exp1']);
 		this.setFrame(this.expFrame);
 	},
@@ -432,9 +433,11 @@ Packman.prototype = {
 	},
 	
 	hit: function() {
-		this.isShot = true;
 		shock = true;
-		audioMngr.play("exp1");
+		if(!this.isShot)
+			audioMngr.play("exp1");
+		
+		this.isShot = true;
 		this.setSprite(explosionSprite['exp1']);
 		this.setFrame(this.expFrame);
 	},
@@ -606,9 +609,11 @@ Raider.prototype = {
 	},
 	
 	hit: function() {
-		this.isShot = true;
 		shock = true;
-		audioMngr.play("exp5");
+		if(!this.isShot)
+			audioMngr.play("exp5");
+
+		this.isShot = true;
 		this.setSprite(explosionSprite['exp1']);
 		this.setFrame(this.expFrame);
 	},
@@ -800,9 +805,12 @@ Hawk.prototype = {
 	},
 	
 	hit: function() {
-		this.isShot = true;
+		
 		shock = true;
-		audioMngr.play("exp5");
+		if(!this.isShot)
+			audioMngr.play("exp5");
+
+		this.isShot = true;
 		this.setSprite(explosionSprite['exp1']);
 		this.setFrame(this.expFrame);
 	},
@@ -940,9 +948,11 @@ Cubic.prototype = {
 	},
 	
 	hit: function() {
-		this.isShot = true;
 		shock = true;
-		audioMngr.play("exp4");
+		if(!this.isShot)
+			audioMngr.play("exp4");
+
+		this.isShot = true;
 		this.setSprite(explosionSprite['exp4']);
 		this.setFrame(this.expFrame);
 	},
@@ -1049,9 +1059,11 @@ Asteroid.prototype = {
 	},
 	
 	hit: function() {
-		this.isShot = true;
 		shock = true;
-		audioMngr.play("exp1");
+		if(!this.isShot)
+			audioMngr.play("exp1");
+		
+		this.isShot = true;
 		this.setSprite(explosionSprite['exp3']);
 		this.setFrame(this.expFrame);
 	},
@@ -1111,7 +1123,7 @@ Spaceship = function(x, y, horSpeed, vertSpeed, f) {
 	this.levelDone = false;
 	this.endPositionFound = false;
 	this.sequenceDone = false;
-	this.speed = 0.01;
+	this.speed = 0.05;
 	this.soundNum = 0;
 }
 
@@ -1367,7 +1379,6 @@ Spaceship.prototype = {
 	hit: function() {
 		shock = true;
 
-		audioMngr.play("exp2");
 		// zerstoere Schutzschilder
 		for(s in this.shields) {
 			this.shields[s].setDefunct();
@@ -1375,6 +1386,9 @@ Spaceship.prototype = {
 		}
 			
 		this.shields = [];
+		if(!this.isShot)
+			audioMngr.play("exp2");
+
 		this.isShot = true;
 		this.setSprite(explosionSprite['exp1']);
 		this.setFrame(this.expFrame);
@@ -1426,7 +1440,9 @@ Spaceship.prototype = {
 				this.decY(0.5);
 			else if(y < yPos)
 				this.incY(0.5);
-		}
+
+			console.log("Not Found: ",x, xPos, y, yPos);
+		}						
 		else {
 			this.endPositionFound = true;
 			if(y > -100) {
@@ -1438,6 +1454,8 @@ Spaceship.prototype = {
 				stopGame();
 				levelDone();
 			}
+
+			console.log("Found: ",y, this.speed);
 		}
 	}
 }

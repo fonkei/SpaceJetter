@@ -12,10 +12,10 @@ _p = AudioManager.prototype;
 
 _p.init = function () {
 	var tempAudio = new Audio();
-    this.fileExtension = tempAudio.canPlayType('audio/ogg; codecs="vorbis"')? ".ogg" : ".wav";
+    this.fileExtension = tempAudio.canPlayType('audio/ogg; codecs="vorbis"')? ".ogg" : ".ogg";
 	delete tempAudio;
 	
-	var channel_max = 10;
+	var channel_max = 5;
 	this.channels = new Array();
 	for (a = 0; a < channel_max; a++) {
 		this.channels[a] = new Audio();
@@ -72,6 +72,24 @@ _p.setVolume = function(s, val) {
 	if(!audio)
 		return;
 	audio.volume = val;
+}
+
+_p.mute = function(val) {
+	for(s in this.sounds) {
+		audio = this.sounds[s];
+		if(val)
+			audio.volume = 0;
+		else
+			audio.volume = 0.5;
+	}
+
+	for(c in this.channels) {
+		audio = this.channels[c];
+		if(val)
+			audio.volume = 0;
+		else
+			audio.volume = 0.5;
+	}
 }
 
 _p._loadFinished = function(callback) {

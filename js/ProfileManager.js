@@ -20,10 +20,12 @@ ProfileManager.prototype.loadProfile = function() {
 		localStorage.setItem("currLevel", 1);
 		currLevel = localStorage.getItem("currLevel");
 	}
+
+	console.log("CurrLevel: ", currLevel);
 }
 
 ProfileManager.prototype.updateProfile = function() {
-	if((storedLevel + 1) <= maxLevel) {
+	if((currLevel + 1) <= maxLevel) {
 		currLevel++;
 		localStorage.setItem("currLevel", currLevel);
 	}

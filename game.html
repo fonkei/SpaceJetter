@@ -5,11 +5,8 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, user-scalable=0" />
 
-	
-	
 	<!-- JQuery -->
 	<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
-	
 	
 	<!-- JQuery Mobile einbinden-->
 	<link rel="stylesheet" type="text/css" href="css/themes/darkSpace.css" />
@@ -32,7 +29,6 @@
 	<script type="text/javascript" src="js/levelManager.js"></script>
 	<script type="text/javascript" src="js/ImageManager.js"></script>
 	<script type="text/javascript" src="js/AudioManager.js"></script>
-	<script type="text/javascript" src="js/sound.js"></script>
   </head>  
   <!--body onload='new Preroll().init(["pics/spaceship.png", "pics/sun.png"], 2000, 1000, document.getElementById("menu"))'-->
   <body onload='new Preroll().init([], 2000, 1000, document.getElementById("menu"))'>
@@ -76,10 +72,17 @@
 			<div data-role="fieldcontain">
 				<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
 					<legend>Musik:</legend>
+					<label for='musicOn'> An </label>
+					<input type='radio' id='musicOn' name='music' value='1' checked="checked"/>
+					<label for='musicOff'> Aus </label>
+					<input type='radio' id='musicOff' name='music' value='2' checked=""/>
+				</fieldset>
+				<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+					<legend>Sounds:</legend>
 					<label for='soundOn'> An </label>
-					<input type='radio' id='soundOn' name='music' value='1' checked="checked"/>
+					<input type='radio' id='soundOn' name='sound' value='1' checked="checked"/>
 					<label for='soundOff'> Aus </label>
-					<input type='radio' id='soundOff' name='music' value='2' checked=""/>
+					<input type='radio' id='soundOff' name='sound' value='2' checked=""/>
 				</fieldset>
 			</div>
 			<a href="#" data-role="button" data-icon="" class="clearProfile" id="clearProfileBtn">Profil zur&uuml;cksetzen</a>
@@ -113,7 +116,7 @@
 	  <div data-role="footer" id="foot">
 		<fieldset data-role="controlgroup" data-type="horizontal">
 			<a href="#levels" data-role="button" class="levelSelection" id="levelBtn">&nbsp;</a>
-			<a href="" data-role="button" class="sound" id="soundBtn">&nbsp;</a>
+			<a href="" data-role="button" class="audio" id="audioBtn">&nbsp;</a>
 			<a href="" data-role="button" class="pause" id="pauseBtn">&nbsp;</a>
 			<a href="#main" data-role="button" class="reloadLevel" id="reloadBtn">&nbsp;</a>
 		</fieldset>

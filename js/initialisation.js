@@ -126,7 +126,8 @@ function onImgDone() {
 
 // Event zum starten des Spieles
 $(document).ready(function(){
-	$("#soundOn").attr("checked", "checked");
+	$("#musicOn").prop('checked', true);
+	$("#soundOn").prop('checked', true);
 
 	$("#backBtn").click(function() {
 		if(isStarted == true)
@@ -135,35 +136,55 @@ $(document).ready(function(){
 	
 	$(".clearProfile").click(function() {
 		prflMngr.resetProfile();
-		buildLevelSelection();
+		checkLevelEnabled();
 	});
 
-	$(".sound").click(function() {
-		if(soundOn) {
+	$(".audio").click(function() {
+		if(audioOn) {
 			$(this).css('background-image', 'url(css/images/Mute.png)');
-			$("#soundOff").attr("checked", true);
-			$("#soundOn").attr("checked", false);
-			
+			muteMusic();
+			muteSound();
+			audioOn = false;
 		}
 		else {
 			$(this).css('background-image', 'url(css/images/Sound2.png)');
-			$("#soundOn").attr("checked", true);
-			$("#soundOff").attr("checked", false);
+			playMusic();
+			playSound();
 		}
-		mute();
+		console.log(audioOn, musicOn, soundOn);
 	});
 	
+	$("#musicOn").click(function() {
+		if(!musicOn) {
+			playMusic();
+			$("#audioBtn").css('background-image', 'url(css/images/Sound2.png)');
+		}
+	});
+	
+	$("#musicOff").click(function() {
+		if(musicOn) {
+			muteMusic();
+			if(!soundOn) {
+				$("#audioBtn").css('background-image', 'url(css/images/Mute.png)');
+				audioOn = false;
+			}
+		}
+	});
+
 	$("#soundOn").click(function() {
 		if(!soundOn) {
-			$("#soundBtn").css('background-image', 'url(css/images/Sound2.png)');
-			mute();
+			playSound();
+			$("#audioBtn").css('background-image', 'url(css/images/Sound2.png)');
 		}
 	});
 	
 	$("#soundOff").click(function() {
 		if(soundOn) {
-			$("#soundBtn").css('background-image', 'url(css/images/Mute.png)');
-			mute();
+			muteSound();
+			if(!musicOn) {
+				$("#audioBtn").css('background-image', 'url(css/images/Mute.png)');
+				audioOn = false;
+			}
 		}
 	});
 	
@@ -176,9 +197,8 @@ $(document).ready(function(){
 			$(this).css('background-image', 'url(css/images/Pause2.png)');
 		}
 	});
-	
+
 	$(".levelSelection").click(function() {
-		buildLevelSelection();
 		stopGame();
 	});
 	
@@ -188,6 +208,7 @@ $(document).ready(function(){
 	
 	$(".nextLevel").click(function() {
 		prflMngr.updateProfile();
+		checkLevelEnabled();
 		startNewGame(currLevel);
 	});
 });
@@ -195,13 +216,13 @@ $(document).ready(function(){
 
 // Spiele Hintergrundmusik ab
 function playBackgroundMusic() {
-	audio = new Audio();//document.createElement("audio");
-	audio.src = "audio/squawky2.ogg";
-	audio.volume = 0.1;
-	audio.addEventListener('ended', function () {
+	backgroundMusic = new Audio();//document.createElement("audio");
+	backgroundMusic.src = "audio/squawky2.ogg";
+	backgroundMusic.volume = 0.1;
+	backgroundMusic.addEventListener('ended', function () {
 	// Wait 500 milliseconds before next loop
-	setTimeout(function () { audio.play(); }, 0);}, false);
-	audio.play();
+	setTimeout(function () { backgroundMusic.play(); }, 0);}, false);
+	backgroundMusic.play();
 }
 
 // starte ein neues Spiel
@@ -295,20 +316,66 @@ function pauseGame() {
 	}
 }
 
-// Spiel pausieren oder wieder fortsetzen
-function mute() {
-	if (!soundOn) {
-		soundOn = true;
-		audio.play();
-	} else {
-		soundOn = false;
-		audio.pause();
-	}
+
+function playMusic() {
+	musicOn = true;
+	audioOn = true;
+
+	$("#musicOff").removeAttr("checked");
+	$("#musicOn").attr("checked", "checked");
+	$("#musicOff").checkboxradio("refresh");
+	$("#musicOn").checkboxradio("refresh");
+
+
+	backgroundMusic.play();
+	
+}
+
+function muteMusic() {
+	console.log("Music: "+ musicOn);
+	
+	musicOn = false;
+	
+	$("#musicOn").removeAttr("checked");
+	$("#musicOff").attr("checked", "checked");
+	$("#musicOff").checkboxradio("refresh");
+	$("#musicOn").checkboxradio("refresh");
+	
+	backgroundMusic.pause();
+	
+	console.log("Music: "+ musicOn);
+}
+
+function playSound() {
+	
+	soundOn = true;
+	audioOn = true;
+
+	$("#soundOff").removeAttr("checked");
+	$("#soundOn").attr("checked", "checked");
+	$("#soundOff").checkboxradio("refresh");
+	$("#soundOn").checkboxradio("refresh");
+
+	audioMngr.mute(false);
+}
+
+function muteSound() {
+	console.log("Sound: "+ soundOn);
+
+	soundOn = false;
+
+	$("#soundOn").removeAttr("checked");
+	$("#soundOff").attr("checked", "checked");
+	$("#soundOff").checkboxradio("refresh");
+	$("#soundOn").checkboxradio("refresh");
+
+	audioMngr.mute(true);
+	
+	console.log("Sound: "+ soundOn);
 }
 
 function buildLevelSelection() {
 	// clear level Selectio
-
 	var lvlSelectionData = lvlMngr.getLevelSelectionData();
 
 	maxLevel = lvlSelectionData.length;
@@ -316,9 +383,6 @@ function buildLevelSelection() {
 	var blocks = {0:'a', 1:'b', 2:'c', 3:'d', 4:'e'};
 	var i = 1;
 
-	//$("#levelIcons").children().detach().remove();
-	//document.getElementById('levelIcons').innerHTML = "";
-	
 	for(l in lvlSelectionData) {
 		var attribs = lvlSelectionData[l];
 
@@ -335,15 +399,27 @@ function buildLevelSelection() {
 					  'width' : '50px',
 					  'height' : '50px'};
 
-		if(i <= currLevel) {
-			$('.ui-grid-d').append('<div class="ui-block-'+blocks[blockCount]+'"><a id="level'+i+'" href="#main" data-role="button" data-theme="c" onclick="startNewGame('+i+')"/><a class="lvlDesc">'+title+'</a></div> ');
-		}	
-		else {
-			$('.ui-grid-d').append('<div class="ui-block-'+blocks[blockCount]+'"><a id="level'+i+'" href="#main" data-role="button" data-theme="c" class="ui-disabled"/><a class="lvlDesc ui-disabled">'+title+'</a></div> ');
-		}
-			
+
+		console.log("hier");
+		var disabledIcon = $('<div class="ui-block-'+blocks[blockCount]+'"><a id="level'+i+'" href="#main" data-role="button" data-theme="c" class="" onclick="startNewGame('+i+')"></a><a id="levelDesc'+i+'" class="lvlDesc">'+title+'</a></div> ');
+		$('.ui-grid-d').append(disabledIcon);
+		
 		$('#level'+i).css(cssObj);
 		i++;
+	}
+	checkLevelEnabled();
+}
+
+function checkLevelEnabled() {
+	for(i=1; i<=maxLevel; i++) {
+		if(i <= currLevel) {
+			$('#level'+i).removeClass('ui-disabled');
+			$('#levelDesc'+i).removeClass('ui-disabled');
+		}
+		else {
+			$('#level'+i).addClass('ui-disabled');
+			$('#levelDesc'+i).addClass('ui-disabled');
+		}
 	}
 }
 
