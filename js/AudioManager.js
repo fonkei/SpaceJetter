@@ -19,6 +19,7 @@ _p.init = function () {
 	this.channels = new Array();
 	for (a = 0; a < channel_max; a++) {
 		this.channels[a] = new Audio();
+		this.channels[a].volume = 0.2;
 		this.channels[a].timeFinished = -1;
 	}
 }
@@ -47,7 +48,7 @@ _p.loadSnd = function (files, callback) {
 				snd.addEventListener('load', audioCallback, false);
 				snd.addEventListener('error', audioCallback, false);
 				snd.src = filename;
-				snd.volume = 0.5;
+				snd.volume = 0.2;
 				snd.load();
 			}
 		// No sounds to load? Fire callback directly
@@ -80,7 +81,7 @@ _p.mute = function(val) {
 		if(val)
 			audio.volume = 0;
 		else
-			audio.volume = 0.5;
+			audio.volume = 0.2;
 	}
 
 	for(c in this.channels) {
@@ -88,7 +89,7 @@ _p.mute = function(val) {
 		if(val)
 			audio.volume = 0;
 		else
-			audio.volume = 0.5;
+			audio.volume = 0.2;
 	}
 }
 

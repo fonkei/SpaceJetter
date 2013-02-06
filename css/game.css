@@ -72,14 +72,21 @@ html, body {
 	width: 30px;	
 }
 
-
 #optionBtns
 {	
-	margin-top: 40px;
 	margin-left: auto;  
 	margin-right: auto;	
 	padding: 0px;
 	height:40px;
+	width:240px;
+}
+
+#clearProfileBtn
+{	
+	margin-left: auto;  
+	margin-right: auto;	
+	padding: 0px;
+	/*height:40px;*/
 	width:240px;
 }
 
@@ -176,6 +183,7 @@ html, body {
 	margin-top: auto;
 	margin-left: auto;  
 	margin-right: auto;	
+	margin-bottom: 40px;
 }
 
 .levelIcons
@@ -191,6 +199,24 @@ html, body {
 	float: left;
 }
 
+table {
+	width: 200px;
+	margin-top: auto;
+	margin-left: auto;  
+	margin-right: auto;
+}
+
+table .col2 {
+	float: right;
+}
+
+.audioOptions {
+	margin-top: auto;
+	margin-left: auto;  
+	margin-right: auto;
+	margin-bottom: 100px;
+}
+
 .ui-dialog-contain {
 	width: 92.5%;
 	max-width: 400px;
@@ -198,6 +224,11 @@ html, body {
 	padding: 0;
 	position: relative;
 	top: -15px;
+}
+
+.ui-body-c
+.ui-link {
+    color: #FFFFFF;
 }
 
 .ui-dialog  .ui-header .ui-btn-icon-notext  { 
@@ -218,6 +249,10 @@ html, body {
 
 .ui-icon-back2 {
 	background-image: url("images/Back.png");
+}
+
+.ui-icon-reset {
+	background-image: url("images/Decline.png");
 }
 
 .ui-icon-accept {

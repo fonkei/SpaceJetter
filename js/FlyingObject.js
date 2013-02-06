@@ -1260,6 +1260,7 @@ Spaceship.prototype = {
 						powerUps.push(new PUShield(powerupSprite['shield']));
 						this.shieldPowerUp = true;
 					}
+					audioMngr.play("load");
 					object.setDefunct();
 				}
 				if(object instanceof PURocket) {
@@ -1267,7 +1268,8 @@ Spaceship.prototype = {
 						powerUps.push(new PURocket(powerupSprite['rocket']));
 						this.rocketPowerUp = true;
 					}
-						
+
+					audioMngr.play("load");
 					object.setDefunct();
 				}
 				if(object instanceof PULaser) {
@@ -1276,10 +1278,12 @@ Spaceship.prototype = {
 						this.laserPowerUp = true;
 					}
 					
+					audioMngr.play("load");
 					object.setDefunct();
 				}
 				if(object instanceof Sphere) {
 					sphereCount++;
+					audioMngr.play("pickup");
 					object.setDefunct();
 				}
 				if(object.type == "Enemy") {
@@ -1350,7 +1354,7 @@ Spaceship.prototype = {
 			this.explode();
 	},
 	
-	// schieﬂen
+	// schie√üen
 	shoot: function() {
 		
 		audioMngr.play("laser");
@@ -1421,10 +1425,7 @@ Spaceship.prototype = {
 		this.shields = [];
 	},
 	
-	levelDoneSequence: function() {
-		/*for(o in objects)
-			objects[o].setDefunct();*/
-			
+	levelDoneSequence: function() {			
 		var x = Math.round(this.getX() + (this.getWidth() / 2));
 		var y = Math.round(this.getY() + (this.getHeight() / 2));
 		var xPos = Math.round(width / 2);
@@ -1440,8 +1441,6 @@ Spaceship.prototype = {
 				this.decY(0.5);
 			else if(y < yPos)
 				this.incY(0.5);
-
-			console.log("Not Found: ",x, xPos, y, yPos);
 		}						
 		else {
 			this.endPositionFound = true;
@@ -1454,8 +1453,6 @@ Spaceship.prototype = {
 				stopGame();
 				levelDone();
 			}
-
-			console.log("Found: ",y, this.speed);
 		}
 	}
 }
@@ -1540,7 +1537,7 @@ Rocket = function(sp, shooterX, shooterY, t, delay) {
 	var yPos = shooterY + 40;
 	
 	var frame = 9;
-	var speed = 20;	
+	var speed = 25;	
 	
 	this.base(xPos, yPos, speed, frame, sp);
 	this.init();

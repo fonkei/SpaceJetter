@@ -370,18 +370,30 @@ function checkFocus() {
 }
 
 function levelDone() {
-		$('.successlvlScore').append('<h5 class="score" id="score">'+lvlScore+'</h5>');
-		
-		//if(currLevel >= storedLevel)
-			//$(".nextLevel").remove();
-
+		$('.successlvlScore').text(lvlScore);
 		$.mobile.changePage('#successDialog', 'pop', true, true);
+		console.log(" 1 "+lvlScore);
+		// Sphere Zaehler
+		 $(function () {
+	     	var collection = new Array();
+	     	collection.length = sphereCount;
+	     	var counter = 0;
+	     	$(collection).each(function () {
+	        	$('.countText').animate({ opacity: "1" }, 100, function () {
+	           		counter++;
+	           		lvlScore += 100;
+	           		$('.countText').text(counter);
+	           		$('.totalText').text(lvlScore);
+	       			console.log(lvlScore);
+	        	});
+	      	});
+	   	});
 }
 
 function gameOver() {
 		stopGame();
 		$.mobile.changePage('#gameOverDialog', 'pop', true, true);
-		$('.gameOverlvlScore').append('<h5 class="score" id="lvlScore">'+lvlScore+'</h5>');
+		$('.gameOverlvlScore').text(lvlScore);
 }
 
 //===========================================================

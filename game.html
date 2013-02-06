@@ -40,7 +40,7 @@
 		<h1>Hauptmen&uuml;</h1>
 	  </div>
 	 
-	  <div data-role="content" id="overviewMenu"> 
+	  <div data-role="content" id="overviewMenu">
 		<p><a href="#levels" data-role="button" data-icon="level-selection">Levelsauswahl</a></p>
 		<p><a href="#options" data-role="button" data-icon="settings">Optionen</a></p>    
 		<p><a href="#exit" data-role="button" data-icon="quit">Beenden</a></p>
@@ -57,7 +57,7 @@
 		<div data-role="content" id="levelOverview">
 			<div class="ui-grid-d" id="levelIcons"></div>
 		
-		<a href="#menu" data-role="button" data-icon="back2" id="optionBtns">Zur&uuml;ck</a>
+			<a href="#menu" data-role="button" data-icon="back2" id="optionBtns">Zur&uuml;ck</a>
 		</div>		
 	</div>
 	
@@ -70,22 +70,22 @@
 	  
 		<div data-role="content" id="overviewOptions">	  
 			<div data-role="fieldcontain">
-				<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+				<fieldset data-role="controlgroup" class="audioOptions" data-type="horizontal" data-mini="true">
 					<legend>Musik:</legend>
 					<label for='musicOn'> An </label>
-					<input type='radio' id='musicOn' name='music' value='1' checked="checked"/>
+					<input type='radio' class="music" id='musicOn' name='music' value='1' checked="checked"/>
 					<label for='musicOff'> Aus </label>
-					<input type='radio' id='musicOff' name='music' value='2' checked=""/>
+					<input type='radio' class="music" id='musicOff' name='music' value='2' checked=""/>
 				</fieldset>
-				<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+				<fieldset data-role="controlgroup" class="audioOptions" data-type="horizontal" data-mini="true">
 					<legend>Sounds:</legend>
 					<label for='soundOn'> An </label>
-					<input type='radio' id='soundOn' name='sound' value='1' checked="checked"/>
+					<input type='radio' class="sound" id='soundOn' name='sound' value='1' checked="checked"/>
 					<label for='soundOff'> Aus </label>
-					<input type='radio' id='soundOff' name='sound' value='2' checked=""/>
+					<input type='radio' class="sound" id='soundOff' name='sound' value='2' checked=""/>
 				</fieldset>
 			</div>
-			<a href="#" data-role="button" data-icon="" class="clearProfile" id="clearProfileBtn">Profil zur&uuml;cksetzen</a>
+			<a href="#" data-role="button" data-icon="reset" class="clearProfile" id="clearProfileBtn">Profil zur&uuml;cksetzen</a>
 			<a href="#menu" data-role="button" data-icon="back2" id="optionBtns">Zur&uuml;ck</a>
 		
 		</div>
@@ -132,9 +132,12 @@
 		
 		<div data-role="content" id="gameOverDialogText">
 			<div class="gameOverVars">
-				<div class="gameOverlvlScore">
-					<h4>Punktestand: </h4>
-				</div>
+				<table class="successTable">
+					<tr class="row1">
+						<td class="col1">Punktestand: </td>
+					    <td class="col2"><div class="gameOverlvlScore">0</div></td>
+					</tr>
+					</table>
 			</div>
 			<fieldset data-role="controlgroup" data-type="horizontal">
 				<a href="#levels" data-role="button" class="levelSelection" id="gameOverlevelBtn">&nbsp;</a>
@@ -151,9 +154,20 @@
 		
 		<div data-role="content" id="successDialogText">
 			<div class="successVars">
-				<div class="successlvlScore">
-					<h4>Punktestand: </h4>
-				</div>
+				<table class="successTable">
+				  <tr class="row1">
+				    <td class="col1">Punktestand: </td>
+				    <td class="col2"><div class="successlvlScore">0</div></td>
+				  </tr>
+				  <tr class="row2">
+				    <td class="col1"><img src="pics/sphere.png" alt="Sphere"></td>
+				    <td class="col2"><div class="countText">0</div></td>
+				  </tr>
+				  <tr class="row3">
+				    <td class="col1"><b>Gesamt: </b></td>
+				    <td class="col2"><div class="totalText">0</div></td>
+				  </tr>
+				</table>
 			</div>
 			<fieldset class="successFldset" data-role="controlgroup" data-type="horizontal">
 				<a href="#levels" data-role="button" class="levelSelection" id="successlevelBtn">&nbsp;</a>
@@ -163,12 +177,17 @@
 		</div>    
 	</div>
 
-	<div id="pwidget">  
-		<div id="progressbar">
-			<div id="indicator"></div>
-		</div>
-		<div id="progressnum">0</div>
+	<div data-role="dialog" id="confirmDialog">
+		<div data-role="header">
+			<h1>Profil Zur&uuml;cksetzen?</h1>
+		</div>    
+		<h2>Soll das Profil wirklich zur&uuml;ckgesetzt werden?</h2>
+		<div data-role="content" id="confirmDialogText">
+			<fieldset class="confirmFldset" data-role="controlgroup" data-type="horizontal">
+				<a href="#options" data-role="button" class="confirm" data-icon="accept" id="confirmBtn">Ja</a>
+				<a href="#options" data-role="button" class="decline" data-icon="decline" id="declineBtn">Nein</a>
+			</fieldset>
+		</div>    
 	</div>
-        
   </body>  
 </html>

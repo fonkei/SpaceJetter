@@ -14,7 +14,7 @@ window.addEventListener("load", function() {
 	sctx = myStatusBar.getContext('2d');
 	
 	// Initialisiere das Spiel
-	playBackgroundMusic();
+	//playBackgroundMusic();
 	
 	myCanvas.style.opacity = 1;
 	myStatusBar.style.opacity = 1;
@@ -53,6 +53,8 @@ window.addEventListener("load", function() {
 	audioMngr = new AudioManager();
 	audioMngr.loadSnd({
         "laser"					: "./audio/laser1",
+        "load"					: "./audio/reload",
+        "pickup"				: "./audio/pickup",
 		"exp1"					: "./audio/exp1",
 		"exp2"					: "./audio/exp2",
 		"exp4"					: "./audio/exp4",
@@ -135,6 +137,10 @@ $(document).ready(function(){
 	});
 	
 	$(".clearProfile").click(function() {
+		$.mobile.changePage('#confirmDialog', 'pop', true, true);
+	});
+
+	$(".confirm").click(function() {
 		prflMngr.resetProfile();
 		checkLevelEnabled();
 	});
@@ -270,6 +276,7 @@ function clearLevel() {
 	lvlSpeed = 0;
 	bgHeight = 0;
 	lvlScore = 0;
+	sphereCount = 0;
 	powerUpCount = 0;
 	
 	$(".score").remove();
@@ -323,6 +330,8 @@ function playMusic() {
 
 	$("#musicOff").removeAttr("checked");
 	$("#musicOn").attr("checked", "checked");
+	$("#musicOff").checkboxradio(); // für die Initialisierung
+	$("#musicOn").checkboxradio();
 	$("#musicOff").checkboxradio("refresh");
 	$("#musicOn").checkboxradio("refresh");
 
@@ -338,6 +347,8 @@ function muteMusic() {
 	
 	$("#musicOn").removeAttr("checked");
 	$("#musicOff").attr("checked", "checked");
+	$("#musicOff").checkboxradio();
+	$("#musicOn").checkboxradio();
 	$("#musicOff").checkboxradio("refresh");
 	$("#musicOn").checkboxradio("refresh");
 	
@@ -353,6 +364,8 @@ function playSound() {
 
 	$("#soundOff").removeAttr("checked");
 	$("#soundOn").attr("checked", "checked");
+	$("#soundOff").checkboxradio();
+	$("#soundOn").checkboxradio();
 	$("#soundOff").checkboxradio("refresh");
 	$("#soundOn").checkboxradio("refresh");
 
@@ -366,6 +379,8 @@ function muteSound() {
 
 	$("#soundOn").removeAttr("checked");
 	$("#soundOff").attr("checked", "checked");
+	$("#soundOff").checkboxradio(); 
+	$("#soundOn").checkboxradio();
 	$("#soundOff").checkboxradio("refresh");
 	$("#soundOn").checkboxradio("refresh");
 
